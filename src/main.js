@@ -4,9 +4,8 @@ import router from "./router";
 import store from "./store";
 import ElementUI from 'element-ui';
 import components from './components'; // 自定义模板
-import xDictionary from "./utils/dictionary";
 import VEmojiPicker from 'v-emoji-picker';
-import VueClipboard from 'vue-clipboard2'
+import VueClipboard from 'vue-clipboard2';
 
 import _ from "lodash";
 
@@ -25,8 +24,7 @@ Vue.use(VEmojiPicker);
 Vue.use(VueClipboard);
 
 Vue.prototype.$apiHttp = api;
-Vue.prototype.$D = new xDictionary();
-Vue.prototype.$bus=new Vue();
+Vue.prototype.$bus = new Vue();
 
 new Vue({
   router,

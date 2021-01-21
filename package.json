@@ -1,5 +1,5 @@
 {
-  "name": "FICHAT",
+  "name": "sitespilot-admin",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -11,6 +11,7 @@
     "axios": "^0.21.0",
     "axios-request-cache": "^1.0.2",
     "core-js": "^3.6.5",
+    "echarts": "^5.0.1",
     "element-ui": "^2.14.1",
     "lodash": "^4.17.20",
     "v-emoji-picker": "^2.3.1",

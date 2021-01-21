@@ -15,7 +15,22 @@ export default [
       {
         path: '/home',
         name: 'home',
+        meta:{title:'Home'},
         component: () => import('../../views/home/home.vue'),
+      },
+      //数据
+      {
+        path: '/analystics',
+        name: 'analystics',
+        meta:{title:'Analystics'},
+        component: () => import('../../views/analystics'),
+      },
+      //评论回复
+      {
+        path: '/reviews',
+        name: 'reviews',
+        meta:{title:'Reviews'},
+        component: () => import('../../views/reviews'),
       },
     ]
   }

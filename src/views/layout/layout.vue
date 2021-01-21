@@ -4,7 +4,8 @@
       <div class="logo" :style="`width:${isCollapse ? 54 : 200}px`">
         <el-image
           :class="isCollapse ? 'collapse_img' : 'collapse_n_img'"
-          :src="require('../../assets/img/logo-white.png')"
+          :src="require('../../assets/img/logo.png')"
+          fit="scale-down"
         >
         </el-image>
       </div>
@@ -16,17 +17,17 @@
         unique-opened
         router
       >
-        <el-menu-item index="/" class="menu_item">
-          <svg-icon value="icon-custom-service" :size="1.1"></svg-icon>
+        <el-menu-item index="/home" class="menu_item">
+          <svg-icon value="icon-shouye1" :size="1.1"></svg-icon>
           <span slot="title">Home</span>
         </el-menu-item>
-        <el-menu-item index="1" class="menu_item">
-          <svg-icon value="icon-ziyuan" :size="1.1"></svg-icon>
+        <el-menu-item index="/analystics" class="menu_item">
+          <svg-icon value="icon-shuju1" :size="1.1"></svg-icon>
           <span slot="title">Analystics</span>
         </el-menu-item>
-        <el-menu-item index="2" class="menu_item">
+        <el-menu-item index="/reviews" class="menu_item">
           <svg-icon
-            value="icon-dailizizhizizhiqiyezizhi"
+            value="icon-pinglun"
             :size="1.2"
           ></svg-icon>
           <span slot="title">Reviews</span>
@@ -43,7 +44,6 @@
             ></svg-icon>
           </span>
           <el-breadcrumb separator="/">
-            <el-breadcrumb-item to="/home">主页</el-breadcrumb-item>
             <el-breadcrumb-item
               v-for="item in levelList"
               :key="item.path"
@@ -79,7 +79,6 @@
 </template>
 <script>
 import type from "../../commons/type";
-import xSocketLink from "@/utils/xSocketLink";
 export default {
   data() {
     return {
@@ -139,7 +138,8 @@ export default {
     }
     .logo {
       width: 100%;
-      height: 50px;
+      height: 60px;
+      padding: 10px 0;
       line-height: 50px;
       background: #2b2f3a;
       text-align: center;
@@ -148,7 +148,6 @@ export default {
         width: 100%;
         /deep/img {
           height: 100%;
-          width: auto;
         }
       }
       .collapse_img {

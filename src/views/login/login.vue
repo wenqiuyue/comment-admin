@@ -1,7 +1,8 @@
 <template>  
   <div class="login" v-loading="loading">
     <el-form :model="loginForm" :rules="rules" ref="loginForm" class="login_form">
-      <el-image style="width: 450px;" :src="require('../../assets/img/logo-white.png')"></el-image>
+      <!-- <el-image style="width: 450px;" :src="require('../../assets/img/logo-white.png')"></el-image> -->
+      <h1>商家好评网站后台管理系统</h1>
       <el-form-item prop="acc">
         <el-input v-model="loginForm.acc" placeholder="请输入用户名">
           <svg-icon slot="prefix" value="icon-yonghuming"></svg-icon>
@@ -39,11 +40,7 @@ export default {
     }
   },
    created() {
-     if(this.$route.name=='reclogin'){
-       this.handleRecCheckToken();
-     }else{
-        this.handleCheckToken();
-     }
+     this.handleCheckToken();
   },
   methods:{
     /**
@@ -52,11 +49,7 @@ export default {
     login(){
       this.$refs.loginForm.validate((valid)=>{
         if(valid){
-          if(this.$route.name=='reclogin'){
-            this.receptionLogin();
-          }else{
-            this.backstageLogin();
-          }
+          this.backstageLogin();
         }else{
           return;
         }
@@ -79,38 +72,12 @@ export default {
           })
     },
     /**
-     * 前台登录
-     */
-    receptionLogin(){
-      this.loading=true;
-      this.$apiHttp.homeLogin(this.loginForm).then((resp)=>{
-        if(resp.res==200){
-          localStorage.setItem(type.RECUSER, JSON.stringify(resp.data));
-          this.$store.dispatch("Reclogin", resp.data.token);
-          this.$router.push({
-            path: "/reception"
-          });
-        }
-        this.loading=false;
-      })
-    },
-    /**
      * 后台验证Token
      */
     handleCheckToken() {
-      if (localStorage.getItem(type.TOKEN)) {
+      if (localStorage.getItem(type.TOKEN) && localStorage.getItem(type.USER)) {
         this.$router.push({
           path: "/home"
-        })
-      }
-    },
-    /**
-     * 前台验证Token
-     */
-    handleRecCheckToken() {
-      if (localStorage.getItem(type.RECTOKEN)) {
-        this.$router.push({
-          path: "/reception"
         })
       }
     },
@@ -123,10 +90,9 @@ export default {
   height: 100%;
   background-color: #2d3a4b;
   .login_form{
-    width: 510px;
-    max-width: 100%;
+    max-width: 510px;
     margin: 0 auto;
-    padding: 100px 35px 0;
+    padding: 140px 35px 0;
     text-align: center;
     /deep/.el-form-item{
       .el-input__inner{
@@ -145,6 +111,10 @@ export default {
     }
     .login_btn{
       width: 100%;
+    }
+    h1{
+      color: #fff;
+      margin-bottom: 65px;
     }
   }
 }
