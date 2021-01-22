@@ -53,6 +53,34 @@
       "font_class": "xingxing",
       "unicode": "e75b",
       "unicode_decimal": 59227
+    },
+    {
+      "icon_id": "71548632",
+      "name": "标记",
+      "font_class": "biaoji",
+      "unicode": "e728",
+      "unicode_decimal": 59176
+    },
+    {
+      "icon_id": "71548633",
+      "name": "查找",
+      "font_class": "chazhao",
+      "unicode": "e761",
+      "unicode_decimal": 59233
+    },
+    {
+      "icon_id": "71548634",
+      "name": "回复",
+      "font_class": "huifu",
+      "unicode": "e60e",
+      "unicode_decimal": 58894
+    },
+    {
+      "icon_id": "71548692",
+      "name": "分享",
+      "font_class": "fenxiang1",
+      "unicode": "e606",
+      "unicode_decimal": 58886
     }
   ]
 }
