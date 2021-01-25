@@ -11,7 +11,7 @@
           prefix-icon="el-icon-search"
           v-model="searchVal">
         </el-input>
-        <el-dropdown split-button size="small" type="primary" trigger="click" ref="starRate">
+        <el-dropdown split-button size="small" type="primary" trigger="click" :hide-on-click="false" ref="starRate">
           Star rating
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item>
@@ -177,7 +177,7 @@
               12
             </el-tab-pane>
           </el-tabs>
-          <svg-icon class="report" value="icon-biaoji" :size="1.3" :color="'#9A9AAD'"></svg-icon>
+          <svg-icon class="report" value="icon-biaoji" :size="1.3" :color="'#9A9AAD'" @click="handleReport"></svg-icon>
         </div>
       </div>
     </div>
@@ -192,10 +192,14 @@
         :total="400">
       </el-pagination>
     </div>
+    <ReportDialog ref="reportdialog"></ReportDialog>
   </div>
 </template>
 <script>
 export default {
+  components:{
+    ReportDialog:()=> import("./report-dialog")
+  },
   data(){
     return{
       activeName:'1',
@@ -208,7 +212,13 @@ export default {
   },
   methods:{
     /**
-     * reply筛选
+     * 举报
+     */
+    handleReport(){
+      this.$refs.reportdialog.openDialog();
+    },
+    /**
+     * 筛选
      */
     handleApply(type){
       if(type==1){
@@ -220,7 +230,7 @@ export default {
       }
     },
     /**
-     * 清除reply筛选
+     * 清除筛选
      */
     handleClear(type){
       if(type==1){

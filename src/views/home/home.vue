@@ -73,9 +73,47 @@
             </div>
           </div>
           <div class="reviews">
-            <div class="reviews_l">
+            <div class="reviews_l" v-if="false">
               <p>No reviews to show for this time frame.</p>
               <p>Try broadening your search</p>
+            </div>
+            <div class="reviews_l_card_list" v-else>
+              <div class="reviews_l_card">
+                <div class="r_l_c_title">TOTAL REVIEWS</div>
+                <h5>1</h5>
+                <el-dropdown trigger="click">
+                  <span class="el-dropdown-link">
+                    <i class="el-icon-caret-bottom"></i> <span class="dropdown_txt">-66.7%</span>
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item>黄金糕</el-dropdown-item>
+                    <el-dropdown-item>狮子头</el-dropdown-item>
+                    <el-dropdown-item>螺蛳粉</el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </div>
+              <div class="reviews_l_card">
+                <div class="r_l_c_title">WITH AN INVITATION</div>
+                <h5>0</h5>
+              </div>
+              <div class="reviews_l_card">
+                <div class="r_l_c_title">YOUR REPLY RATE</div>
+                <h5>0%</h5>
+              </div>
+              <div class="reviews_l_card">
+                <div class="r_l_c_title">WITHOUT AN INVITATION</div>
+                <h5>1</h5>
+                <el-dropdown trigger="click">
+                  <span class="el-dropdown-link">
+                    <i class="el-icon-caret-bottom"></i> <span class="dropdown_txt">-66.7%</span>
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item>黄金糕</el-dropdown-item>
+                    <el-dropdown-item>狮子头</el-dropdown-item>
+                    <el-dropdown-item>螺蛳粉</el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </div>
             </div>
             <div class="reviews_r">
               <p>STAR DISTRIBUTION</p>
@@ -239,9 +277,9 @@ export default {
         .reviews{
           display: flex;
           flex-direction: row;
-          align-items: center;
+          // align-items: center;
           .reviews_l{
-            width: 40%;
+            width: 50%;
             p:first-child{
               color: #454554;
             }
@@ -250,8 +288,39 @@ export default {
               color: #6F6F87;
             }
           }
+          .reviews_l_card_list{
+            padding-right: 20px;
+            width: 50%;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            .reviews_l_card{
+              width: 180px;
+              height: calc(50% - 35px);
+              border: 1px solid #DCDCE6;
+              padding: 15px;
+              margin-right: 20px;
+              margin-bottom: 10px;
+              .r_l_c_title{
+                font-size: 14px;
+                color: #6F6F87;
+              }
+              .el-dropdown{
+                  /deep/.dropdown_txt{
+                    font-size: 12px;
+                  }
+                }
+              h5{
+                margin: 10px 0 0px 0;
+                font-size: 18px;
+                color: #454554;
+                font-weight: normal;
+              }
+            }
+          }
           .reviews_r{
-            width:60%;
+            width:50%;
             p{
               font-size: 14px;
               color: #6F6F87;

@@ -5,6 +5,12 @@ export default [
 		name: '/',
     component: () => import('../../views/login/login.vue'),
   },
+  //注册页
+  {
+    path: '/register',
+		name: 'register',
+    component: () => import('../../views/register'),
+  },
 	//首页
   {
     path: '/',
