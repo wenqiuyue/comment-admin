@@ -177,7 +177,11 @@
               12
             </el-tab-pane>
           </el-tabs>
-          <svg-icon class="report" value="icon-biaoji" :size="1.3" :color="'#9A9AAD'" @click="handleReport"></svg-icon>
+          <div class="report">
+            <svg-icon value="icon-biaoji" :size="1.3" :color="'#9A9AAD'" @click="handleReport"></svg-icon>
+            <span v-if="index==2">Invistigation in progress</span>
+            <span v-else-if="index==1">Invistigation complete</span>
+          </div>
         </div>
       </div>
     </div>
@@ -448,6 +452,12 @@ export default {
           top: 9px;
           right: 17px;
           cursor: pointer;
+          display: flex;
+          align-items: center;
+          span{
+            font-size: 14px;
+            margin-left: 5px;
+          }
         }
       }
     }

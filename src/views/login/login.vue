@@ -1,45 +1,37 @@
-<template>  
-  <div class="login" v-loading="loading">
-    <div class="card">
-       <el-image
-        class="c_bg_img"
-        style="width:50%; height: 100%"
-        :src="require('@/assets/img/bg_l1.jpg')"
-        ></el-image>
-        <div class="login_card">
-          <div class="l_c_top">
-            <el-image
-              style="width:40px"
-              :src="require('@/assets/img/logo-17.png')"
-              ></el-image>
-            <div>Comment reply | Administration</div>
-          </div>
-           <el-form :model="loginForm" :rules="rules" ref="loginForm" class="login_form">
-            <el-form-item prop="acc" class="padding_item">
-              <el-input v-model="loginForm.acc" placeholder="Mailbox">
-                <svg-icon slot="prefix" value="icon-yonghuming"></svg-icon>
+<template>
+  <div class="login">
+    <el-row>
+      <el-col :span="15">
+        <div class="login_main">
+          <h1 class="main_head">
+            <a href="http://sitespilot.com/">sitespilot.com</a>
+          </h1>
+          <h1 class="main_title">Login</h1>
+          <el-form :model="loginForm" :rules="rules" ref="loginForm" class="form" label-position="top" :hide-required-asterisk="true">
+            <el-form-item prop="acc" label="E-mail">
+              <el-input v-model="loginForm.acc" placeholder="E-mail">
               </el-input>
             </el-form-item>
-            <el-form-item prop="pwd" class="padding_item" style="margin-bottom:5px">
+            <el-form-item prop="pwd" label="Password">
               <el-input v-model="loginForm.pwd" placeholder="Password" show-password>
-                <svg-icon slot="prefix" value="icon-mima"></svg-icon>
               </el-input>
             </el-form-item>
-             <el-form-item class="padding_item last_item">
-              <el-checkbox v-model="automaticChecked">automatic logon</el-checkbox>
-              <span class="forget">Forget Password?</span>
+             <el-form-item class="check_item">
+              <el-checkbox v-model="automaticChecked">Remember the password</el-checkbox>
+              <a href="http://sitespilot.com/" class="forget">Forgot Your Password?</a>
             </el-form-item>
-            <el-form-item class="btn_item">
-              <el-button class="login_btn" type="primary" @click="login">Login</el-button>
-            </el-form-item>
-            <div class="register_tips">No account yet? <span @click="handleReg">Register now</span></div>
+            <el-button class="login_btn" type="primary" :loading="loading">Login</el-button>
+            <div class="register_tips">Need an account? <a href="http://sitespilot.com/">Sign up</a></div>
           </el-form>
         </div>
-    </div>
+      </el-col>
+      <el-col :span="9">
+        <login-reg-right></login-reg-right>
+      </el-col>
+    </el-row>
   </div>
 </template>
 <script>
-import type from '../../commons/type';
 export default {
   data(){
     return{
@@ -51,147 +43,87 @@ export default {
       automaticChecked:false, //自动登录
       rules: {
         acc: [
-          { required: true, message: '请输入有效的用户名', trigger: 'blur' },
+          { required: true, message: 'Please input email', trigger: 'blur' },
         ],
         pwd: [
-          { required: true, message: '请输入有效的密码', trigger: 'blur' },
+          { required: true, message: 'Please enter a valid password', trigger: 'blur' },
         ],
       }
     }
   },
-   created() {
-     this.handleCheckToken();
-  },
-  methods:{
-    /**
-     * 注册
-     */
-    handleReg(){
-      this.$router.push({
-        path:'/register'
-      })
-    },
-    /**
-     * 登录
-     */
-    login(){
-      this.$refs.loginForm.validate((valid)=>{
-        if(valid){
-          this.backstageLogin();
-        }else{
-          return;
-        }
-      })
-    },
-    /**
-     * 后台登录
-     */
-    backstageLogin(){
-      this.loading=true;
-          this.$apiHttp.getProcessDetails(this.loginForm).then((resp)=>{
-            if(resp.res==200){
-              localStorage.setItem(type.USER, JSON.stringify(resp.data));
-              this.$store.dispatch("login", resp.data.token);
-              this.$router.push({
-                path: "/home"
-              });
-            }
-            this.loading=false;
-          })
-    },
-    /**
-     * 后台验证Token
-     */
-    handleCheckToken() {
-      if (localStorage.getItem(type.TOKEN) && localStorage.getItem(type.USER)) {
-        this.$router.push({
-          path: "/home"
-        })
-      }
-    },
-  }
 }
 </script>
 <style lang="less" scoped>
-.login{
-  width: 100%;
+.login,
+.el-row,
+.el-col
+{
   height: 100%;
-  // background-color: #D7E2FE;
-  background: url("~@/assets/img/bg.jpg") no-repeat;
-  background-size:100% 100%;
-  position: relative;
-  .card{
-    background: #ffffff;
-    width: 76%;
-    height: 74%;
-    position: absolute;
-    top: 13%;
-    left: 12%;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: row;
-    /deep/.c_bg_img{
-      flex-shrink: 0;
-      img{
-        border-radius: 10px 0 0 10px;
+}
+.login{
+  overflow: hidden;
+  .login_main{
+    height: 100%;
+    max-width: 411px;
+    margin: 0 auto;
+    .main_head{
+      margin-top: 95px;
+      color: #0A1148;
+      font-size: 19.8px;
+      a{
+        text-decoration: none;
+        color: inherit;
       }
     }
-    .login_card{
-      width: 50%;
-      padding: 25px 45px;
-      .l_c_top{
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        margin-top: 48px;
-        div{
-          color: #2B7DF2;
-          margin-left: 8px;
-          font-size: 20px;
+    .main_title{
+      color: #0B143E;
+      font-size: 52px;
+      margin-top: 81px;
+    }
+    .form{
+      /deep/.el-form-item{
+        margin-bottom: 0;
+        margin-top: 26px;
+      }
+      /deep/.el-form-item__label{
+        color: #05091D;
+        line-height: 24px;
+      }
+      /deep/.el-input__inner{
+        height: 52px;
+        font-size: 15px;
+        line-height: 52px;
+        box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1);
+      }
+      .check_item{
+        margin-top: 10px;
+        .forget{
+          float: right;
+          text-decoration: none;
+          color: #787D97;
+        }
+        .el-checkbox{
+          color: #787D97;
         }
       }
-    }
-  }
-  .login_form{
-    margin-top: 30px;
-    /deep/.padding_item{
-      padding: 0 20px;
-      .el-input__inner{
-        height: 55px;
-        line-height: 55px;
-      }
-    }
-    /deep/.last_item{
-      margin-bottom: 14px;
-      .forget{
-        float: right;
-        color: #999999;
-        cursor: pointer;
-      }
-    }
-    /deep/.btn_item{
-      padding: 0 20px;
-      height: 55px;
-      .el-form-item__content{
-        height: 100%;
-      }
-      .el-button{
+      .login_btn{
+        margin-top: 50px;
         width: 100%;
-        height: 100%;
-        font-size: 20px;
         background-color: #6cafff;
         background-image: linear-gradient(90deg, #6cafff 12%, #0a60ff 93%);
         box-shadow: 0 6px 20px -5px rgba(80,166,255,.7);
+        height: 48px;
+        font-size: 20px;
       }
-    }
-    .register_tips{
-      text-align: center;
-      margin-top: 30px;
-      font-size: 14px;
-      span{
-        cursor: pointer;
-        color: #428AFF;
+      .register_tips{
+        margin-top: 20px;
+        text-align: center;
+        color: #AEAECA;
+        font-size: 14px;
+        a{
+          text-decoration: none;
+          color: #428AFF;
+        }
       }
     }
   }

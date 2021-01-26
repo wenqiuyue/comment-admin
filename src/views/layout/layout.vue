@@ -64,9 +64,9 @@
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item disabled>{{ user.uname }}</el-dropdown-item>
-              <el-dropdown-item divided command="1">设置</el-dropdown-item>
-              <el-dropdown-item command="2">修改密码</el-dropdown-item>
-              <el-dropdown-item divided command="6">注销</el-dropdown-item>
+              <el-dropdown-item divided command="1">Set Up</el-dropdown-item>
+              <el-dropdown-item command="2">Change Password</el-dropdown-item>
+              <el-dropdown-item divided command="6">Log out</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </div>

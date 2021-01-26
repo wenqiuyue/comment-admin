@@ -2,25 +2,24 @@
   <div class="notice">
     <el-dialog
       :visible.sync="dialogNotice"
-      width="30%">
-      <div class="notice-body">
-          <div class="header-panel">
-              <div class="title">
-                <svg-icon value="icon-decorate_tips" :size="1.3" />预约须知
-              </div>
-              <div class="division">
-                <span></span>
-                <span></span>
-              </div>
-              <div class="content">
-                11111
-              </div>
-          </div>
+      width="460px">
+      <div class="title" slot="title">
+        <svg-icon value="icon-cebianlan-bijiao-xuanzhong" :size="1.4"></svg-icon>
+        <span>Terms of service</span>
+      </div>
+      <div class="header-panel">
+        <div class="division">
+          <span></span>
+          <span></span>
         </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogNotice = false">取 消</el-button>
-        <el-button type="primary" @click="dialogNotice = false">确 定</el-button>
-      </span>
+        <div class="content">
+          <p>Dear users</p>
+          <p>Welcome to be a user of this website. Please read the following terms of service carefully before logging in for the first time.</p>
+          <p>1. Confirmation and acceptance of the terms of service of this websiteThe ownership and operation right of all services of this website belong to this website.</p>
+          <p>2. Users must:Provide necessary equipment for Internet access, including personal computer, modem or other necessary Internet access devices.They shall bear the telephone and network charges related to this service paid by individuals on the Internet.</p>
+          <p>3. Modification of service terms This website has the right to modify the terms of service when necessary. Once the terms of service of this website change, it will prompt to modify the content on the important page. If you don't agree with the content, you can cancel the information service of this website. If the user continues to enjoy the information service of this website, it is deemed to accept the change of service terms. The website reserves the right to modify the service at any time without notifying the user; if the service needs to be interrupted, the website will inform the user in advance as far as possible. This website exercises the right to modify or interrupt the service, and is not responsible to the user or the third party.</p>
+        </div>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -40,51 +39,64 @@ export default {
 </script>
 <style lang="less" scoped>
 .notice{
-  .notice-body {
-      height: calc(100% - 67px);
-      overflow: scroll;
-      padding: 10px;
-      .header-panel {
-        border-radius: 5px;
-        padding: 12px 15px;
-        min-height: 390px;
-        .title {
-          font-size: 16px;
-          color: #000000;
-          display: flex;
-          align-items: center;
-          svg {
-            margin-right: 5px;
-          }
-        }
-        .division {
-          margin-top: 15px;
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-
-          border: 1.3px dashed #ff7979;
-          span {
-            background: #fff5f5;
-            height: 16px;
-            width: 16px;
-            border-radius: 50%;
-            position: absolute;
-          }
-          span:first-child {
-            left: -8px;
-          }
-          span:last-child {
-            right: -8px;
-          }
-        }
-        .content {
-          padding-top: 10px;
-          color: #666666;
-          font-size: 14px;
-          line-height: 30px;
-        }
+  .title{
+    display: flex;
+    align-items: center;
+    span{
+      margin-left: 8px;
+      color: #606266;
+    }
+  }
+  /deep/.el-dialog__header{
+    padding-bottom: 5px;
+  }
+  /deep/.el-dialog__body{
+    padding: 0;
+  }
+  .header-panel {
+    border-radius: 5px;
+    padding: 0 20px 20px 20px;
+    height: 490px;
+    overflow-y: scroll;
+    .division {
+      margin-top: 15px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      border: 1px dashed #2B7DF2;
+      span {
+        background: #808080;
+        height: 16px;
+        width: 16px;
+        border-radius: 50%;
+        position: absolute;
+      }
+      span:first-child {
+        left: -8px;
+      }
+      span:last-child {
+        right: -8px;
       }
     }
+    .content {
+      padding-top: 10px;
+      color: #666666;
+      font-size: 14px;
+      line-height: 30px;    
+    }
+  }
+  .header-panel::-webkit-scrollbar {/*滚动条整体样式*/
+    width: 3px;     /*高宽分别对应横竖滚动条的尺寸*/
+    height: 1px;
+  }
+
+  .header-panel::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+    border-radius: 10px;
+    background: #535353;
+  }
+  .header-panel::-webkit-scrollbar-track {/*滚动条里面轨道*/
+    border-radius: 10px;
+    background: #EDEDED;
+  }
 }
 </style>

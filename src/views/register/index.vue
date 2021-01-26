@@ -166,6 +166,7 @@ export default {
       text-align: center;
       margin-top: 30px;
       font-size: 14px;
+      color: #606266;
       span{
         cursor: pointer;
         color: #428AFF;

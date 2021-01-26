@@ -87,6 +87,8 @@ export default {
           }
         },
         toolbox: {
+          padding: [0,40,0,0],
+          itemGap: 16,
           feature: {
             dataView: {show: true, readOnly: false},
             magicType: {show: true, type: ['line', 'bar']},
@@ -95,6 +97,7 @@ export default {
           }
         },
 			  legend: {
+           x: 'center',
 				  data:['1-star','2-star','3-star','4-star','5-star','Average rating']
 			  },
 			  xAxis: {
@@ -211,7 +214,7 @@ export default {
       display: flex;
       flex-direction: row;
       justify-content: space-between;
-      margin-bottom: 10px;
+      margin-bottom: 20px;
       .echar_title_l{
         color: #89847B;
         font-size: 24px;

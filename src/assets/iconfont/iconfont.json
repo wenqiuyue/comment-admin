@@ -81,6 +81,13 @@
       "font_class": "fenxiang1",
       "unicode": "e606",
       "unicode_decimal": 58886
+    },
+    {
+      "icon_id": "71730590",
+      "name": "侧边栏-比较-选中",
+      "font_class": "cebianlan-bijiao-xuanzhong",
+      "unicode": "e624",
+      "unicode_decimal": 58916
     }
   ]
 }
