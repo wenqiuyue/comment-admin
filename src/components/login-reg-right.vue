@@ -21,7 +21,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .login-reg-right{
-  height: 100%;
+  // height: 100%;
   background: #040620;
   padding: 50px 95px 33px 94px;
   .about{

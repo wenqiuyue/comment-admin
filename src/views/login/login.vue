@@ -21,11 +21,11 @@
               <a href="http://sitespilot.com/" class="forget">Forgot Your Password?</a>
             </el-form-item>
             <el-button class="login_btn" type="primary" :loading="loading">Login</el-button>
-            <div class="register_tips">Need an account? <a href="http://sitespilot.com/">Sign up</a></div>
+            <div class="register_tips">Need an account? <a href="http://localhost:8080/register">Sign up</a></div>
           </el-form>
         </div>
       </el-col>
-      <el-col :span="9">
+      <el-col :span="9" class="right_col">
         <login-reg-right></login-reg-right>
       </el-col>
     </el-row>
@@ -60,12 +60,19 @@ export default {
 {
   height: 100%;
 }
+.el-col{
+  position: relative;
+}
+.right_col{
+  background: #040620;
+}
 .login{
-  overflow: hidden;
   .login_main{
     height: 100%;
-    max-width: 411px;
+    width: 411px;
     margin: 0 auto;
+    position: absolute;
+    left: 25%;
     .main_head{
       margin-top: 95px;
       color: #0A1148;
