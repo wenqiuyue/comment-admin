@@ -38,6 +38,13 @@ export default [
         meta:{title:'Reviews'},
         component: () => import('../../views/reviews'),
       },
+      //验证
+      {
+        path: '/verification',
+        name: 'verification',
+        meta:{title:'Verification'},
+        component: () => import('../../views/verification'),
+      },
     ]
   }
 ]

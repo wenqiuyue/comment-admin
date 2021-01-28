@@ -20,8 +20,8 @@
               <el-checkbox v-model="automaticChecked">Remember the password</el-checkbox>
               <a href="http://sitespilot.com/" class="forget">Forgot Your Password?</a>
             </el-form-item>
-            <el-button class="login_btn" type="primary" :loading="loading">Login</el-button>
-            <div class="register_tips">Need an account? <a href="http://localhost:8080/register">Sign up</a></div>
+            <el-button class="login_btn" type="primary" :loading="loading" @click="handleLogin">Login</el-button>
+            <div class="register_tips">Need an account? <a href="http://192.168.1.15:8081/register">Sign up</a></div>
           </el-form>
         </div>
       </el-col>
@@ -51,6 +51,13 @@ export default {
       }
     }
   },
+  methods:{
+    handleLogin(){
+      this.$router.push({
+        path:'/home'
+      })
+    }
+  }
 }
 </script>
 <style lang="less" scoped>

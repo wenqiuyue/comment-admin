@@ -12,26 +12,32 @@
       <el-menu
         background-color="#304156"
         text-color="#bfcbd9"
-        default-active="/home"
+        :default-active="path"
         :collapse="isCollapse"
         unique-opened
         router
       >
-        <el-menu-item index="/home" class="menu_item">
+        <el-menu-item index="/Verification" class="menu_item" v-if="true">
           <svg-icon value="icon-shouye1" :size="1.1"></svg-icon>
-          <span slot="title">Home</span>
+          <span slot="title">Profile verification</span>
         </el-menu-item>
-        <el-menu-item index="/analystics" class="menu_item">
-          <svg-icon value="icon-shuju1" :size="1.1"></svg-icon>
-          <span slot="title">Analystics</span>
-        </el-menu-item>
-        <el-menu-item index="/reviews" class="menu_item">
-          <svg-icon
-            value="icon-pinglun"
-            :size="1.2"
-          ></svg-icon>
-          <span slot="title">Reviews</span>
-        </el-menu-item>
+        <div v-if="false">
+          <el-menu-item index="/home" class="menu_item">
+            <svg-icon value="icon-shouye1" :size="1.1"></svg-icon>
+            <span slot="title">Home</span>
+          </el-menu-item>
+          <el-menu-item index="/analystics" class="menu_item">
+            <svg-icon value="icon-shuju1" :size="1.1"></svg-icon>
+            <span slot="title">Analystics</span>
+          </el-menu-item>
+          <el-menu-item index="/reviews" class="menu_item">
+            <svg-icon
+              value="icon-pinglun"
+              :size="1.2"
+            ></svg-icon>
+            <span slot="title">Reviews</span>
+          </el-menu-item>
+        </div>
       </el-menu>
     </el-aside>
     <el-container class="right_container">
@@ -43,7 +49,8 @@
               :size="1.2"
             ></svg-icon>
           </span>
-          <el-breadcrumb separator="/">
+          <div v-if="path=='/Verification'">baidu.com</div>
+          <el-breadcrumb separator="/" v-else>
             <el-breadcrumb-item
               v-for="item in levelList"
               :key="item.path"
@@ -63,7 +70,7 @@
               <i class="el-icon-caret-bottom el-icon--right"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item disabled>{{ user.uname }}</el-dropdown-item>
+              <el-dropdown-item disabled>admin</el-dropdown-item>
               <el-dropdown-item divided command="1">Set Up</el-dropdown-item>
               <el-dropdown-item command="2">Change Password</el-dropdown-item>
               <el-dropdown-item divided command="6">Log out</el-dropdown-item>
@@ -85,11 +92,13 @@ export default {
       isCollapse: false, //侧边栏是否收缩
       levelList: null, //面包屑
       user: null, //用户信息
+      path:null, //当前路由
     };
   },
   watch: {
     $route(to, from) {
       this.getBreadcrumb();
+      this.path=to.fullPath;
     },
   },
   mounted() {
@@ -97,6 +106,7 @@ export default {
   },
   created() {
     this.user = JSON.parse(localStorage.getItem(type.USER));
+    this.path = this.$route.fullPath;
   },
   methods: {
     /**
@@ -122,8 +132,12 @@ export default {
      * 面包屑
      */
     getBreadcrumb() {
-      let matched = this.$route.matched.filter((item) => item.meta.title);
-      this.levelList = matched;
+      if(this.path=='/Verification'){
+        return;
+      }else{
+        let matched = this.$route.matched.filter((item) => item.meta.title);
+        this.levelList = matched;
+      }
     },
   },
 };

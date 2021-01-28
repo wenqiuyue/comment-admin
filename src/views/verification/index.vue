@@ -1,0 +1,121 @@
+<template>
+  <div class="verification">
+    <div class="ver_main">
+      <h1 class="main_title">Domain zcool.com.cn verification</h1>
+      <el-radio v-model="verForm.verification" :label="1">Verification option 1</el-radio>
+      <div class="options">
+        <p class="option_dec">The skin is the largest organ in the body. It defends against</p>
+        <ul>
+          <li>
+            <p><strong>Copy meta tag below</strong> and paste it into your site’s home page.</p>
+            <el-input
+              type="textarea"
+              autosize
+              placeholder="请输入内容"
+              v-model="meta">
+            </el-input>
+          </li>
+          <li>
+            <p><strong>Click Finish button</strong></p>
+            <p class="normal_p">To stay verified, don’t remove the meta tag, even after verification succeeds.</p>
+          </li>
+        </ul>
+      </div>
+      <el-radio v-model="verForm.verification" :label="2">Verification option 2</el-radio>
+      <div class="options">
+        <ul>
+          <li>
+            <p><strong>Download this txt</strong> <a>verification file</a></p>
+          </li>
+          <li>
+            <p><strong>Upload the file to domain, root directory. (Example http://your-domain/verify_review.txt)</strong></p>
+          </li>
+          <li>
+            <p><strong>Click finish below.</strong></p>
+            <p class="normal_p">To stay verified, do not remove TXT verification file, from your root directory, even after verification succeeds.</p>
+          </li>
+        </ul>
+      </div>
+      <el-button class="register_btn" type="primary" :loading="loading">Verification</el-button>
+    </div>
+  </div>
+</template>
+<script>
+export default {
+  data(){
+    return{
+      loading:false,
+      verForm:{
+        verification:1
+      },
+      meta:'<meta name="verify-reviews" content="$2y$10$9pHM8q7LBuvyA78atKzuYewVlpdTQchIr6.ctYd8x8FOqdB12S57i">', // 验证方式一，meta标签
+    }
+  }
+}
+</script>
+<style lang="less" scoped>
+.verification{
+  padding: 0 40px;  
+  .ver_main{
+    width: 700px;
+    margin: 0 auto;
+    padding-bottom: 22px;
+    .main_title{
+      color: #0B143E;
+      font-size: 38px;
+      margin-top: 40px;
+      margin-bottom: 20px;
+    }
+    /deep/.el-radio{
+      margin-top: 20px;
+    }
+    .options{
+      font-size: 14px;
+      margin-left: 24px;
+      width: 100%;
+      .option{
+        line-height: 16px;
+      }
+      .option_dec{
+        color: #787D97;
+        line-height: 26px;
+        margin: 0;
+        font-family: "Roboto-Regular", Arial, "Helvetica Neue", Helvetica, sans-serif;
+      }
+      ul{
+        margin-top: 20px;
+        padding-left: 20px;
+        list-style-type: decimal;
+        li{
+          margin-bottom: 15px;
+          .el-textarea{
+            margin-top: 10px;
+          }
+          p{
+            color: #191B3A;
+            font-family: "Roboto-Regular", Arial, "Helvetica Neue", Helvetica, sans-serif;
+            margin: 0;
+            line-height: 20px;
+          }
+          .normal_p{
+            margin: 0;
+            word-break: break-all;
+          }
+          &::marker{
+            color: #191B3A;
+          }
+        }
+      }
+    }
+    .register_btn{
+      margin-top: 50px;
+      width: 100%;
+      background-color: #6cafff;
+      background-image: linear-gradient(90deg, #6cafff 12%, #0a60ff 93%);
+      box-shadow: 0 6px 20px -5px rgba(80,166,255,.7);
+      height: 48px;
+      font-size: 20px;
+    }  
+  }
+}
+</style>
