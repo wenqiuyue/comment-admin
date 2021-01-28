@@ -126,7 +126,7 @@ export default {
         verification:1
       },
       automaticChecked:false, //自动登录
-      step:3, //当前步骤
+      step:1, //当前步骤
       meta:'<meta name="verify-reviews" content="$2y$10$9pHM8q7LBuvyA78atKzuYewVlpdTQchIr6.ctYd8x8FOqdB12S57i">', // 验证方式一，meta标签
       rules: {
         webSite: [

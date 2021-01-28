@@ -11,6 +11,18 @@ export default [
 		name: 'register',
     component: () => import('../../views/register'),
   },
+  //忘记密码
+  {
+    path: '/forgot-password',
+		name: 'forgot-password',
+    component: () => import('../../views/forgot-password'),
+  },
+  //重置密码
+  {
+    path: '/password-reset',
+		name: 'password-reset',
+    component: () => import('../../views/password-reset'),
+  },
 	//首页
   {
     path: '/',

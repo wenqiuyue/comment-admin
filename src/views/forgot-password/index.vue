@@ -1,26 +1,19 @@
 <template>
-  <div class="login">
+  <div class="forgot-password">
     <el-row>
       <el-col :span="15">
-        <div class="login_main">
+        <div class="forgot_main">
           <h1 class="main_head">
             <a href="http://sitespilot.com/">sitespilot.com</a>
           </h1>
-          <h1 class="main_title">Login</h1>
-          <el-form :model="loginForm" :rules="rules" ref="loginForm" class="form" label-position="top" :hide-required-asterisk="true">
-            <el-form-item prop="acc" label="E-mail">
-              <el-input v-model="loginForm.acc" placeholder="E-mail">
+          <h1 class="main_title">Reset Password</h1>
+          <el-form :model="forgotForm" :rules="rules" ref="forgotForm" class="form" label-position="top" :hide-required-asterisk="true">
+            <el-form-item prop="email" label="E-mail">
+              <el-input v-model="forgotForm.email" placeholder="example@example.com">
               </el-input>
             </el-form-item>
-            <el-form-item prop="pwd" label="Password">
-              <el-input v-model="loginForm.pwd" placeholder="Password" show-password>
-              </el-input>
-            </el-form-item>
-             <el-form-item class="check_item">
-              <el-checkbox v-model="automaticChecked">Remember the password</el-checkbox>
-              <a href="http://192.168.1.15:8081/forgot-password" class="forget">Forgot Your Password?</a>
-            </el-form-item>
-            <el-button class="login_btn" type="primary" :loading="loading" @click="handleLogin">Login</el-button>
+            <el-button class="forgot_btn" type="primary" :loading="loading" @click="handleSend">Send Password Reset Link</el-button>
+            <div class="register_tips">Already have an account? <a href="http://192.168.1.15:8081">Sign In</a></div>
             <div class="register_tips">Need an account? <a href="http://192.168.1.15:8081/register">Sign up</a></div>
           </el-form>
         </div>
@@ -36,32 +29,31 @@ export default {
   data(){
     return{
       loading:false, //加载
-      loginForm:{
-        acc:null,
-        pwd:null
+      forgotForm:{
+        email:null
       },
       automaticChecked:false, //自动登录
       rules: {
-        acc: [
+        email: [
           { required: true, message: 'Please input email', trigger: 'blur' },
-        ],
-        pwd: [
-          { required: true, message: 'Please enter a valid password', trigger: 'blur' },
         ],
       }
     }
   },
   methods:{
-    handleLogin(){
+    /**
+     * 发送邮件
+     */
+    handleSend(){
       this.$router.push({
-        path:'/home'
+        path:'/password-reset'
       })
     }
   }
 }
 </script>
 <style lang="less" scoped>
-.login,
+.forgot-password,
 .el-row,
 .el-col
 {
@@ -73,8 +65,8 @@ export default {
 .right_col{
   background: #040620;
 }
-.login{
-  .login_main{
+.forgot-password{
+  .forgot_main{
     height: 100%;
     width: 411px;
     margin: 0 auto;
@@ -109,18 +101,7 @@ export default {
         line-height: 52px;
         box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1);
       }
-      .check_item{
-        margin-top: 10px;
-        .forget{
-          float: right;
-          text-decoration: none;
-          color: #787D97;
-        }
-        .el-checkbox{
-          color: #787D97;
-        }
-      }
-      .login_btn{
+      .forgot_btn{
         margin-top: 50px;
         width: 100%;
         background-color: #6cafff;
@@ -138,6 +119,9 @@ export default {
           text-decoration: none;
           color: #428AFF;
         }
+      }
+      .register_tips:last-child{
+        margin-top: 10px;
       }
     }
   }

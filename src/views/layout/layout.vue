@@ -18,7 +18,7 @@
         router
       >
         <el-menu-item index="/Verification" class="menu_item" v-if="true">
-          <svg-icon value="icon-shouye1" :size="1.1"></svg-icon>
+          <svg-icon value="icon-linkman-contacts_ico" :size="1.1"></svg-icon>
           <span slot="title">Profile verification</span>
         </el-menu-item>
         <div v-if="false">
@@ -49,7 +49,7 @@
               :size="1.2"
             ></svg-icon>
           </span>
-          <div v-if="path=='/Verification'">baidu.com</div>
+          <div v-if="path=='/Verification'">Domain zcool.com.cn</div>
           <el-breadcrumb separator="/" v-else>
             <el-breadcrumb-item
               v-for="item in levelList"

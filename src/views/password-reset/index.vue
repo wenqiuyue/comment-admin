@@ -1,0 +1,140 @@
+<template>
+  <div class="password-reset">
+      <div class="left_col">
+        <div class="reset_main">
+          <h1 class="main_head">
+            <a href="http://sitespilot.com/">sitespilot.com</a>
+          </h1>
+          <h1 class="main_title">Reset Password</h1>
+          <el-form :model="resetForm" :rules="rules" ref="resetForm" class="form" label-position="top" :hide-required-asterisk="true">
+            <el-form-item prop="email" label="E-mail">
+              <el-input v-model="resetForm.email" placeholder="example@example.com">
+              </el-input>
+            </el-form-item>
+            <el-form-item prop="pass" label="Password">
+              <el-input v-model="resetForm.pass" placeholder="Enter Password">
+              </el-input>
+            </el-form-item>
+            <el-form-item prop="confirmPass" label="Confirm Password">
+              <el-input v-model="resetForm.confirmPass" placeholder="Confirm Password">
+              </el-input>
+            </el-form-item>
+            <el-button class="reset_btn" type="primary" :loading="loading" @click="handleSend">Send Password Reset Link</el-button>
+            <div class="register_tips">Already have an account? <a href="http://192.168.1.15:8081">Sign In</a></div>
+            <div class="register_tips">Need an account? <a href="http://192.168.1.15:8081/register">Sign up</a></div>
+          </el-form>
+        </div>
+      </div>
+      <div class="right_col">
+        <login-reg-right></login-reg-right>
+      </div>
+  </div>
+</template>
+<script>
+export default {
+  data(){
+    return{
+      loading:false, //加载
+      resetForm:{
+        email:null,
+        pass:null,
+        confirmPass:null
+      },
+      automaticChecked:false, //自动登录
+      rules: {
+        email: [
+          { required: true, message: 'Please input email', trigger: 'blur' },
+        ],
+        pass: [
+          { required: true, message: 'Please input password', trigger: 'blur' },
+        ],
+        confirmPass: [
+          { required: true, message: 'Please input confirm password', trigger: 'blur' },
+        ],
+      }
+    }
+  },
+  methods:{
+    /**
+     * 发送邮件
+     */
+    handleSend(){
+      this.$router.push({
+        path:'/'
+      })
+    }
+  }
+}
+</script>
+<style lang="less" scoped>
+.password-reset{
+  display: table;
+  flex-direction: row;
+  .right_col{
+    width: 40%;
+    display:table-cell;
+    background: #040620;
+  }
+  .left_col{
+    width: 60%;
+    display:table-cell;
+    .reset_main{
+      width: 411px;
+      margin: 0 auto;
+      padding-bottom: 22px;
+      .main_head{
+        margin-top: 95px;
+        color: #0A1148;
+        font-size: 19.8px;
+        a{
+          text-decoration: none;
+          color: inherit;
+        }
+      }
+      .main_title{
+        color: #0B143E;
+        font-size: 52px;
+        margin-top: 81px;
+      }
+      .form{
+        /deep/.el-form-item{
+          margin-bottom: 0;
+          margin-top: 26px;
+        }
+        /deep/.el-form-item__label{
+          color: #05091D;
+          line-height: 24px;
+        }
+        /deep/.el-input__inner{
+          height: 52px;
+          font-size: 15px;
+          line-height: 52px;
+          box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1);
+        }
+        .reset_btn{
+          margin-top: 50px;
+          width: 100%;
+          background-color: #6cafff;
+          background-image: linear-gradient(90deg, #6cafff 12%, #0a60ff 93%);
+          box-shadow: 0 6px 20px -5px rgba(80,166,255,.7);
+          height: 48px;
+          font-size: 20px;
+        }
+        .register_tips{
+          margin-top: 20px;
+          text-align: center;
+          color: #AEAECA;
+          font-size: 14px;
+          a{
+            text-decoration: none;
+            color: #428AFF;
+          }
+        }
+        .register_tips:last-child{
+          margin-top: 10px;
+        }
+      }
+    }
+  }
+}
+</style>

@@ -88,6 +88,13 @@
       "font_class": "cebianlan-bijiao-xuanzhong",
       "unicode": "e624",
       "unicode_decimal": 58916
+    },
+    {
+      "icon_id": "71937035",
+      "name": "好友列表",
+      "font_class": "linkman-contacts_ico",
+      "unicode": "e666",
+      "unicode_decimal": 58982
     }
   ]
 }
