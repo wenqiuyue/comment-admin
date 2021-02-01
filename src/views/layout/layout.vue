@@ -17,11 +17,11 @@
         unique-opened
         router
       >
-        <el-menu-item index="/Verification" class="menu_item" v-if="true">
+        <el-menu-item index="/Verification" class="menu_item" v-if="path=='/Verification'">
           <svg-icon value="icon-linkman-contacts_ico" :size="1.1"></svg-icon>
           <span slot="title">Profile verification</span>
         </el-menu-item>
-        <div v-if="false">
+        <div v-else>
           <el-menu-item index="/home" class="menu_item">
             <svg-icon value="icon-shouye1" :size="1.1"></svg-icon>
             <span slot="title">Home</span>

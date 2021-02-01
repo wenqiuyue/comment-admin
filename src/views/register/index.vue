@@ -4,57 +4,66 @@
         <div class="register_main">
           <h1 class="main_title">Create a free account</h1>
           <el-form :model="registerForm" :rules="rules" ref="form-1" class="form" label-position="top" :hide-required-asterisk="true" v-if="step==1">
-            <el-form-item prop="webSite" label="Web site">
-              <el-input v-model="registerForm.webSite" placeholder="Enter web site">
+            <el-form-item prop="WebSite" label="Web site">
+              <el-input v-model="registerForm.WebSite" placeholder="Enter web site">
               </el-input>
             </el-form-item>
-            <el-form-item prop="email" label="Work email">
-              <el-input v-model="registerForm.email" placeholder="Enter work email">
+            <el-form-item prop="WorkEmail" label="Work email">
+              <el-input v-model="registerForm.WorkEmail" placeholder="Enter work email">
               </el-input>
             </el-form-item>
             <div class="inline">
-              <el-form-item prop="password" label="Password">
-                <el-input v-model="registerForm.password" placeholder="Enter password">
+              <el-form-item prop="Pwd" label="Password">
+                <el-input v-model="registerForm.Pwd" placeholder="Enter password">
                 </el-input>
               </el-form-item>
-              <el-form-item prop="repeatPass" label="Repeat password">
+              <el-form-item 
+                prop="repeatPass" 
+                label="Repeat password"
+              >
                 <el-input v-model="registerForm.repeatPass" placeholder="Repeat password">
                 </el-input>
               </el-form-item>
             </div>
           </el-form>
           <el-form :model="registerForm" :rules="rules" ref="form-2" class="form" label-position="top" :hide-required-asterisk="true" v-if="step==2">
-            <el-form-item label="Company name">
-              <el-input v-model="registerForm.company" placeholder="Enter company name">
+            <el-form-item prop="CompanyName" label="Company name">
+              <el-input v-model="registerForm.CompanyName" placeholder="Enter company name">
               </el-input>
             </el-form-item>
             <div class="inline">
-              <el-form-item prop="fName" label="First Name">
-                <el-input v-model="registerForm.fName" placeholder="Enter first name">
+              <el-form-item prop="FirstName" label="First Name">
+                <el-input v-model="registerForm.FirstName" placeholder="Enter first name">
                 </el-input>
               </el-form-item>
-              <el-form-item prop="sName" label="Surname">
-                <el-input v-model="registerForm.sName" placeholder="Enter surname">
+              <el-form-item prop="Surname" label="Surname">
+                <el-input v-model="registerForm.Surname" placeholder="Enter surname">
                 </el-input>
               </el-form-item>
             </div>
-            <el-form-item prop="phone" label="Phone number">
-              <el-input v-model="registerForm.phone" placeholder="Enter phone number">
+            <el-form-item prop="Phone" label="Phone number">
+              <el-input v-model="registerForm.Phone" placeholder="Enter phone number">
               </el-input>
             </el-form-item>
             <div class="inline">
-              <el-form-item prop="country" label="Country">
-                <el-input v-model="registerForm.country" placeholder="Enter first name">
-                </el-input>
+              <el-form-item prop="Country" label="Country">
+                <el-select v-model="registerForm.Country">
+                  <el-option
+                    v-for="item in countryOptions"
+                    :key="item.Id"
+                    :label="item.Name"
+                    :value="item.Id">
+                  </el-option>
+                </el-select>
               </el-form-item>
-              <el-form-item prop="city" label="City">
-                <el-input v-model="registerForm.city" placeholder="Enter city">
+              <el-form-item prop="City" label="City">
+                <el-input v-model="registerForm.City" placeholder="Enter city">
                 </el-input>
               </el-form-item>
             </div>
           </el-form>
           <div class="verification" v-if="step==3">
-                <el-radio v-model="registerForm.verification" :label="1">Verification option 1</el-radio>
+                <el-radio v-model="verification" :label="1">Verification option 1</el-radio>
                   <div class="options">
                     <p class="option_dec">The skin is the largest organ in the body. It defends against</p>
                     <ul>
@@ -73,7 +82,7 @@
                       </li>
                     </ul>
                   </div>
-                 <el-radio v-model="registerForm.verification" :label="2">Verification option 2</el-radio>
+                 <el-radio v-model="verification" :label="2">Verification option 2</el-radio>
                   <div class="options">
                     <ul>
                       <li>
@@ -89,10 +98,10 @@
                     </ul>
                   </div>
           </div>
-          <el-button class="register_btn" type="primary" :loading="loading" @click="handleNext" v-if="step==1">Next</el-button>
+          <el-button class="register_btn" type="primary" :loading="loading" @click="handleNext" v-if="step==1 || step==3">{{step==3?'Finish':'Next'}}</el-button>
           <div class="two_btn" v-else>
-            <el-button class="register_btn" type="primary" :loading="loading" @click="step--">Previous</el-button>
-            <el-button class="register_btn" type="primary" :loading="loading" @click="handleNext">{{step==3?'Finish':'Next'}}</el-button>
+            <el-button class="register_btn" type="primary" :loading="loading" @click="handlePrevious">Previous</el-button>
+            <el-button class="register_btn" type="primary" :loading="loading" @click="handleNext">Save</el-button>
           </div>
           <ul class="step">
             <li :class="step==1?'now_step':''"></li>
@@ -110,53 +119,98 @@
 <script>
 export default {
   data(){
+    var checkCompany = (rule, value, callback) => {
+      if(this.step!=2){
+        return;
+      }
+      const data={
+        Url:this.registerForm.WebSite,
+        Name:value
+      }
+      this.$apiHttp.businessVerificationCompany(data).then((resp)=>{
+        if(resp.res==500){
+          callback(new Error(resp.msg));
+        }else{
+          callback();
+        }
+      })
+    };
     return{
       loading:false, //加载
       registerForm:{
-        webSite:null,
-        email:null,
-        password:null,
-        repeatPass:null,
-        company:null,
-        fName:null,
-        sName:null,
-        phone:null,
-        country:null,
-        city:null,
-        verification:1
+        WebSite:null,
+        WorkEmail:null,
+        Pwd:null,
+        CompanyName:null,
+        FirstName:null,
+        Surname:null,
+        Phone:null,
+        Country:null,
+        City:null,
+        repeatPass:null, //电话号码确认
       },
+      verification:1, //验证方法
       automaticChecked:false, //自动登录
       step:1, //当前步骤
+      countryOptions:null, //国家选项
+      idBusiness:null,
       meta:'<meta name="verify-reviews" content="$2y$10$9pHM8q7LBuvyA78atKzuYewVlpdTQchIr6.ctYd8x8FOqdB12S57i">', // 验证方式一，meta标签
       rules: {
-        webSite: [
+        WebSite: [
           { required: true, message: 'The domain field is required.', trigger: 'blur' },
         ],
-        email: [
+        WorkEmail: [
           { required: true, message: 'The email field is required.', trigger: 'blur' },
+          { type: 'email', message: 'Please enter the correct email address', trigger: ['blur', 'change'] }
         ],
-        password: [
+        Pwd: [
           { required: true, message: 'The password field is required.', trigger: 'blur' },
         ],
-        repeatPass: [
+        repeatPass:[
           { required: true, message: 'The repeat password field is required.', trigger: 'blur' },
         ],
-        fName: [
+        CompanyName:[
+          { required: true, message: 'The Company name is required.', trigger: 'blur' },
+          { validator: checkCompany, trigger: 'blur' }
+        ],
+        FirstName: [
           { required: true, message: 'First name is required.', trigger: 'blur' },
         ],
-        sName: [
+        Surname: [
           { required: true, message: 'The Surname is required.', trigger: 'blur' },
         ],
-        phone: [
+        Phone: [
           { required: true, message: 'Phone number is required.', trigger: 'blur' },
         ],
-        city: [
+        City: [
           { required: true, message: 'City is required.', trigger: 'blur' },
         ],
       }
     }
   },
+  mounted(){
+    this.getCountry();
+  },
   methods:{
+    /**
+     * 上一步
+     */
+    handlePrevious(){
+      this.step--;
+      this.$nextTick(()=>{
+        this.$refs[`form-${this.step}`].validate();
+      })
+    },
+    /**
+     * 获取国家选项
+     */
+    getCountry(){
+      this.$apiHttp.businessGetCountry().then((resp)=>{
+        if(resp.res==200){
+          this.countryOptions=resp.data;
+        }
+      })
+    },
     /**
      * 下一步
      */
@@ -166,16 +220,31 @@ export default {
         this.$router.push({
           path:'/Verification'
         })
-      }
-      const stepNum = this.step;
-      this.$refs[`form-${stepNum}`].validate((valid)=>{
+      };
+      this.$refs[`form-${this.step}`].validate((valid)=>{
         if(valid){
-          this.step++;
+          if(this.step==2){
+            this.saveBusiness();
+          }else{
+            this.step++;
+          }
         }else{
           return;
         }
       })
-    }
+    },
+    /**
+     * 保存商家信息
+     */
+    saveBusiness(){
+      this.loading=true;
+      this.$apiHttp.businessSaveBusiness(this.registerForm).then((resp)=>{
+        if(resp.res==200){
+          this.idBusiness=resp.data;
+          this.step++;
+        }
+      }).finally(()=> this.loading=false);
+    },
   }
 }
 </script>
