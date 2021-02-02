@@ -21,7 +21,7 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   response => {
     const result = response.data;
-    if (result.res == 500) {
+    if (result.res == 300) {
       return result;
     }else if(result.res!=200){
       Message.error({ message: result.msg })

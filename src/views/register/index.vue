@@ -86,7 +86,7 @@
                   <div class="options">
                     <ul>
                       <li>
-                        <p><strong>Download this txt</strong> <a>verification file</a></p>
+                        <p><strong>Download this txt</strong> <el-link type="primary" v-down="codeFile"> verification file</el-link></p>
                       </li>
                       <li>
                         <p><strong>Upload the file to domain, root directory. (Example http://your-domain/verify_review.txt)</strong></p>
@@ -100,7 +100,7 @@
           </div>
           <el-button class="register_btn" type="primary" :loading="loading" @click="handleNext" v-if="step==1 || step==3">{{step==3?'Finish':'Next'}}</el-button>
           <div class="two_btn" v-else>
-            <el-button class="register_btn" type="primary" :loading="loading" @click="handlePrevious">Previous</el-button>
+            <el-button class="register_btn" type="primary" @click="handlePrevious">Previous</el-button>
             <el-button class="register_btn" type="primary" :loading="loading" @click="handleNext">Save</el-button>
           </div>
           <ul class="step">
@@ -117,6 +117,7 @@
   </div>
 </template>
 <script>
+import axios from "axios";
 export default {
   data(){
     var checkCompany = (rule, value, callback) => {
@@ -128,7 +129,7 @@ export default {
         Name:value
       }
       this.$apiHttp.businessVerificationCompany(data).then((resp)=>{
-        if(resp.res==500){
+        if(resp.res==300){
           callback(new Error(resp.msg));
         }else{
           callback();
@@ -145,7 +146,7 @@ export default {
         FirstName:null,
         Surname:null,
         Phone:null,
-        Country:null,
+        Country:1,
         City:null,
         repeatPass:null, //电话号码确认
       },
@@ -153,15 +154,16 @@ export default {
       automaticChecked:false, //自动登录
       step:1, //当前步骤
       countryOptions:null, //国家选项
-      idBusiness:null,
-      meta:'<meta name="verify-reviews" content="$2y$10$9pHM8q7LBuvyA78atKzuYewVlpdTQchIr6.ctYd8x8FOqdB12S57i">', // 验证方式一，meta标签
+      businessId:null, //商家id
+      meta:null, // 验证方式一，meta标签
+      codeFile:null, //验证方式二，下载的文件
       rules: {
         WebSite: [
           { required: true, message: 'The domain field is required.', trigger: 'blur' },
         ],
         WorkEmail: [
           { required: true, message: 'The email field is required.', trigger: 'blur' },
-          { type: 'email', message: 'Please enter the correct email address', trigger: ['blur', 'change'] }
+          // { type: 'email', message: 'Please enter the correct email address', trigger: ['blur', 'change'] }
         ],
         Pwd: [
           { required: true, message: 'The password field is required.', trigger: 'blur' },
@@ -171,7 +173,7 @@ export default {
         ],
         CompanyName:[
           { required: true, message: 'The Company name is required.', trigger: 'blur' },
-          { validator: checkCompany, trigger: 'blur' }
+          // { validator: checkCompany, trigger: 'blur' }
         ],
         FirstName: [
           { required: true, message: 'First name is required.', trigger: 'blur' },
@@ -185,6 +187,25 @@ export default {
         City: [
           { required: true, message: 'City is required.', trigger: 'blur' },
         ],
+      }
+    }
+  },
+  computed:{
+    url(){
+      return process.env.VUE_APP_BASE_URL
+    }
+  },
+  directives: {
+    /**
+     * 文件下载
+     */
+    'down': {
+      inserted(el, binding) {
+        el.addEventListener('click', () => {
+          let url = binding.value;
+          const dic_url = process.env.VUE_APP_BASE_URL + "/api/Business/DownLoadFile?file=" + url;
+          window.location.href=dic_url;
+        })
       }
     }
   },
@@ -217,9 +238,24 @@ export default {
     handleNext(){
       //如果到达验证步骤
       if(this.step==3){
-        this.$router.push({
-          path:'/Verification'
-        })
+        this.loading=true;
+        const data={
+          Option:this.verification,
+          Id:this.businessId
+        }
+        this.$apiHttp.businessVerificationCode(data).then((resp)=>{
+          if(resp.res==200){
+
+          }else{
+            this.$router.push({
+              path:'/Verification',
+              query:{
+                meta:this.meta,
+                webSite:this.registerForm.WebSite
+              }
+            })
+          }
+        }).finally(()=> this.loading=false);
       };
       this.$refs[`form-${this.step}`].validate((valid)=>{
         if(valid){
@@ -240,7 +276,22 @@ export default {
       this.loading=true;
       this.$apiHttp.businessSaveBusiness(this.registerForm).then((resp)=>{
         if(resp.res==200){
-          this.idBusiness=resp.data;
+          this.businessId=resp.data;
+          this.getGenerateCode(resp.data)
+        }else{
+          this.loading=false;
+        }
+      })
+    },
+    /**
+     * 获取两种验证方式的加密串和文件
+     */
+    getGenerateCode(id){
+      this.$apiHttp.businessGenerateCode({params:{id:id}}).then((resp)=>{
+        if(resp.res==200){
+          this.meta=resp.data.meta;
+          this.codeFile=resp.data.file;
+          console.log(this.codeFile);
           this.step++;
         }
       }).finally(()=> this.loading=false);
