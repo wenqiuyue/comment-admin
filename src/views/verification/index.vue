@@ -1,7 +1,7 @@
 <template>
-  <div class="verification">
+  <div class="verification" v-if="verificationData">
     <div class="ver_main">
-      <h1 class="main_title">Domain zcool.com.cn verification</h1>
+      <h1 class="main_title">{{verificationData.webSite}} verification</h1>
       <el-radio v-model="verForm.verification" :label="1">Verification option 1</el-radio>
       <div class="options">
         <p class="option_dec">The skin is the largest organ in the body. It defends against</p>
@@ -10,9 +10,9 @@
             <p><strong>Copy meta tag below</strong> and paste it into your site’s home page.</p>
             <el-input
               type="textarea"
-              autosize
+              :autosize="{ minRows: 2, maxRows: 4}"
               placeholder="请输入内容"
-              v-model="meta">
+              v-model="verificationData.meta">
             </el-input>
           </li>
           <li>
@@ -25,7 +25,7 @@
       <div class="options">
         <ul>
           <li>
-            <p><strong>Download this txt</strong> <a>verification file</a></p>
+            <p><strong>Download this txt</strong> <el-link type="primary" v-down="verificationData.fileUrl"> verification file</el-link></p>
           </li>
           <li>
             <p><strong>Upload the file to domain, root directory. (Example http://your-domain/verify_review.txt)</strong></p>
@@ -36,11 +36,12 @@
           </li>
         </ul>
       </div>
-      <el-button class="register_btn" type="primary" :loading="loading">Verification</el-button>
+      <el-button class="register_btn" type="primary" :loading="loading" @click="handleVer">Verification</el-button>
     </div>
   </div>
 </template>
 <script>
+import type from '../../commons/type';
 export default {
   data(){
     return{
@@ -48,7 +49,48 @@ export default {
       verForm:{
         verification:1
       },
-      meta:'<meta name="verify-reviews" content="$2y$10$9pHM8q7LBuvyA78atKzuYewVlpdTQchIr6.ctYd8x8FOqdB12S57i">', // 验证方式一，meta标签
+      verificationData:null //验证需要的信息
+
+    }
+  },
+  directives: {
+    /**
+     * 文件下载
+     */
+    'down': {
+      inserted(el, binding) {
+        el.addEventListener('click', () => {
+          let url = binding.value;
+          const dic_url = process.env.VUE_APP_BASE_URL + "/api/Business/DownLoadFile?file=" + url;
+          window.location.href=dic_url;
+        })
+      }
+    }
+  },
+  mounted(){
+    this.verificationData = JSON.parse(localStorage.getItem(type.USER));
+    if(this.verificationData && this.verificationData.fileUrl){
+      this.verificationData.fileUrl = this.verificationData.fileUrl.split('/file/')[1];
+    }
+  },
+  methods:{
+    /**
+     * 验证
+     */
+    handleVer(){
+      this.loading = true;
+      const data={
+        Option:this.verForm.verification,
+        Id:this.verificationData.id
+      }
+      this.$apiHttp.businessVerificationCode(data).then((resp)=>{
+        if(resp.res==200){
+          //如果验证成功，就到登录界面
+          this.$router.push({
+            path: "/"
+          });
+        }
+      }).finally(()=> this.loading=false);
     }
   }
 }

@@ -36,3 +36,27 @@ export function businessVerificationCode (data) {
 export function businessDownLoadFile (data) {
   return fetchGet('api/Business/DownLoadFile',data)
 };
+/**
+ * 登录
+ */
+export function login (data) {
+  return fetchPost('/site/Login',data)
+};
+/**
+ * 获取首页评论信息
+ */
+export function siteComment (data) {
+  return fetchGet('/site/Comment',data)
+};
+/**
+ * 获取柱状图数据
+ */
+export function siteAnalysticBrokenLine (data) {
+  return fetchGet('/site/AnalysticBrokenLine',data)
+};
+/**
+ * 获取饼状图数据
+ */
+export function siteAnalysticPieChart (data) {
+  return fetchGet('/site/AnalysticPieChart',data)
+};

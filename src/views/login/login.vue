@@ -8,12 +8,12 @@
           </h1>
           <h1 class="main_title">Login</h1>
           <el-form :model="loginForm" :rules="rules" ref="loginForm" class="form" label-position="top" :hide-required-asterisk="true">
-            <el-form-item prop="acc" label="E-mail">
-              <el-input v-model="loginForm.acc" placeholder="E-mail">
+            <el-form-item prop="account" label="E-mail">
+              <el-input v-model="loginForm.account" placeholder="E-mail">
               </el-input>
             </el-form-item>
-            <el-form-item prop="pwd" label="Password">
-              <el-input v-model="loginForm.pwd" placeholder="Password" show-password>
+            <el-form-item prop="password" label="Password">
+              <el-input v-model="loginForm.password" placeholder="Password" show-password>
               </el-input>
             </el-form-item>
              <el-form-item class="check_item">
@@ -32,20 +32,22 @@
   </div>
 </template>
 <script>
+import type from '../../commons/type';
 export default {
   data(){
     return{
       loading:false, //加载
       loginForm:{
-        acc:null,
-        pwd:null
+        account:null,
+        password:null
       },
-      automaticChecked:false, //自动登录
+      automaticChecked:true, //自动登录
       rules: {
-        acc: [
+        account: [
           { required: true, message: 'Please input email', trigger: 'blur' },
+          { type: 'email', message: 'Please enter the correct email address', trigger: ['blur', 'change'] }
         ],
-        pwd: [
+        password: [
           { required: true, message: 'Please enter a valid password', trigger: 'blur' },
         ],
       }
@@ -53,8 +55,29 @@ export default {
   },
   methods:{
     handleLogin(){
-      this.$router.push({
-        path:'/home'
+      this.$refs.loginForm.validate((valid)=>{
+        if(valid){
+          this.loading=true;
+          this.$apiHttp.login(this.loginForm).then((resp)=>{
+            if(resp.res==200){
+              if(resp.data.status){
+                this.$store.dispatch("login", resp.data.token);
+                localStorage.setItem(type.USER, JSON.stringify(resp.data));
+                this.$router.push({
+                  path: "/home"
+                });
+              }else{
+                localStorage.setItem(type.USER, JSON.stringify(resp.data));
+                this.$router.push({
+                  path:'/Verification'
+                })
+              }
+              // this.$store.dispatch("login", resp.data);
+            }
+          }).finally(()=> this.loading=false);
+        }else{
+          return;
+        }
       })
     }
   }

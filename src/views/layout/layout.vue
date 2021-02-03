@@ -49,7 +49,7 @@
               :size="1.2"
             ></svg-icon>
           </span>
-          <div v-if="path=='/Verification'">Domain zcool.com.cn</div>
+          <div v-if="path=='/Verification' && user">{{user.webSite}}</div>
           <el-breadcrumb separator="/" v-else>
             <el-breadcrumb-item
               v-for="item in levelList"
@@ -70,7 +70,10 @@
               <i class="el-icon-caret-bottom el-icon--right"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item disabled>admin</el-dropdown-item>
+              <el-dropdown-item disabled>
+                <div>{{user.firstName}}</div>
+                <div>{{user.workEmail}}</div>
+              </el-dropdown-item>
               <el-dropdown-item divided command="1">Set Up</el-dropdown-item>
               <el-dropdown-item command="2">Change Password</el-dropdown-item>
               <el-dropdown-item divided command="6">Log out</el-dropdown-item>
@@ -105,8 +108,8 @@ export default {
     this.getBreadcrumb();
   },
   created() {
-    this.user = JSON.parse(localStorage.getItem(type.USER));
     this.path = this.$route.fullPath;
+    this.user = JSON.parse(localStorage.getItem(type.USER));
   },
   methods: {
     /**

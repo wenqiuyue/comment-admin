@@ -9,6 +9,7 @@
           </el-tooltip>
         </div>
         <el-date-picker
+          @change="datePickerChange(1)"
           v-model="reviewNumDate"
           type="monthrange"
           range-separator="-"
@@ -63,6 +64,8 @@ export default {
     return{
       reviewNumDate:[], //评论条数图标日期
       totalRatingDate:[],
+      reviewNumData:null, //柱状图数据
+      totalRatingData:null, //饼状图数据
       echarts:null
     }
   },
@@ -70,10 +73,54 @@ export default {
     this.echarts = require('echarts');
   },
   mounted(){
-    this.reviewNumEcharts();
-    this.totalRatingEcharts();
+    this.getAnalysticBrokenLine();
+    this.getAnalysticPieChart();
   },
   methods:{
+    /**
+     * 时间选择切换
+     * 1、柱状图  2、饼状图
+     */
+    datePickerChange(type){
+      if(type==1){
+        this.getAnalysticBrokenLine();
+      }else{
+        this.getAnalysticPieChart();
+      }
+    },
+    /**
+     * 柱状图数据
+     */
+    getAnalysticBrokenLine(){
+      const data={
+        startTime: this.reviewNumDate.length>0?this.reviewNumDate[0].timeFormat('yyyy-MM-dd'):null,
+        endTime: this.reviewNumDate.length>0?this.reviewNumDate[1].timeFormat('yyyy-MM-dd'):null
+      }
+      this.$apiHttp.siteAnalysticBrokenLine({params:data}).then((resp)=>{
+        if(resp.res==200){
+          this.reviewNumData = resp.data;
+          this.reviewNumEcharts();
+        }
+      })
+    },
+    /**
+     * 饼状图数据
+     */
+    getAnalysticPieChart(){
+      const data={
+        startTime: this.totalRatingDate.length>0?this.totalRatingDate[0].timeFormat('yyyy-MM-dd'):null,
+        endTime: this.totalRatingDate.length>0?this.totalRatingDate[1].timeFormat('yyyy-MM-dd'):null
+      }
+      this.$apiHttp.siteAnalysticPieChart({params:data}).then((resp)=>{
+        if(resp.res==200){
+          this.totalRatingData = resp.data;
+          this.totalRatingEcharts();
+        }
+      })
+    },
+    /**
+     * 柱状图
+     */
     reviewNumEcharts(){
       // 基于准备好的dom，初始化echarts实例
 		  var myChart = this.echarts.init(document.getElementById('reviewNum'));

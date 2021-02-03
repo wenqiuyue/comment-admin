@@ -95,6 +95,13 @@
       "font_class": "linkman-contacts_ico",
       "unicode": "e666",
       "unicode_decimal": 58982
+    },
+    {
+      "icon_id": "72288839",
+      "name": "无数据",
+      "font_class": "wushuju",
+      "unicode": "e642",
+      "unicode_decimal": 58946
     }
   ]
 }

@@ -2,6 +2,27 @@ module.exports = {
   lintOnSave: false,
   devServer:{
     host : "0.0.0.0",
-    open:true,
+    open: true,
+    port: 8081,
+    https: false,
+    proxy: {//配置跨域
+      '/site': {
+        target: 'http://192.168.1.43:8080',//这里后台的地址模拟的;应该填写你们真实的后台接口
+        ws: true,
+        changOrigin: true,//允许跨域
+        // pathRewrite: {
+        // '^/api': '/'//请求的时候使用这个api就可以
+        // }
+      },
+      '/api': {
+        target: 'http://120.25.67.116:5251',//这里后台的地址模拟的;应该填写你们真实的后台接口
+        ws: true,
+        changOrigin: true,//允许跨域
+        // pathRewrite: {
+        // '^/api': ''//请求的时候使用这个api就可以
+        // }
+      },
+    }
+
   }
 };

@@ -1,8 +1,9 @@
 import axios from 'axios'
+import type from '../commons/type'
 import { Message } from "element-ui";
 
 const instance = axios.create({
-  baseURL: process.env.VUE_APP_BASE_URL,
+  // baseURL: '/',
   timeout: 20000,
 })
 // 请求拦截器
@@ -10,6 +11,10 @@ instance.interceptors.request.use(
   config => {
     config.headers = {
       'Content-Type': 'application/json;charset=utf-8'
+    }
+    const token = localStorage.getItem(type.TOKEN);
+    if (token) {
+      config.headers.Authorization = 'Bearer '+token;
     }
     return config
   },

@@ -71,7 +71,7 @@
                         <p><strong>Copy meta tag below</strong> and paste it into your site’s home page.</p>
                         <el-input
                           type="textarea"
-                          autosize
+                          :autosize="{ minRows: 2, maxRows: 4}"
                           placeholder="请输入内容"
                           v-model="meta">
                         </el-input>
@@ -117,7 +117,7 @@
   </div>
 </template>
 <script>
-import axios from "axios";
+import type from '../../commons/type';
 export default {
   data(){
     var checkCompany = (rule, value, callback) => {
@@ -163,7 +163,7 @@ export default {
         ],
         WorkEmail: [
           { required: true, message: 'The email field is required.', trigger: 'blur' },
-          // { type: 'email', message: 'Please enter the correct email address', trigger: ['blur', 'change'] }
+          { type: 'email', message: 'Please enter the correct email address', trigger: ['blur', 'change'] }
         ],
         Pwd: [
           { required: true, message: 'The password field is required.', trigger: 'blur' },
@@ -214,6 +214,31 @@ export default {
   },
   methods:{
     /**
+     * 商家验证失败获取验证数据
+     */
+    getVer(){
+      const data={
+        account:this.registerForm.WorkEmail,
+        password:this.registerForm.Pwd
+      }
+      this.$apiHttp.login(data).then((resp)=>{
+        if(resp.res==200){
+          if(resp.data.status){
+            localStorage.setItem(type.USER, JSON.stringify(resp.data));
+            this.$store.dispatch("login", resp.data);
+            this.$router.push({
+              path: "/home"
+            });
+          }else{
+            localStorage.setItem(type.USER, JSON.stringify(resp.data));
+            this.$router.push({
+              path:'/Verification'
+            })
+          }
+        }
+      }).finally(()=> this.loading=false);
+    },
+    /**
      * 上一步
      */
     handlePrevious(){
@@ -243,19 +268,10 @@ export default {
           Option:this.verification,
           Id:this.businessId
         }
-        this.$apiHttp.businessVerificationCode(data).then((resp)=>{
-          if(resp.res==200){
-
-          }else{
-            this.$router.push({
-              path:'/Verification',
-              query:{
-                meta:this.meta,
-                webSite:this.registerForm.WebSite
-              }
-            })
-          }
-        }).finally(()=> this.loading=false);
+        this.$apiHttp.businessVerificationCode(data).finally(()=> {
+          this.getVer();
+        });
+        return;
       };
       this.$refs[`form-${this.step}`].validate((valid)=>{
         if(valid){

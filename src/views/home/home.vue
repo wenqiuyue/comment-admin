@@ -1,162 +1,205 @@
 <template>
   <div class="home">
-    <el-row :gutter="8" class="row">
-      <el-col :span="12">
-        <div class="card">
-          <div class="card_title">
-            <div class="card_title_left">
-              <span>Overall performance</span>
-              <el-tooltip class="item" effect="dark" content="Top Center 提示文字" placement="top">
-                <i class="el-icon-info"></i>
-              </el-tooltip>
+    <div class="date">
+       <el-date-picker
+        @change="datePickerChange"
+        v-model="datePicker"
+        type="daterange"
+        range-separator="-"
+        start-placeholder="Start date"
+        end-placeholder="End date">
+      </el-date-picker>
+    </div>
+    <div v-loading="loading" class="home_main" v-if="!comData">
+      <el-row :gutter="8" class="row">
+        <el-col :span="12">
+          <div class="card">
+            <div class="card_title">
+              <div class="card_title_left">
+                <span>Overall performance</span>
+                <el-tooltip class="item" effect="dark" content="Top Center 提示文字" placement="top">
+                  <i class="el-icon-info"></i>
+                </el-tooltip>
+              </div>
+            </div>
+            <div class="card_score">
+              <h5>Great</h5>
+              <rate
+                class="c_rate"
+                :value="3.5"
+                :isDisabled="true"
+              >
+              </rate>
+              <div class="reviews_num">Based on <strong>152</strong> reviews</div>
+            </div>
+            <div class="trust_score">
+              <div>TRUSTSCORE</div>
+              <div><strong>3.8</strong> out of 5</div>
             </div>
           </div>
-          <div class="card_score">
-            <h5>Great</h5>
-            <rate
-              class="c_rate"
-              :value="3.5"
-              :isDisabled="true"
-            >
-            </rate>
-            <div class="reviews_num">Based on <strong>152</strong> reviews</div>
-          </div>
-          <div class="trust_score">
-            <div>TRUSTSCORE</div>
-            <div><strong>3.8</strong> out of 5</div>
-          </div>
-        </div>
-      </el-col>
-      <el-col :span="12">
-        <div class="card">
-          <div class="card_title">
-            <div class="card_title_left">
-              <span>Engage</span>
-              <el-tooltip class="item" effect="dark" content="Top Center 提示文字" placement="top">
-                <i class="el-icon-info"></i>
-              </el-tooltip>
+        </el-col>
+        <el-col :span="12">
+          <div class="card">
+            <div class="card_title">
+              <div class="card_title_left">
+                <span>Engage</span>
+                <el-tooltip class="item" effect="dark" content="Top Center 提示文字" placement="top">
+                  <i class="el-icon-info"></i>
+                </el-tooltip>
+              </div>
+              <div class="card_title_right">
+                Service Reviews
+              </div>
             </div>
-            <div class="card_title_right">
-              Service Reviews
-            </div>
-          </div>
-          <p class="eng_reviews">Your 3 latest reviews</p>
-          <div class="reviews_list">
-            <div class="reviews_item" v-for="(item,index) in 3" :key="index">
-              <span class="reviews_item_l">"</span>
-              <div class="reviews_item_r">
-                <div>These guys work very hard and impatient users These guys work very hard and impatient usersThese guys work very hard and impatient users</div>
-                <div>
-                  <rate
-                    class="c_rate"
-                    :value="5"
-                    :isDisabled="true"
-                  >
-                  </rate>
-                  <span>By Jamie Chamber, 2 weeks ago</span>
+            <p class="eng_reviews">Your 3 latest reviews</p>
+            <div class="reviews_list">
+              <div class="reviews_item" v-for="(item,index) in 3" :key="index">
+                <span class="reviews_item_l">"</span>
+                <div class="reviews_item_r">
+                  <div>These guys work very hard and impatient users These guys work very hard and impatient usersThese guys work very hard and impatient users</div>
+                  <div>
+                    <rate
+                      class="c_rate"
+                      :value="5"
+                      :isDisabled="true"
+                    >
+                    </rate>
+                    <span>By Jamie Chamber, 2 weeks ago</span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </el-col>
-    </el-row>
-    <el-row class="row">
-      <el-col :span="24">
-        <div class="card">
-          <div class="card_title">
-            <div class="card_title_left">
-              <span>Your reviews</span>
-              <el-tooltip class="item" effect="dark" content="Top Center 提示文字" placement="top">
-                <i class="el-icon-info"></i>
-              </el-tooltip>
+        </el-col>
+      </el-row>
+      <el-row class="row">
+        <el-col :span="24">
+          <div class="card">
+            <div class="card_title">
+              <div class="card_title_left">
+                <span>Your reviews</span>
+                <el-tooltip class="item" effect="dark" content="Top Center 提示文字" placement="top">
+                  <i class="el-icon-info"></i>
+                </el-tooltip>
+              </div>
+            </div>
+            <div class="reviews">
+              <div class="reviews_l" v-if="false">
+                <p>No reviews to show for this time frame.</p>
+                <p>Try broadening your search</p>
+              </div>
+              <div class="reviews_l_card_list" v-else>
+                <div class="reviews_l_card">
+                  <div class="r_l_c_title">TOTAL REVIEWS</div>
+                  <h5>1</h5>
+                  <el-dropdown trigger="click">
+                    <span class="el-dropdown-link">
+                      <i class="el-icon-caret-bottom"></i> <span class="dropdown_txt">-66.7%</span>
+                    </span>
+                    <el-dropdown-menu slot="dropdown">
+                      <el-dropdown-item>黄金糕</el-dropdown-item>
+                      <el-dropdown-item>狮子头</el-dropdown-item>
+                      <el-dropdown-item>螺蛳粉</el-dropdown-item>
+                    </el-dropdown-menu>
+                  </el-dropdown>
+                </div>
+                <!-- <div class="reviews_l_card">
+                  <div class="r_l_c_title">WITH AN INVITATION</div>
+                  <h5>0</h5>
+                </div> -->
+                <div class="reviews_l_card">
+                  <div class="r_l_c_title">YOUR REPLY RATE</div>
+                  <h5>0%</h5>
+                </div>
+                <!-- <div class="reviews_l_card">
+                  <div class="r_l_c_title">WITHOUT AN INVITATION</div>
+                  <h5>1</h5>
+                  <el-dropdown trigger="click">
+                    <span class="el-dropdown-link">
+                      <i class="el-icon-caret-bottom"></i> <span class="dropdown_txt">-66.7%</span>
+                    </span>
+                    <el-dropdown-menu slot="dropdown">
+                      <el-dropdown-item>黄金糕</el-dropdown-item>
+                      <el-dropdown-item>狮子头</el-dropdown-item>
+                      <el-dropdown-item>螺蛳粉</el-dropdown-item>
+                    </el-dropdown-menu>
+                  </el-dropdown>
+                </div> -->
+              </div>
+              <div class="reviews_r">
+                <p>STAR DISTRIBUTION</p>
+                <div class="reviews_star_list">
+                  <div class="star_item">
+                    <span>5 stars</span>
+                    <el-progress :text-inside="true" :stroke-width="26" :percentage="70" color="#00B67A"></el-progress>
+                    <span>32 Reviews</span>
+                  </div>
+                  <div class="star_item">
+                    <span>4 stars</span>
+                    <el-progress :text-inside="true" :stroke-width="26" :percentage="80" color="#73CF11"></el-progress>
+                    <span>32 Reviews</span>
+                  </div>
+                  <div class="star_item">
+                    <span>3 stars</span>
+                    <el-progress :text-inside="true" :stroke-width="26" :percentage="30" color="#FFCE00"></el-progress>
+                    <span>32 Reviews</span>
+                  </div>
+                  <div class="star_item">
+                    <span>2 stars</span>
+                    <el-progress :text-inside="true" :stroke-width="26" :percentage="90" color="#FF8622"></el-progress>
+                    <span>32 Reviews</span>
+                  </div>
+                  <div class="star_item">
+                    <span>1 stars</span>
+                    <el-progress :text-inside="true" :stroke-width="26" :percentage="20" color="#FF3722"></el-progress>
+                    <span>32 Reviews</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="reviews">
-            <div class="reviews_l" v-if="false">
-              <p>No reviews to show for this time frame.</p>
-              <p>Try broadening your search</p>
-            </div>
-            <div class="reviews_l_card_list" v-else>
-              <div class="reviews_l_card">
-                <div class="r_l_c_title">TOTAL REVIEWS</div>
-                <h5>1</h5>
-                <el-dropdown trigger="click">
-                  <span class="el-dropdown-link">
-                    <i class="el-icon-caret-bottom"></i> <span class="dropdown_txt">-66.7%</span>
-                  </span>
-                  <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item>黄金糕</el-dropdown-item>
-                    <el-dropdown-item>狮子头</el-dropdown-item>
-                    <el-dropdown-item>螺蛳粉</el-dropdown-item>
-                  </el-dropdown-menu>
-                </el-dropdown>
-              </div>
-              <div class="reviews_l_card">
-                <div class="r_l_c_title">WITH AN INVITATION</div>
-                <h5>0</h5>
-              </div>
-              <div class="reviews_l_card">
-                <div class="r_l_c_title">YOUR REPLY RATE</div>
-                <h5>0%</h5>
-              </div>
-              <div class="reviews_l_card">
-                <div class="r_l_c_title">WITHOUT AN INVITATION</div>
-                <h5>1</h5>
-                <el-dropdown trigger="click">
-                  <span class="el-dropdown-link">
-                    <i class="el-icon-caret-bottom"></i> <span class="dropdown_txt">-66.7%</span>
-                  </span>
-                  <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item>黄金糕</el-dropdown-item>
-                    <el-dropdown-item>狮子头</el-dropdown-item>
-                    <el-dropdown-item>螺蛳粉</el-dropdown-item>
-                  </el-dropdown-menu>
-                </el-dropdown>
-              </div>
-            </div>
-            <div class="reviews_r">
-              <p>STAR DISTRIBUTION</p>
-              <div class="reviews_star_list">
-                <div class="star_item">
-                  <span>5 stars</span>
-                  <el-progress :text-inside="true" :stroke-width="26" :percentage="70" color="#00B67A"></el-progress>
-                  <span>32 Reviews</span>
-                </div>
-                <div class="star_item">
-                  <span>4 stars</span>
-                  <el-progress :text-inside="true" :stroke-width="26" :percentage="80" color="#73CF11"></el-progress>
-                  <span>32 Reviews</span>
-                </div>
-                <div class="star_item">
-                  <span>3 stars</span>
-                  <el-progress :text-inside="true" :stroke-width="26" :percentage="30" color="#FFCE00"></el-progress>
-                  <span>32 Reviews</span>
-                </div>
-                <div class="star_item">
-                  <span>2 stars</span>
-                  <el-progress :text-inside="true" :stroke-width="26" :percentage="90" color="#FF8622"></el-progress>
-                  <span>32 Reviews</span>
-                </div>
-                <div class="star_item">
-                  <span>1 stars</span>
-                  <el-progress :text-inside="true" :stroke-width="26" :percentage="20" color="#FF3722"></el-progress>
-                  <span>32 Reviews</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </el-col>
-    </el-row>
+        </el-col>
+      </el-row>
+    </div>
+    <empty v-else :tips="'暂无数据'"></empty>
   </div>
 </template>
 <script>
+import empty from '../../components/empty.vue';
 export default {
+  components: { empty },
   data(){
     return{
+      datePicker:[], //时间筛选
+      comData:null, //首页数据
+      loading:false
     }
   },
+  mounted(){
+    this.getData();
+  },
+  methods:{
+    /**
+     * 时间选择触发
+     */
+    datePickerChange(){
+      this.getData();
+    },
+    /**
+     * 获取数据
+     */
+    getData(){
+      this.loading=true;
+      const data={
+        startTime:this.datePicker[0]?this.datePicker[0]:null,
+        endTime:this.datePicker[1]?this.datePicker[1]:null
+      }
+      console.log(data);
+      this.$apiHttp.siteComment({params:data}).then((resp)=>{
+        this.comData = resp.data;
+      }).finally(()=> this.loading=false);
+    }
+  }
 }
 </script>
 <style lang="less" scoped>
@@ -164,8 +207,15 @@ export default {
   padding:10px;
   background: #F9F9F9;
   height: calc(100% - 20px);
+  .date{
+    text-align: right;
+  }
+  .home_main{
+    height: 100%;
+  }
   .row{
-    height: 49%;
+    height: 48%;
+    margin-top: 10px;
     .el-col{
       height: 100%;
       .card{
