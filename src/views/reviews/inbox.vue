@@ -3,16 +3,17 @@
     <div class="screen">
       <div class="screen_l">
         <el-input
+          @blur="getReviews"
           placeholder="Search"
           prefix-icon="el-icon-search"
           v-model="searchVal">
         </el-input>
-        <el-dropdown split-button size="small" type="primary" trigger="click" :hide-on-click="false" ref="starRate">
+        <el-dropdown split-button size="small" type="primary" trigger="click" :hide-on-click="false" ref="starRate" @command="handleCommand($event,3)">
           Star rating
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>
+            <el-dropdown-item command="1">
               <div class="star_rate">
-                <i class="el-icon-check"></i>
+                <i v-if="starCom==1" class="el-icon-check"></i>
                 <span>Bad</span>
                 <rate
                   class="c_rate"
@@ -22,9 +23,9 @@
                 </rate>
               </div>
             </el-dropdown-item>
-            <el-dropdown-item>
+            <el-dropdown-item command="2">
               <div class="star_rate">
-                <i class="el-icon-check"></i>
+                <i v-if="starCom==2" class="el-icon-check"></i>
                 <span>Poor</span>
                 <rate
                   class="c_rate"
@@ -34,9 +35,9 @@
                 </rate>
               </div>
             </el-dropdown-item>
-            <el-dropdown-item>
+            <el-dropdown-item command="3">
               <div class="star_rate">
-                <i class="el-icon-check"></i>
+                <i v-if="starCom==3" class="el-icon-check"></i>
                 <span>Average</span>
                 <rate
                   class="c_rate"
@@ -46,9 +47,9 @@
                 </rate>
               </div>
             </el-dropdown-item>
-            <el-dropdown-item>
+            <el-dropdown-item command="4">
               <div class="star_rate">
-                <i class="el-icon-check"></i>
+                <i v-if="starCom==4" class="el-icon-check"></i>
                 <span>Great</span>
                 <rate
                   class="c_rate"
@@ -58,9 +59,9 @@
                 </rate>
               </div>
             </el-dropdown-item>
-            <el-dropdown-item>
+            <el-dropdown-item command="5">
               <div class="star_rate">
-                <i class="el-icon-check"></i>
+                <i v-if="starCom==5" class="el-icon-check"></i>
                 <span>Excellent</span>
                 <rate
                   class="c_rate"
@@ -76,22 +77,22 @@
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <el-dropdown split-button size="small" type="primary" trigger="click" :hide-on-click="false" ref="reply">
+        <el-dropdown split-button size="small" type="primary" trigger="click" :hide-on-click="false" ref="reply" @command="handleCommand($event,1)">
           Reply
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item icon="el-icon-check">Reviews <strong>width a reply</strong></el-dropdown-item>
-            <el-dropdown-item>Reviews <strong>without a reply</strong></el-dropdown-item>
+            <el-dropdown-item :icon="replyCom==1?'el-icon-check':''" command="1">Reviews <strong>width a reply</strong></el-dropdown-item>
+            <el-dropdown-item :icon="replyCom==2?'el-icon-check':''" command="2">Reviews <strong>without a reply</strong></el-dropdown-item>
             <el-dropdown-item divided class="menu_btn">
               <el-button plain size="mini" @click="handleApply(1)">Apply</el-button>
               <el-button plain size="mini" @click="handleClear(1)">Clear</el-button>
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <el-dropdown split-button size="small" type="primary" trigger="click" :hide-on-click="false" ref="report">
+        <el-dropdown split-button size="small" type="primary" trigger="click" :hide-on-click="false" ref="report" @command="handleCommand($event,2)">
           Report
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item icon="el-icon-check">Reviews <strong>reported</strong></el-dropdown-item>
-            <el-dropdown-item>Reviews <strong>nor reported</strong></el-dropdown-item>
+            <el-dropdown-item :icon="reportCom==1?'el-icon-check':''" command="1">Reviews <strong>reported</strong></el-dropdown-item>
+            <el-dropdown-item :icon="reportCom==2?'el-icon-check':''" command="2">Reviews <strong>nor reported</strong></el-dropdown-item>
             <el-dropdown-item divided class="menu_btn">
               <el-button plain size="mini" @click="handleApply(2)">Apply</el-button>
               <el-button plain size="mini" @click="handleClear(2)">Clear</el-button>
@@ -100,6 +101,7 @@
         </el-dropdown>
         <el-date-picker
           class="date"
+          @change="getReviews"
           v-model="datePicker"
           type="daterange"
           range-separator="-"
@@ -108,129 +110,145 @@
         </el-date-picker>
       </div>
     </div>
-    <div class="review_list">
-      <div class="review_card" v-for="(item,index) in 8" :key="index">
-        <div class="card_main">
-          <div class="card_main_l">
-            <rate
-              class="c_rate"
-              :value="3.5"
-              :isDisabled="true"
-            >
-            </rate>
-            <el-dropdown trigger="click">
-              <span class="el-dropdown-link">
-                Jamie Chambers<i class="el-icon-arrow-down el-icon--right"></i>
-              </span>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>黄金糕</el-dropdown-item>
-                <el-dropdown-item>狮子头</el-dropdown-item>
-                <el-dropdown-item>螺蛳粉</el-dropdown-item>
-                <el-dropdown-item disabled>双皮奶</el-dropdown-item>
-                <el-dropdown-item divided>蚵仔煎</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
+    <div class="review_list" v-loading="loading">
+      <template v-if="reviewsList.length>0">
+        <div class="review_card" v-for="(item,index) in reviewsList" :key="item.id">
+          <div class="card_main">
+            <div class="card_main_l">
+              <rate
+                class="c_rate"
+                :value="item.rank"
+                :isDisabled="true"
+              >
+              </rate>
+              <el-dropdown trigger="click">
+                <span class="el-dropdown-link">
+                  {{item.name}}<i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item>黄金糕</el-dropdown-item>
+                  <el-dropdown-item>狮子头</el-dropdown-item>
+                  <el-dropdown-item>螺蛳粉</el-dropdown-item>
+                  <el-dropdown-item disabled>双皮奶</el-dropdown-item>
+                  <el-dropdown-item divided>蚵仔煎</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </div>
+            <div class="card_main_r">
+              <p>
+                <span>{{item.subject}}</span>
+                <span>{{dateEnglish(item.time)}}</span>
+              </p>
+              <p>{{item.content}}</p>
+              <p>Source: Organic</p>
+            </div>
           </div>
-          <div class="card_main_r">
-            <p>
-              <span>These guys work very hard and impatient These guys work very hard and impatient These guys work very hard and impatient</span>
-              <span>8 Jan 2021</span>
-            </p>
-            <p>It is necessary to attach importance to and reuse award-winning teachers and give them corresponding treatment, honor and title. It is also reasonable to let them become the "signboard" of the school's teaching staff and the "business card" of the school's foreign exchange. However, in this process, some schools just regard the award-winning teachers as the brand of the school, ignoring the teaching responsibilities and guidance of the award-winning teachers, and even such a strange phenomenon appears: the higher the award-winning level, the farther away the award-winning teachers are from the podium, which leads to a great discount in the radiation role of the award-winning teachers in the improvement of school teaching quality.</p>
-            <p>Source: Organic</p>
+          <div class="card_btn_group">
+            <el-tabs v-model="activeCardName" @tab-click="handleCardNameClick">
+              <el-tab-pane label="Reply" :name="JSON.stringify({name:'reply',id:item.id})">
+                <div slot="label" class="tab_label" v-if="item.replys.length>0"><i class="el-icon-success"></i> <span>Replied</span></div>
+                <div slot="label" class="tab_label" v-else><svg-icon value="icon-huifu" :size="1.5"></svg-icon> <span>Reply</span></div>
+                <div class="reply_tab">
+                  <div class="reply_tab_l">
+                    {{item.companyName}}
+                  </div>
+                  <div class="reply_tab_r">
+                    <div v-if="item.replys.length==0 || replyEditId">
+                      <el-input
+                        type="textarea"
+                        :rows="4"
+                        placeholder="Please input"
+                        v-model="replyTextarea">
+                      </el-input>
+                      <el-button type="primary" size="small" plain @click="handleReply(item.id)" :loading="confrimBtnLoading"><i class="el-icon-edit el-icon--right"></i> Post reply</el-button>
+                      <el-button size="small" plain @click="handleCancle">Cancel</el-button>
+                    </div>
+                    <template v-else>
+                      <div class="reply_content" v-for="(repitem,index) in item.replys" :key="repitem.id">
+                        <p>{{repitem.content}}</p>
+                        <div class="date">{{dateEnglish(repitem.time)}}</div>
+                        <el-button type="primary" size="small" plain @click="handleEditReply(repitem)"><i class="el-icon-edit el-icon--right"></i> Edit reply</el-button>
+                        <el-popconfirm
+                          confirm-button-text='confirm'
+                          cancel-button-text='cancle'
+                          @confirm="handleDel(repitem.id)"
+                          icon="el-icon-info"
+                          icon-color="red"
+                          title="Are you sure to delete？"
+                        >
+                          <el-button slot="reference" type="danger" size="small" plain><i class="el-icon-delete el-icon--right"></i> Delete reply</el-button>
+                        </el-popconfirm>
+                      </div>
+                    </template>
+                  </div>
+                </div>
+              </el-tab-pane>
+              <el-tab-pane label="Share" :name="JSON.stringify({name:'share',id:item.id})">
+                <div slot="label" class="tab_label"><svg-icon value="icon-fenxiang1" :size="1.1"></svg-icon> <span>Share</span></div>
+                12
+              </el-tab-pane>
+              <el-tab-pane label="Report" :name="JSON.stringify({name:'report',id:item.id})">
+                <div slot="label" class="tab_label">
+                  <svg-icon value="icon-biaoji" :size="1.1" ></svg-icon> 
+                  <span v-if="index==2">Invistigation in progress</span>
+                  <span v-else-if="index==1">Invistigation complete</span>
+                  <span v-else>Report</span>
+                </div>
+                <div class="report_tab" v-if="index==1">
+                  <el-timeline v-if="!isDown">
+                    <el-timeline-item timestamp="2021-1-31 19:05" placement="top" v-for="(item,index) in 4" :key="index">
+                      <el-card>
+                        <span><strong>Investigation complete:</strong> The review doesn't breach our guidelines for: <strong>defamation</strong></span>
+                        <p>
+                          <el-button plain icon="el-icon-reading">Read our decision</el-button>
+                          <el-button type="text" class="dif_issue">There's a different issue</el-button>
+                        </p>
+                      </el-card>
+                    </el-timeline-item>
+                  </el-timeline>
+                  <el-timeline v-else>
+                    <el-timeline-item timestamp="2021-1-31 19:05" placement="top" v-for="(item,index) in 1" :key="index">
+                      <el-card>
+                        <span><strong>Investigation complete:</strong> The review doesn't breach our guidelines for: <strong>defamation</strong></span>
+                        <p>
+                          <el-button plain icon="el-icon-reading">Read our decision</el-button>
+                          <el-button type="text" class="dif_issue">There's a different issue</el-button>
+                        </p>
+                      </el-card>
+                    </el-timeline-item>
+                  </el-timeline>
+                  <div class="show_btn">
+                    <el-button type="text" :icon="!isDown?'el-icon-caret-top':'el-icon-caret-bottom'" @click="isDown=!isDown">{{isDown?'Show history':'Hide history'}}</el-button>
+                  </div>
+                </div>
+              </el-tab-pane>
+            </el-tabs>
+            <!-- <div class="report">
+              <svg-icon value="icon-biaoji" :size="1.3" :color="'#9A9AAD'" @click="handleReport"></svg-icon>
+              <span v-if="index==2">Invistigation in progress</span>
+              <span v-else-if="index==1">Invistigation complete</span>
+            </div> -->
           </div>
         </div>
-        <div class="card_btn_group">
-          <el-tabs v-model="activeCardName" @tab-click="handleCardNameClick">
-            <el-tab-pane label="Reply" name="reply">
-              <div slot="label" class="tab_label"><svg-icon value="icon-huifu" :size="1.5" :color="'#9A9AAD'"></svg-icon> <span>Reply</span></div>
-              <div class="reply_tab">
-                <div class="reply_tab_l">
-                  WhiteHatBox
-                </div>
-                <div class="reply_tab_r">
-                  <div v-if="index%2==0">
-                    <el-input
-                      type="textarea"
-                      :rows="4"
-                      placeholder="Please input"
-                      v-model="replyTextarea">
-                    </el-input>
-                    <el-button type="primary" size="small" plain><i class="el-icon-edit el-icon--right"></i> Post reply</el-button>
-                    <el-button size="small" plain>Cancel</el-button>
-                  </div>
-                  <div class="reply_content" v-else>
-                    <div class="date">8 Jan 2021</div>
-                    <p>It is necessary to attach importance to and reuse award-winning teachers and give them corresponding treatment, honor and title. It is also reasonable to let them become the "signboard" of the school's teaching staff and the "business card" of the school's foreign exchange. However, in this process, some schools just regard the award-winning teachers as the brand of the school, ignoring the teaching responsibilities and guidance of the award-winning teachers, and even such a strange phenomenon appears: the higher the award-winning level, the farther away the award-winning teachers are from the podium, which leads to a great discount in the radiation role of the award-winning teachers in the improvement of school teaching quality.</p>
-                    <el-button type="primary" size="small" plain><i class="el-icon-edit el-icon--right"></i> Edit reply</el-button>
-                    <el-button type="danger" size="small" plain><i class="el-icon-delete el-icon--right"></i> Delete reply</el-button>
-                  </div>
-                </div>
-              </div>
-            </el-tab-pane>
-            <el-tab-pane label="Share" name="share">
-              <div slot="label" class="tab_label"><svg-icon value="icon-fenxiang1" :size="1.1" :color="'#9A9AAD'"></svg-icon> <span>Share</span></div>
-              12
-            </el-tab-pane>
-            <el-tab-pane label="Report" name="report">
-              <div slot="label" class="tab_label">
-                <svg-icon value="icon-biaoji" :size="1.1" :color="'#9A9AAD'"></svg-icon> 
-                <span v-if="index==2">Invistigation in progress</span>
-                <span v-else-if="index==1">Invistigation complete</span>
-                <span v-else>Report</span>
-              </div>
-              <div class="report_tab" v-if="index==1">
-                <el-timeline v-if="!isDown">
-                  <el-timeline-item timestamp="2021-1-31 19:05" placement="top" v-for="(item,index) in 4" :key="index">
-                    <el-card>
-                      <span><strong>Investigation complete:</strong> The review doesn't breach our guidelines for: <strong>defamation</strong></span>
-                      <p>
-                        <el-button plain icon="el-icon-reading">Read our decision</el-button>
-                        <el-button type="text" class="dif_issue">There's a different issue</el-button>
-                      </p>
-                    </el-card>
-                  </el-timeline-item>
-                </el-timeline>
-                <el-timeline v-else>
-                  <el-timeline-item timestamp="2021-1-31 19:05" placement="top" v-for="(item,index) in 1" :key="index">
-                    <el-card>
-                      <span><strong>Investigation complete:</strong> The review doesn't breach our guidelines for: <strong>defamation</strong></span>
-                      <p>
-                        <el-button plain icon="el-icon-reading">Read our decision</el-button>
-                        <el-button type="text" class="dif_issue">There's a different issue</el-button>
-                      </p>
-                    </el-card>
-                  </el-timeline-item>
-                </el-timeline>
-                <div class="show_btn">
-                  <el-button type="text" :icon="!isDown?'el-icon-caret-top':'el-icon-caret-bottom'" @click="isDown=!isDown">{{isDown?'Show history':'Hide history'}}</el-button>
-                </div>
-              </div>
-            </el-tab-pane>
-          </el-tabs>
-          <!-- <div class="report">
-            <svg-icon value="icon-biaoji" :size="1.3" :color="'#9A9AAD'" @click="handleReport"></svg-icon>
-            <span v-if="index==2">Invistigation in progress</span>
-            <span v-else-if="index==1">Invistigation complete</span>
-          </div> -->
-        </div>
-      </div>
+      </template>
+      <empty v-else :tips="'No data available'"></empty>
     </div>
-    <div class="pagination">
+    <div class="pagination" v-if="page.pageTotal/page.pageSize>1">
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="currentPage4"
-        :page-sizes="[100, 200, 300, 400]"
-        :page-size="100"
+        :current-page="page.pageIndex"
+        :page-sizes="[10, 20, 30, 40]"
+        :page-size="page.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="400">
+        :total="page.pageTotal">
       </el-pagination>
     </div>
     <ReportDialog ref="reportdialog"></ReportDialog>
   </div>
 </template>
 <script>
+import { dateEnglish } from '../../commons';
 export default {
   components:{
     ReportDialog:()=> import("./report-dialog")
@@ -239,13 +257,117 @@ export default {
     return{
       searchVal:null, //搜索
       datePicker:[], //评论时间筛选
-      currentPage4:4,
       activeCardName:null, //评论卡片操作选项卡
       replyTextarea:'', //商家回复
       isDown:true, //向下
+      loading:false,
+      starCom:null, //星星筛选条件
+      replyCom:null, //回复筛选条件
+      reportCom:null, //举报筛选条件
+      reviewsList:[], //评论列表
+      confrimBtnLoading:false,
+      page:{
+        pageSize:10, //每页数量
+        pageTotal:null, //总数量
+        pageIndex:1 //当前页
+      },
+      user: null, //商家信息
+      replyEditId:null, //回复的id
     }
   },
+  mounted(){
+    this.getReviews();
+  },
   methods:{
+    dateEnglish,
+    /**
+     * 删除评论
+     */
+    handleDel(id){
+      this.$apiHttp.siteDelReply({params:{id:id}}).then((resp)=>{
+        if(resp.res==200){
+          this.$message({
+            message: 'Successfully deleted',
+            type: 'success'
+          });
+          this.getReviews();
+        }
+      })
+    },
+    /**
+     * 评论cancle
+     */
+    handleCancle(){
+      this.replyTextarea=null;
+      this.activeCardName=null;
+      this.replyEditId=null;
+    },
+    /**
+     * 点击修改按钮
+     */
+    handleEditReply(reply){
+      this.replyEditId = reply.id;
+      this.replyTextarea = reply.content;
+    },
+    /**
+     * 商家回复/修改
+     */
+    handleReply(comId){
+      this.confrimBtnLoading=true;
+      const data={
+        content:this.replyTextarea,
+        commentId:comId,
+        id:this.replyEditId,
+      }
+      this.$apiHttp.siteReply(data).then((resp)=>{
+        if(resp.res==200){
+          this.replyTextarea=null;
+          this.replyEditId=null;
+          this.$message({
+            message: this.replyEditId?'Modification reply succeeded':'Reply succeeded',
+            type: 'success'
+          });
+          this.getReviews();
+        }
+      }).finally(()=> this.confrimBtnLoading=false);
+    },
+    /**
+     * 筛选条件选择切换
+     */
+    handleCommand(com,type){
+      if(!com){
+        return;
+      }
+      if(type==3){
+        this.starCom = com;
+      }else if(type==1){
+        this.replyCom = com;
+      }else if(type==2){
+        this.reportCom = com;
+      }
+    },
+    /**
+     * 获取评论数据
+     */
+    getReviews(){
+      this.loading=true;
+      const data={
+        search: this.searchVal,
+        star:this.starCom,
+        reply:this.replyCom,
+        report:this.reportCom,
+        startTime:this.datePicker.length>0?this.datePicker[0].timeFormat('yyyy-MM-dd'):null,
+        endTime:this.datePicker.length>0?this.datePicker[1].timeFormat('yyyy-MM-dd'):null,
+        offset:this.page.pageIndex,
+        limit:this.page.pageSize,
+      }
+      this.$apiHttp.siteReviews({params:data}).then((resp)=>{
+        if(resp.res==200){
+          this.reviewsList=resp.data.reviews;
+          this.page.pageTotal=resp.data.total;
+        }
+      }).finally(()=> this.loading=false);
+    },
     /**
      * 评论状态切换
      */
@@ -253,7 +375,7 @@ export default {
       if(tab.name=='report'){
         this.$refs.reportdialog.openDialog();
       }
-      console.log(tab.name);
+      console.log(JSON.parse(tab.name));
     },
     /**
      * 举报
@@ -272,24 +394,32 @@ export default {
       }else if(type==3){
         this.$refs.starRate.hide()
       }
+      this.getReviews();
     },
     /**
      * 清除筛选
      */
     handleClear(type){
       if(type==1){
+        this.replyCom = null;
         this.$refs.reply.hide();
       }else if(type==2){
+        this.reportCom = null;
         this.$refs.report.hide();
       }else if(type==3){
+        this.starCom = null;
         this.$refs.starRate.hide()
       }
+      this.getReviews();
     },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      this.page.pageIndex=1;
+      this.page.pageSize = val;
+      this.getReviews();
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      this.page.pageIndex=val;
+      this.getReviews();
     }
   }
 }
@@ -363,6 +493,7 @@ export default {
   .review_list{
     max-width: 980px;
     margin: 15px auto;
+    height: 100%;
     .review_card{
       margin-bottom: 8px;
       background: #ffffff;
@@ -375,7 +506,7 @@ export default {
         display: flex;
         flex-direction: row;
         .card_main_l{
-          margin-right: 28px;
+          width: 185px;
           .c_rate{
             margin-bottom: 12px;
             /deep/.icon-pingfendengjiRating4{
@@ -449,9 +580,8 @@ export default {
             display: flex;
             flex-direction: row;
             .reply_tab_l{
-              width: 145px;
-              margin-right: 28px;
-              text-align: center;
+              width: 185px;
+              text-align: left;
               font-size: 14px;
               color: #6F6F87;
             }
@@ -470,9 +600,11 @@ export default {
                 }
                 .date{
                   text-align: right;
-                  margin-bottom: 5px;
                   font-size: 14px;
                   color: #6F6F87;
+                }
+                .el-button{
+                  margin-right: 8px;
                 }
               }
             }

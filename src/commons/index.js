@@ -53,7 +53,7 @@ export function HtmlLineBreak(str){
 
  */
 
-export function formatDate(value,stime) {
+export function formatDate(value) {
 
   // 注意ie和firefox浏览器时间格式兼容性
 
@@ -83,7 +83,7 @@ export function formatDate(value,stime) {
 
   let month = day * 30;
 
-  let now = new Date(stime).getTime();
+  let now = new Date().getTime();
 
   let diffValue = now - timestamp;
 
@@ -91,7 +91,7 @@ export function formatDate(value,stime) {
 
   if (diffValue < 0) {
 
-    return '不久前';
+    return 'not long ago';
 
   }
 
@@ -130,35 +130,92 @@ export function formatDate(value,stime) {
     // 超过1年，直接显示年月日
 
     return (function () {
-
-      let date = new Date(timestamp);
-
-      return date.getFullYear() + '年' + zero(date.getMonth() + 1) + '月' + zero(date.getDate()) + '日';
-
+      const m=new Date(timestamp).getMonth()+1;
+      const y=new Date(timestamp).getFullYear();
+      const d = new Date(timestamp).getDate();
+      if(m==1){
+        return `January ${d}, ${y}`
+      }else if(m==2){
+        return `February ${d}, ${y}`
+      }else if(m==3){
+        return `March ${d}, ${y}`
+      }else if(m==4){
+        return `April ${d}, ${y}`
+      }else if(m==5){
+        return `May ${d}, ${y}`
+      }else if(m==6){
+        return `June ${d}, ${y}`
+      }else if(m==7){
+        return `July ${d}, ${y}`
+      }else if(m==8){
+        return `August ${d}, ${y}`
+      }else if(m==9){
+        return `September ${d}, ${y}`
+      }else if(m==10){
+        return `October ${d}, ${y}`
+      }else if(m==11){
+        return `November ${d}, ${y}`
+      }else if(m==12){
+        return `December ${d}, ${y}`
+      }
     })();
-
   } else if (monthC >= 1) {
 
-    return parseInt(monthC) + '月前';
+    return parseInt(monthC) + 'months ago';
 
   } else if (weekC >= 1) {
 
-    return parseInt(weekC) + '周前';
+    return parseInt(weekC) + 'weeks ago';
 
   } else if (dayC >= 1) {
 
-    return parseInt(dayC) + '天前';
+    return parseInt(dayC) + 'days ago';
 
   } else if (hourC >= 1) {
 
-    return parseInt(hourC) + '小时前';
+    return parseInt(hourC) + 'hours ago';
 
   } else if (minC >= 1) {
 
-    return parseInt(minC) + '分钟前';
+    return parseInt(minC) + 'minutes ago';
 
   }
 
-  return '刚刚';
+  return 'just now';
 
+}
+/**
+ * 时间显示成英文,2020/12/1 (December 1, 2020)
+ */
+export function dateEnglish(date){
+  const m=new Date(date).getMonth()+1;
+  const y=new Date(date).getFullYear();
+  const d=new Date(date).getDate();
+  if(m==1){
+    return `January ${d}, ${y}`
+  }else if(m==2){
+    return `February ${d}, ${y}`
+  }else if(m==3){
+    return `March ${d}, ${y}`
+  }else if(m==4){
+    return `April ${d}, ${y}`
+  }else if(m==5){
+    return `May ${d}, ${y}`
+  }else if(m==6){
+    return `June ${d}, ${y}`
+  }else if(m==7){
+    return `July ${d}, ${y}`
+  }else if(m==8){
+    return `August ${d}, ${y}`
+  }else if(m==9){
+    return `September ${d}, ${y}`
+  }else if(m==10){
+    return `October ${d}, ${y}`
+  }else if(m==11){
+    return `November ${d}, ${y}`
+  }else if(m==12){
+    return `December ${d}, ${y}`
+  }else{
+    return '111'
+  }
 }

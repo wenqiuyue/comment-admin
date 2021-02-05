@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home" v-loading="loading">
     <div class="date">
        <el-date-picker
         @change="datePickerChange"
@@ -10,14 +10,15 @@
         end-placeholder="End date">
       </el-date-picker>
     </div>
-    <div v-loading="loading" class="home_main" v-if="!comData">
+    <div class="home_main" v-if="comData">
       <el-row :gutter="8" class="row">
         <el-col :span="12">
           <div class="card">
             <div class="card_title">
               <div class="card_title_left">
                 <span>Overall performance</span>
-                <el-tooltip class="item" effect="dark" content="Top Center 提示文字" placement="top">
+                <el-tooltip class="item" effect="dark"  placement="top">
+                  <div slot="content" style="width:210px;word-break:break-all">Get an overview of your customer satisfaction. Your rating and score are current and not based on the selected time frame. The information is also displayed on your public Trustpilot profile page.</div>
                   <i class="el-icon-info"></i>
                 </el-tooltip>
               </div>
@@ -26,15 +27,15 @@
               <h5>Great</h5>
               <rate
                 class="c_rate"
-                :value="3.5"
+                :value="comData.overallPerformance.trustscore"
                 :isDisabled="true"
               >
               </rate>
-              <div class="reviews_num">Based on <strong>152</strong> reviews</div>
+              <div class="reviews_num">Based on <strong>{{comData.overallPerformance.total}}</strong> reviews</div>
             </div>
             <div class="trust_score">
               <div>TRUSTSCORE</div>
-              <div><strong>3.8</strong> out of 5</div>
+              <div><strong>{{comData.overallPerformance.trustscore}}</strong> out of 5</div>
             </div>
           </div>
         </el-col>
@@ -43,7 +44,8 @@
             <div class="card_title">
               <div class="card_title_left">
                 <span>Engage</span>
-                <el-tooltip class="item" effect="dark" content="Top Center 提示文字" placement="top">
+                <el-tooltip class="item" effect="dark"  placement="top">
+                  <div slot="content" style="width:210px;word-break:break-all">See snippets of your recent reviews regardless of the selected time frame. You can click through to read the full reviews, reply, share, and showcase your great customer service.</div>
                   <i class="el-icon-info"></i>
                 </el-tooltip>
               </div>
@@ -51,20 +53,20 @@
                 Service Reviews
               </div>
             </div>
-            <p class="eng_reviews">Your 3 latest reviews</p>
+            <p class="eng_reviews">Your {{comData.engage.length}} latest reviews</p>
             <div class="reviews_list">
-              <div class="reviews_item" v-for="(item,index) in 3" :key="index">
+              <div class="reviews_item" v-for="(item,index) in comData.engage" :key="index">
                 <span class="reviews_item_l">"</span>
                 <div class="reviews_item_r">
-                  <div>These guys work very hard and impatient users These guys work very hard and impatient usersThese guys work very hard and impatient users</div>
+                  <div>{{item.content}}</div>
                   <div>
                     <rate
                       class="c_rate"
-                      :value="5"
+                      :value="item.rank"
                       :isDisabled="true"
                     >
                     </rate>
-                    <span>By Jamie Chamber, 2 weeks ago</span>
+                    <span>By {{item.name}}, {{formatDate(item.time)}}</span>
                   </div>
                 </div>
               </div>
@@ -78,7 +80,8 @@
             <div class="card_title">
               <div class="card_title_left">
                 <span>Your reviews</span>
-                <el-tooltip class="item" effect="dark" content="Top Center 提示文字" placement="top">
+                <el-tooltip class="item" effect="dark" placement="top">
+                  <div slot="content" style="width:210px;word-break:break-all">Keep track of your reviews alongside your star distribution. Trustpilot verifies that a review is genuine if we can connect it to an invitation sent through Trustpilot Business.</div>
                   <i class="el-icon-info"></i>
                 </el-tooltip>
               </div>
@@ -91,10 +94,10 @@
               <div class="reviews_l_card_list" v-else>
                 <div class="reviews_l_card">
                   <div class="r_l_c_title">TOTAL REVIEWS</div>
-                  <h5>1</h5>
+                  <h5>{{comData.yourReviews.totalReviews.total}}</h5>
                   <el-dropdown trigger="click">
                     <span class="el-dropdown-link">
-                      <i class="el-icon-caret-bottom"></i> <span class="dropdown_txt">-66.7%</span>
+                      <i class="el-icon-caret-bottom"></i> <span class="dropdown_txt">{{comData.yourReviews.totalReviews.compare}}</span>
                     </span>
                     <el-dropdown-menu slot="dropdown">
                       <el-dropdown-item>黄金糕</el-dropdown-item>
@@ -103,56 +106,40 @@
                     </el-dropdown-menu>
                   </el-dropdown>
                 </div>
-                <!-- <div class="reviews_l_card">
-                  <div class="r_l_c_title">WITH AN INVITATION</div>
-                  <h5>0</h5>
-                </div> -->
                 <div class="reviews_l_card">
                   <div class="r_l_c_title">YOUR REPLY RATE</div>
-                  <h5>0%</h5>
+                  <h5>{{comData.yourReviews.yourReplyRate}}</h5>
                 </div>
-                <!-- <div class="reviews_l_card">
-                  <div class="r_l_c_title">WITHOUT AN INVITATION</div>
-                  <h5>1</h5>
-                  <el-dropdown trigger="click">
-                    <span class="el-dropdown-link">
-                      <i class="el-icon-caret-bottom"></i> <span class="dropdown_txt">-66.7%</span>
-                    </span>
-                    <el-dropdown-menu slot="dropdown">
-                      <el-dropdown-item>黄金糕</el-dropdown-item>
-                      <el-dropdown-item>狮子头</el-dropdown-item>
-                      <el-dropdown-item>螺蛳粉</el-dropdown-item>
-                    </el-dropdown-menu>
-                  </el-dropdown>
-                </div> -->
               </div>
               <div class="reviews_r">
                 <p>STAR DISTRIBUTION</p>
                 <div class="reviews_star_list">
-                  <div class="star_item">
-                    <span>5 stars</span>
-                    <el-progress :text-inside="true" :stroke-width="26" :percentage="70" color="#00B67A"></el-progress>
-                    <span>32 Reviews</span>
-                  </div>
-                  <div class="star_item">
-                    <span>4 stars</span>
-                    <el-progress :text-inside="true" :stroke-width="26" :percentage="80" color="#73CF11"></el-progress>
-                    <span>32 Reviews</span>
-                  </div>
-                  <div class="star_item">
-                    <span>3 stars</span>
-                    <el-progress :text-inside="true" :stroke-width="26" :percentage="30" color="#FFCE00"></el-progress>
-                    <span>32 Reviews</span>
-                  </div>
-                  <div class="star_item">
-                    <span>2 stars</span>
-                    <el-progress :text-inside="true" :stroke-width="26" :percentage="90" color="#FF8622"></el-progress>
-                    <span>32 Reviews</span>
-                  </div>
-                  <div class="star_item">
-                    <span>1 stars</span>
-                    <el-progress :text-inside="true" :stroke-width="26" :percentage="20" color="#FF3722"></el-progress>
-                    <span>32 Reviews</span>
+                  <div v-for="(item,index) in comData.barDistributton" :key="index">
+                    <div class="star_item" v-if="item.star==5">
+                      <span>5 stars</span>
+                      <el-progress :text-inside="true" :stroke-width="26" :percentage="item.ratio" color="#00B67A"></el-progress>
+                      <span>{{item.amount}} Reviews</span>
+                    </div>
+                    <div class="star_item" v-else-if="item.star==4">
+                      <span>4 stars</span>
+                      <el-progress :text-inside="true" :stroke-width="26" :percentage="item.ratio" color="#73CF11"></el-progress>
+                      <span>{{item.amount}} Reviews</span>
+                    </div>
+                    <div class="star_item" v-else-if="item.star==3">
+                      <span>3 stars</span>
+                      <el-progress :text-inside="true" :stroke-width="26" :percentage="item.ratio" color="#FFCE00"></el-progress>
+                      <span>{{item.amount}} Reviews</span>
+                    </div>
+                    <div class="star_item" v-else-if="item.star==2">
+                      <span>2 stars</span>
+                      <el-progress :text-inside="true" :stroke-width="26" :percentage="item.ratio" color="#FF8622"></el-progress>
+                      <span>{{item.amount}} Reviews</span>
+                    </div>
+                    <div class="star_item" v-else-if="item.star==1">
+                      <span>1 stars</span>
+                      <el-progress :text-inside="true" :stroke-width="26" :percentage="20" color="#FF3722"></el-progress>
+                      <span>{{item.amount}} Reviews</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -161,10 +148,11 @@
         </el-col>
       </el-row>
     </div>
-    <empty v-else :tips="'暂无数据'"></empty>
+    <empty v-else :tips="'No data available'"></empty>
   </div>
 </template>
 <script>
+import { formatDate } from '../../commons';
 import empty from '../../components/empty.vue';
 export default {
   components: { empty },
@@ -179,6 +167,7 @@ export default {
     this.getData();
   },
   methods:{
+    formatDate,
     /**
      * 时间选择触发
      */
@@ -191,10 +180,9 @@ export default {
     getData(){
       this.loading=true;
       const data={
-        startTime:this.datePicker[0]?this.datePicker[0]:null,
-        endTime:this.datePicker[1]?this.datePicker[1]:null
+        startTime:this.datePicker[0]?this.datePicker[0].timeFormat('yyyy-MM-dd'):null,
+        endTime:this.datePicker[1]?this.datePicker[1].timeFormat('yyyy-MM-dd'):null
       }
-      console.log(data);
       this.$apiHttp.siteComment({params:data}).then((resp)=>{
         this.comData = resp.data;
       }).finally(()=> this.loading=false);

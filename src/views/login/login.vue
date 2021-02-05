@@ -18,10 +18,10 @@
             </el-form-item>
              <el-form-item class="check_item">
               <el-checkbox v-model="automaticChecked">Remember the password</el-checkbox>
-              <a href="http://192.168.1.15:8081/forgot-password" class="forget">Forgot Your Password?</a>
+              <a :href="`${pageUrl}/forgot-password`" class="forget">Forgot Your Password?</a>
             </el-form-item>
             <el-button class="login_btn" type="primary" :loading="loading" @click="handleLogin">Login</el-button>
-            <div class="register_tips">Need an account? <a href="http://192.168.1.15:8081/register">Sign up</a></div>
+            <div class="register_tips">Need an account? <a :href="`${pageUrl}/register`">Sign up</a></div>
           </el-form>
         </div>
       </el-col>
@@ -53,7 +53,18 @@ export default {
       }
     }
   },
+  computed:{
+    pageUrl(){
+      return process.env.VUE_APP_PAGE_URL
+    }
+  },
+  created(){
+    this.handleCheckToken();
+  },
   methods:{
+    /**
+     * 登录
+     */
     handleLogin(){
       this.$refs.loginForm.validate((valid)=>{
         if(valid){
@@ -79,7 +90,17 @@ export default {
           return;
         }
       })
-    }
+    },
+    /**
+     * 后台验证Token
+     */
+    handleCheckToken() {
+      if (localStorage.getItem(type.TOKEN)) {
+        this.$router.push({
+          path: "/home"
+        })
+      }
+    },
   }
 }
 </script>

@@ -74,4 +74,22 @@ export function fetchPost (url, params, config) {
   })
 }
 
+/**
+ * DELETE
+ * @param url
+ * @param config
+ * @returns {Promise<unknown>}
+ */
+export function fetchDelete(url, config) {
+	return new Promise((resolve, reject) => {
+		instance
+			.delete(url, config)
+			.then(
+				response => resolve(response),
+				error => reject(error)
+			)
+			.catch(reject);
+	});
+}
+
 export default instance

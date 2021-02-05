@@ -20,8 +20,8 @@
               </el-input>
             </el-form-item>
             <el-button class="reset_btn" type="primary" :loading="loading" @click="handleSend">Send Password Reset Link</el-button>
-            <div class="register_tips">Already have an account? <a href="http://192.168.1.15:8081">Sign In</a></div>
-            <div class="register_tips">Need an account? <a href="http://192.168.1.15:8081/register">Sign up</a></div>
+            <div class="register_tips">Already have an account? <a :href="pageUrl">Sign In</a></div>
+            <div class="register_tips">Need an account? <a :href="`${pageUrl}/register`">Sign up</a></div>
           </el-form>
         </div>
       </div>
@@ -52,6 +52,11 @@ export default {
           { required: true, message: 'Please input confirm password', trigger: 'blur' },
         ],
       }
+    }
+  },
+  computed:{
+    pageUrl(){
+      return process.env.VUE_APP_PAGE_URL
     }
   },
   methods:{

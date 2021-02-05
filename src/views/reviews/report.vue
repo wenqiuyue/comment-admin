@@ -80,7 +80,7 @@
           <div class="tow_card">
             <div class="card">
               <span>8</span> 
-              <span>Number of reports</span>
+              <span>Reports closed, review still online</span>
             </div>
             <div class="card_item">
               <p>

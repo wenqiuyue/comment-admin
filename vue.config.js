@@ -3,7 +3,7 @@ module.exports = {
   devServer:{
     host : "0.0.0.0",
     open: true,
-    port: 8081,
+    port: 8080,
     https: false,
     proxy: {//配置跨域
       '/site': {

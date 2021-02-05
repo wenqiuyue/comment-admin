@@ -1,4 +1,4 @@
-import { fetchGet,fetchPost } from '../utils/request.js'
+import { fetchGet,fetchPost,fetchDelete } from '../utils/request.js'
 
 /**
  * 注册获取国家
@@ -59,4 +59,22 @@ export function siteAnalysticBrokenLine (data) {
  */
 export function siteAnalysticPieChart (data) {
   return fetchGet('/site/AnalysticPieChart',data)
+};
+/**
+ * 评论页数据
+ */
+export function siteReviews (data) {
+  return fetchGet('/site/Reviews',data)
+};
+/**
+ * 商家回复接口
+ */
+export function siteReply (data) {
+  return fetchPost('/site/Reply',data)
+};
+/**
+ * 商家回复删除接口
+ */
+export function siteDelReply (data) {
+  return fetchDelete('/site/Reply',data)
 };

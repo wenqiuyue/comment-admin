@@ -108,7 +108,7 @@
             <li :class="step==2?'now_step':''"></li>
             <li :class="step==3?'now_step':''"></li>
           </ul>
-          <div class="register_tips">Already have an account? <a href="http://192.168.1.15:8081/">Sign In</a></div>       
+          <div class="register_tips">Already have an account? <a :href="pageUrl">Sign In</a></div>       
         </div>
       </div>
       <div class="right_col">
@@ -193,7 +193,10 @@ export default {
   computed:{
     url(){
       return process.env.VUE_APP_BASE_URL
-    }
+    },
+    pageUrl(){
+      return process.env.VUE_APP_PAGE_URL
+    },
   },
   directives: {
     /**
