@@ -14,20 +14,27 @@
         <p>We recommend writing a <span>public reply</span>. It's an opportunity to demonstrate how much you care about your customer's opinions (even the ones you might disagree width). </p>
       </div>
       <div class="page_two" v-else>
-        <h5>Please choose a reason:</h5>
-        <p>Learn more about these reasons in <span>our guidelines</span></p>
-        <el-radio-group v-model="twoRadio">
-          <el-radio :label="1">Harmful or illegal</el-radio>
-          <el-radio :label="2">Personal information</el-radio>
-          <el-radio :label="3">Advertising or promotional</el-radio>
-          <el-radio :label="4">
-            Not based on a genuine experience
-            <el-tooltip class="item" effect="dark" content="Top Center 提示文字" placement="top">
-              <i class="el-icon-info"></i>
-            </el-tooltip>
-          </el-radio>
-          <el-radio :label="5">About a different buiness</el-radio>
-        </el-radio-group>
+        <h5>Please explain why you are reporting this review</h5>
+        <el-form class="form" ref="form" :model="twoForm" label-width="80px" label-position="top">
+          <el-form-item label="Select a reason">
+            <el-select v-model="twoForm.twoSel" placeholder="select a reason">
+              <el-option
+                v-for="item in selOption"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-input
+              type="textarea"
+              :autosize="{ minRows: 7}"
+              placeholder="Please enter an explanation."
+              v-model="twoForm.reason">
+            </el-input>
+          </el-form-item>
+        </el-form>
       </div>
       <div slot="footer" class="dialog-footer">
         <el-checkbox v-if="page==1" v-model="oneChecked">Don't show this message again.</el-checkbox>
@@ -43,7 +50,26 @@ export default {
     return{
       dialogReport:false,
       page:1, //当前步骤页
-      twoRadio:1, //步骤二举报原因单选
+      twoForm:{
+        twoSel:1, //步骤二举报原因单选
+        reason:''
+      },
+      selOption:[{
+        value: 1,
+        label: 'Harmful or illegal'
+      },{
+        value: 2,
+        label: 'Personal information'
+      },{
+        value: 3,
+        label: 'Advertising or promotional'
+      },{
+        value: 4,
+        label: 'Not based on a genuine experience'
+      },{
+        value: 5,
+        label: 'About a different buiness'
+      }, ],
       oneChecked:false
     }
   },
@@ -120,16 +146,18 @@ export default {
       margin: 0;
     }
     p{
-      margin: 6px 0 26px;
-      span{
-        color: #276FFF;
-      }
+      margin: 22px 0 10px;
     }
-    .el-radio-group{
-      display: flex;
-      flex-direction: column;
-      .el-radio{
-        margin-bottom: 16px;
+    .form{
+      margin-top: 10px;
+      /deep/.el-form-item{
+        margin-bottom: 10px;
+        .el-form-item__label{
+          padding-bottom: 0;
+        }
+        .el-select{
+          width: 100%;
+        }
       }
     }
   }

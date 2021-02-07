@@ -187,6 +187,39 @@
                 <div slot="label" class="tab_label"><svg-icon value="icon-fenxiang1" :size="1.1"></svg-icon> <span>Share</span></div>
                 12
               </el-tab-pane>
+              <el-tab-pane label="Find Reviewer" :name="JSON.stringify({name:'find',id:item.id})">
+                <div slot="label" class="tab_label"><svg-icon value="icon-chazhao" :size="1.4"></svg-icon> <span>Find Reviewer</span> <el-tag size="mini">16</el-tag></div>
+                <div class="find_tab">
+                  <div class="find">
+                    <div class="find_tab_l">
+                      29 Dec 2020, 14:36
+                    </div>
+                    <div class="find_tab_r">
+                        <div class="find_content">
+                          <p>You asked William Clark for more information.</p>
+                        </div>
+                        <div class="find_border" v-if="index!=2">
+                          <p>They have until Wednesday, 10 February at 13:00 to respond. We’ll email you with the outcome no matter what.</p>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="find" v-if="index==2">
+                    <div class="find_tab_l">
+                      29 Dec 2020, 14:36
+                    </div>
+                    <div class="find_tab_r">
+                        <div class="find_border">
+                          <p class="first_p">William Clark responded to your request:</p>
+                          <div>
+                            <p>Reference number:ts #120107</p>
+                            <p>Email:wrclark1961@gmail.com</p>
+                            <p>Name:William Clark</p>
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </el-tab-pane>
               <el-tab-pane label="Report" :name="JSON.stringify({name:'report',id:item.id})">
                 <div slot="label" class="tab_label">
                   <svg-icon value="icon-biaoji" :size="1.1" ></svg-icon> 
@@ -245,13 +278,15 @@
       </el-pagination>
     </div>
     <ReportDialog ref="reportdialog"></ReportDialog>
+    <FindDialog ref="finddialog"></FindDialog>
   </div>
 </template>
 <script>
 import { dateEnglish } from '../../commons';
 export default {
   components:{
-    ReportDialog:()=> import("./report-dialog")
+    ReportDialog:()=> import("./report-dialog"),
+    FindDialog:()=> import("./find-dialog")
   },
   data(){
     return{
@@ -372,10 +407,12 @@ export default {
      * 评论状态切换
      */
     handleCardNameClick(tab, event){
-      if(tab.name=='report'){
+      const tabData = JSON.parse(tab.name);
+      if(tabData.name=='report'){
         this.$refs.reportdialog.openDialog();
+      }else if(tabData.name=='find'){
+        this.$refs.finddialog.openDialog();
       }
-      console.log(JSON.parse(tab.name));
     },
     /**
      * 举报
@@ -605,6 +642,46 @@ export default {
                 }
                 .el-button{
                   margin-right: 8px;
+                }
+              }
+            }
+          }
+          .find_tab{
+            padding: 18px 15px;
+            background: #F9F9FA;
+            .find{
+              display: flex;
+              flex-direction: row;
+              .find_tab_l{
+                width: 185px;
+                text-align: left;
+                font-size: 12px;
+                color: #6F6F87;
+              }
+              .find_tab_r{
+                flex: 1;
+                .find_content{
+                  p{
+                    font-size: 14px;
+                    margin-top: 0;
+                    line-height: 23px;
+                    word-break: break-all;
+                    color: #454554;
+                  }
+                }
+                .find_border{
+                  padding: 16px;
+                  border: 1px solid #DCDCE6;
+                  border-radius: 4px;
+                  background: #ffffff;
+                  p{
+                    margin: 0;
+                    font-size: 14px;
+                    color: #454554;
+                  }
+                  .first_p{
+                    margin-bottom: 8px;
+                  }
                 }
               }
             }

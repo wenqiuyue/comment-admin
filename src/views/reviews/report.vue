@@ -57,7 +57,26 @@
               <el-button plain size="mini" @click="handleApply(2)">Apply</el-button>
             </el-dropdown-item>
           </el-dropdown-menu>
-        </el-dropdown>     
+        </el-dropdown>
+        <el-dropdown split-button size="small" type="primary" trigger="click" :hide-on-click="false" ref="whoreport">
+          User who reported
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item>
+              <el-checkbox :indeterminate="isReportReasonIndeterminate" v-model="checkAllWho" @change="handleWhoCheckAllChange">Select all</el-checkbox>
+            </el-dropdown-item>
+            <el-dropdown-item divided class="checkbox_dro">
+              <el-checkbox-group v-model="checkedWho" @change="handleCheckedWhoChange">
+                <el-checkbox v-for="(item,index) in whoOption" :label="item" :key="item">
+                  Jim
+                  <div>(projectmanager@whitehatbox.com)</div>
+                </el-checkbox>
+              </el-checkbox-group>
+            </el-dropdown-item>
+            <el-dropdown-item divided class="menu_btn">
+              <el-button plain size="mini" @click="handleApply(4)">Apply</el-button>
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>      
       </div>
     </div>
     <div class="card_group">
@@ -125,7 +144,8 @@
          >
           <template slot-scope="scope">
             <div>{{scope.row.status}}</div>
-            <a href="http://sitespilot.com/">See the review Why is it still online?</a>
+            <div class="dialog_text"><span @click="handleSee">See the review</span></div>
+            <div class="dialog_text"><span @click="handleWhy">Why is it still online?</span></div>
           </template>
         </el-table-column>
         <el-table-column
@@ -181,10 +201,16 @@
         </el-pagination>
       </div>
     </div>
+    <SeeDialog ref="seedialog"></SeeDialog>
+    <WhyDialog ref="whydialog"></WhyDialog>
   </div>
 </template>
 <script>
 export default {
+  components:{
+    SeeDialog:()=> import('./see-dialog'),
+    WhyDialog:()=> import('./why-dialog'),
+  },
   data(){
     return{
       datePicker:[],
@@ -200,6 +226,10 @@ export default {
       checkedStatus:[], //选择的status
       checkAllStatus: false, //status是否全选
       isStatusIndeterminate:true,
+      whoOption:['Investigating report','Report closed - Review offine','Report closed - still online'], //status选项
+      checkedWho:[], //选择的status
+      checkAllWho: false, //status是否全选
+      isWhoIndeterminate:true,
       currentPage4:4,
       tableData: [{
           online:true,
@@ -259,9 +289,27 @@ export default {
     }
   },
   methods:{
+    /**
+     * 查看原因
+     */
+    handleWhy(){
+      this.$refs.whydialog.openDialog();
+    },
+    /**
+     * 查看评论
+     */
+    handleSee(){
+      this.$refs.seedialog.openDialog();
+    },
+    /**
+     * 设置查询每页多少条
+     */
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
     },
+    /**
+     * 设置当前页多少条
+     */
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
     },
@@ -276,6 +324,9 @@ export default {
         console.log(this.checkedReportReason);
       }else if(type==3){
         this.$refs.status.hide()
+      }
+      else if(type==4){
+        this.$refs.whoreport.hide()
       }
     },
     /**
@@ -323,6 +374,21 @@ export default {
       this.checkAllStatus = checkedCount === this.statusOption.length;
       this.isStatusIndeterminate = checkedCount > 0 && checkedCount < this.statusOption.length;
     },
+    /**
+     * who全选
+     */
+    handleWhoCheckAllChange(val) {
+      this.checkedWho = val ? this.whoOption : [];
+      this.isWhoIndeterminate = false;
+    },
+    /**
+     * who选项
+     */
+    handleCheckedWhoChange(value) {
+      let checkedCount = value.length;
+      this.checkAllWho = checkedCount === this.whoOption.length;
+      this.isWhoIndeterminate = checkedCount > 0 && checkedCount < this.whoOption.length;
+    },
     attenceCellStyle() {
       return {
         padding: "10px 0",
@@ -348,6 +414,10 @@ export default {
     /deep/.el-checkbox-group{
       display: flex;
       flex-direction: column;
+      .el-checkbox{
+        display: flex;
+        margin: 5px 0;
+      }
     }
   }
 }
@@ -466,9 +536,11 @@ export default {
         border-radius: 50%;
         margin: 0 auto;
       }
-      a{
-        text-decoration: none;
-        color: #409EFF;
+      .dialog_text{
+        span{
+          cursor: pointer;
+          color: #409EFF;
+        }
       }
     }
   }

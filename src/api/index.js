@@ -78,3 +78,9 @@ export function siteReply (data) {
 export function siteDelReply (data) {
   return fetchDelete('/site/Reply',data)
 };
+/**
+ * 举报数据查询
+ */
+export function siteReport (data) {
+  return fetchGet('/site/Report',data)
+};
