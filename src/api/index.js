@@ -84,3 +84,15 @@ export function siteDelReply (data) {
 export function siteReport (data) {
   return fetchGet('/site/Report',data)
 };
+/**
+ * 评论举报
+ */
+export function sitePostReport (data) {
+  return fetchPost('/site/Report',data)
+};
+/**
+ * 举报原因选项
+ */
+export function siteReportingReason (data) {
+  return fetchGet('/site/ReportingReason',data)
+};

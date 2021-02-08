@@ -1,6 +1,6 @@
 <template>
   <div class="report-dialog">
-    <el-dialog :title="page==1?'Before you start':'Why are you flagging this review'" :visible.sync="dialogReport" width="615px">
+    <el-dialog :title="page==1?'Before you start':'Why are you flagging this review'" :visible.sync="dialogReport" width="615px" @open="open">
       <div class="page_one" v-if="page==1">
         <div class="one_step">
           <div>1</div>
@@ -20,9 +20,9 @@
             <el-select v-model="twoForm.twoSel" placeholder="select a reason">
               <el-option
                 v-for="item in selOption"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
+                :key="item.id"
+                :label="item.content"
+                :value="item.id">
               </el-option>
             </el-select>
           </el-form-item>
@@ -39,41 +39,54 @@
       <div slot="footer" class="dialog-footer">
         <el-checkbox v-if="page==1" v-model="oneChecked">Don't show this message again.</el-checkbox>
         <el-button v-else plain @click="backBtn">Back</el-button>
-        <el-button type="primary" @click="confirmBtn">Continue</el-button>
+        <el-button type="primary" @click="confirmBtn" :loading="loading">{{page==1?'Continue':'Submit'}}</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 <script>
 export default {
+  props:{
+    comId:{
+      type:Number,
+      default:null,
+    }
+  },
   data(){
     return{
       dialogReport:false,
+      loading:false, //加载
       page:1, //当前步骤页
       twoForm:{
         twoSel:1, //步骤二举报原因单选
         reason:''
       },
-      selOption:[{
-        value: 1,
-        label: 'Harmful or illegal'
-      },{
-        value: 2,
-        label: 'Personal information'
-      },{
-        value: 3,
-        label: 'Advertising or promotional'
-      },{
-        value: 4,
-        label: 'Not based on a genuine experience'
-      },{
-        value: 5,
-        label: 'About a different buiness'
-      }, ],
+      selOption:null,
       oneChecked:false
     }
   },
+  mounted(){
+    this.getOption();
+  },
   methods:{
+    /**
+     * 获取举报原因选项
+     */
+    getOption(){
+      this.$apiHttp.siteReportingReason().then((resp)=>{
+        if(resp.res==200){
+          this.selOption=resp.data;
+        }
+      })
+    },
+    /**
+     * 打开弹窗回调
+     */
+    open(){
+      if(this.oneChecked){
+        this.page=2;
+      }
+    },
     /**
      * 打开弹窗
      */
@@ -88,7 +101,22 @@ export default {
       if(this.page==1){
         this.page=2;
       }else{
-         this.dialogReport = false
+        this.loading=true;
+        const data={
+          commentId:this.comId,
+          reportingReasonId:this.twoForm.twoSel,
+          content:this.twoForm.reason
+        }
+        this.$apiHttp.sitePostReport(data).then((resp)=>{
+          if(resp.res==200){
+            this.$message({
+              message: 'Successful report',
+              type: 'success'
+            });
+            this.dialogReport = false;
+            this.$emit('success');
+          }
+        }).finally(()=> this.loading=false);
       }
     },
     /**

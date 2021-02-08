@@ -220,18 +220,18 @@
                   </div>
                 </div>
               </el-tab-pane>
-              <el-tab-pane label="Report" :name="JSON.stringify({name:'report',id:item.id})">
+              <el-tab-pane label="Report" :name="JSON.stringify({name:'report',id:item.id,bool:!item.investigations.length?true:false})">
                 <div slot="label" class="tab_label">
                   <svg-icon value="icon-biaoji" :size="1.1" ></svg-icon> 
-                  <span v-if="index==2">Invistigation in progress</span>
-                  <span v-else-if="index==1">Invistigation complete</span>
-                  <span v-else>Report</span>
+                  <span v-if="!item.investigations.length">Report</span>
+                  <span v-else-if="item.reportSta==0">Invistigation in progress</span>
+                  <span v-else>Invistigation complete</span>
                 </div>
-                <div class="report_tab" v-if="index==1">
+                <div class="report_tab" v-if="item.investigations.length">
                   <el-timeline v-if="!isDown">
-                    <el-timeline-item timestamp="2021-1-31 19:05" placement="top" v-for="(item,index) in 4" :key="index">
+                    <el-timeline-item :timestamp="report.time.timeFormat('yyyy-MM-dd HH:mm')" placement="top" v-for="(report,index) in item.investigations" :key="index">
                       <el-card>
-                        <span><strong>Investigation complete:</strong> The review doesn't breach our guidelines for: <strong>defamation</strong></span>
+                        <span><strong>{{report.state==0?'Invistigation in progress:':'Invistigation complete:'}}</strong> The review doesn't breach our guidelines for: <strong>defamation</strong></span>
                         <p>
                           <el-button plain icon="el-icon-reading">Read our decision</el-button>
                           <el-button type="text" class="dif_issue">There's a different issue</el-button>
@@ -240,9 +240,18 @@
                     </el-timeline-item>
                   </el-timeline>
                   <el-timeline v-else>
-                    <el-timeline-item timestamp="2021-1-31 19:05" placement="top" v-for="(item,index) in 1" :key="index">
+                    <el-timeline-item :timestamp="item.investigations[0].time.timeFormat('yyyy-MM-dd HH:mm')" placement="top" :key="index">
                       <el-card>
-                        <span><strong>Investigation complete:</strong> The review doesn't breach our guidelines for: <strong>defamation</strong></span>
+                        <div class="report_card_main">
+                          <span class="r_c_m_l">{{item.investigations[0].state==0?'Invistigation in progress:':'Invistigation complete:'}}</span> 
+                          <div class="r_c_m_r">
+                            <p v-if="item.investigations[0].state==1" class="p_one">
+                              The review doesn't breach our guidelines for:
+                            </p>
+                            <p><strong>{{item.investigations[0].reportingReason}}</strong></p>
+                            <p>{{item.investigations[0].content}}</p>
+                          </div>
+                        </div>
                         <p>
                           <el-button plain icon="el-icon-reading">Read our decision</el-button>
                           <el-button type="text" class="dif_issue">There's a different issue</el-button>
@@ -250,7 +259,7 @@
                       </el-card>
                     </el-timeline-item>
                   </el-timeline>
-                  <div class="show_btn">
+                  <div class="show_btn" v-if="item.investigations.length>1">
                     <el-button type="text" :icon="!isDown?'el-icon-caret-top':'el-icon-caret-bottom'" @click="isDown=!isDown">{{isDown?'Show history':'Hide history'}}</el-button>
                   </div>
                 </div>
@@ -277,7 +286,7 @@
         :total="page.pageTotal">
       </el-pagination>
     </div>
-    <ReportDialog ref="reportdialog"></ReportDialog>
+    <ReportDialog ref="reportdialog" :comId="selCommonId" @success="getReviews"></ReportDialog>
     <FindDialog ref="finddialog"></FindDialog>
   </div>
 </template>
@@ -308,6 +317,7 @@ export default {
       },
       user: null, //商家信息
       replyEditId:null, //回复的id
+      selCommonId:null, //选择的评论id
     }
   },
   mounted(){
@@ -399,6 +409,18 @@ export default {
       this.$apiHttp.siteReviews({params:data}).then((resp)=>{
         if(resp.res==200){
           this.reviewsList=resp.data.reviews;
+          this.reviewsList.forEach((m)=>{
+            m.reportSta=null;
+            if(m.investigations.length>0){
+              m.investigations.forEach((i)=>{
+                if(i.state==0){
+                  m.reportSta=0;
+                }else if(i.state==1){
+                  m.reportSta=1;
+                }
+              })
+            }
+          })
           this.page.pageTotal=resp.data.total;
         }
       }).finally(()=> this.loading=false);
@@ -408,8 +430,9 @@ export default {
      */
     handleCardNameClick(tab, event){
       const tabData = JSON.parse(tab.name);
-      if(tabData.name=='report'){
-        this.$refs.reportdialog.openDialog();
+      if(tabData.name=='report' && tabData.bool){
+        this.selCommonId=tabData.id;
+        this.$refs.reportdialog.openDialog();  
       }else if(tabData.name=='find'){
         this.$refs.finddialog.openDialog();
       }
@@ -700,6 +723,22 @@ export default {
             }
             .show_btn{
               padding-left: 30px;
+            }
+            .report_card_main{
+              display: flex;
+              flex-direction: row;
+              .r_c_m_l{
+                flex-shrink: 0;
+              }
+              .r_c_m_r{
+                margin-left: 8px;
+                p{
+                  margin: 0 0 5px;
+                }
+                .p_one{
+                  margin-bottom: 10px !important;
+                }
+              }
             }
           }
         }
