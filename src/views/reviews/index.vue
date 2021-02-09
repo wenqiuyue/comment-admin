@@ -2,10 +2,10 @@
   <div class="reviews">
     <el-tabs v-model="activeName">
       <el-tab-pane label="Inbox" name="1">
-        <Inbox></Inbox>
+        <Inbox v-if="activeName=='1'"></Inbox>
       </el-tab-pane>
       <el-tab-pane label="Reporting activity" name="2">
-        <Report></Report>
+        <Report v-if="activeName=='2'"></Report>
       </el-tab-pane>
     </el-tabs>
   </div>

@@ -93,6 +93,12 @@ export function sitePostReport (data) {
 /**
  * 举报原因选项
  */
-export function siteReportingReason (data) {
-  return fetchGet('/site/ReportingReason',data)
+export function siteReportingReason () {
+  return fetchGet('/site/ReportingReason')
+};
+/**
+ * 举报人选项
+ */
+export function siteUserWhoReported () {
+  return fetchGet('/site/UserWhoReported')
 };

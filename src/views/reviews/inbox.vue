@@ -126,11 +126,8 @@
                   {{item.name}}<i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item>黄金糕</el-dropdown-item>
-                  <el-dropdown-item>狮子头</el-dropdown-item>
-                  <el-dropdown-item>螺蛳粉</el-dropdown-item>
-                  <el-dropdown-item disabled>双皮奶</el-dropdown-item>
-                  <el-dropdown-item divided>蚵仔煎</el-dropdown-item>
+                  <el-dropdown-item class="review_name_dropdown">{{item.name}}<i class="el-icon-document"></i></el-dropdown-item>
+                  <el-dropdown-item class="review_name_dropdown" disabled><i class="el-icon-edit"></i> {{item.totalReviews}}</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </div>
@@ -231,10 +228,19 @@
                   <el-timeline v-if="!isDown">
                     <el-timeline-item :timestamp="report.time.timeFormat('yyyy-MM-dd HH:mm')" placement="top" v-for="(report,index) in item.investigations" :key="index">
                       <el-card>
-                        <span><strong>{{report.state==0?'Invistigation in progress:':'Invistigation complete:'}}</strong> The review doesn't breach our guidelines for: <strong>defamation</strong></span>
-                        <p>
-                          <el-button plain icon="el-icon-reading">Read our decision</el-button>
-                          <el-button type="text" class="dif_issue">There's a different issue</el-button>
+                        <div class="report_card_main">
+                          <span class="r_c_m_l">{{report.state==0?'Invistigation in progress:':'Invistigation complete:'}}</span> 
+                          <div class="r_c_m_r">
+                            <p v-if="report.state==1" class="p_one">
+                              The review doesn't breach our guidelines for:
+                            </p>
+                            <p><strong>{{report.reportingReason}}</strong></p>
+                            <p>{{report.content}}</p>
+                          </div>
+                        </div>
+                        <p v-if="report.state==1">
+                          <el-button plain icon="el-icon-reading" @click="handleRead(item,report)">Read our decision</el-button>
+                          <el-button type="text" class="dif_issue" @click="handleDifferent(item.id)">There's a different issue</el-button>
                         </p>
                       </el-card>
                     </el-timeline-item>
@@ -252,9 +258,9 @@
                             <p>{{item.investigations[0].content}}</p>
                           </div>
                         </div>
-                        <p>
-                          <el-button plain icon="el-icon-reading">Read our decision</el-button>
-                          <el-button type="text" class="dif_issue">There's a different issue</el-button>
+                        <p v-if="item.investigations[0].state==1">
+                          <el-button plain icon="el-icon-reading" @click="handleRead(item,item.investigations[0])">Read our decision</el-button>
+                          <el-button type="text" class="dif_issue" @click="handleDifferent(item.id)">There's a different issue</el-button>
                         </p>
                       </el-card>
                     </el-timeline-item>
@@ -288,6 +294,7 @@
     </div>
     <ReportDialog ref="reportdialog" :comId="selCommonId" @success="getReviews"></ReportDialog>
     <FindDialog ref="finddialog"></FindDialog>
+    <ReadDialog ref="readdialog" :selReport="selReport"></ReadDialog>
   </div>
 </template>
 <script>
@@ -295,7 +302,8 @@ import { dateEnglish } from '../../commons';
 export default {
   components:{
     ReportDialog:()=> import("./report-dialog"),
-    FindDialog:()=> import("./find-dialog")
+    FindDialog:()=> import("./find-dialog"),
+    ReadDialog:()=> import("./read-dialog")
   },
   data(){
     return{
@@ -318,6 +326,7 @@ export default {
       user: null, //商家信息
       replyEditId:null, //回复的id
       selCommonId:null, //选择的评论id
+      selReport:null //选择的评论
     }
   },
   mounted(){
@@ -325,6 +334,16 @@ export default {
   },
   methods:{
     dateEnglish,
+    /**
+     * 阅读举报
+     */
+    handleRead(item,report){
+      this.selReport=report;
+      this.selReport.companyName=item.companyName;
+      this.selReport.name=item.name;
+      console.log(this.selReport)
+      this.$refs.readdialog.openDialog();
+    },
     /**
      * 删除评论
      */
@@ -426,6 +445,13 @@ export default {
       }).finally(()=> this.loading=false);
     },
     /**
+     * 举报不同的问题
+     */
+    handleDifferent(id){
+      this.selCommonId=id;
+      this.$refs.reportdialog.openDialog();  
+    },
+    /**
      * 评论状态切换
      */
     handleCardNameClick(tab, event){
@@ -486,6 +512,13 @@ export default {
 </script>
 <style lang="less" scoped>
 .el-dropdown-menu{
+  /deep/.review_name_dropdown{
+    padding: 0 15px !important;
+  }
+  /deep/.review_name_dropdown:first-child{
+    font-weight: bold;
+    font-size: 16px;
+  }
   /deep/.el-dropdown-menu__item{
     padding: 3px 15px;
     // background: #ffffff;

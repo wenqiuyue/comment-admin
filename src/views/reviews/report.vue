@@ -1,8 +1,9 @@
 <template>
-  <div class="report">
+  <div class="report" v-loading="allLoading">
     <div class="screen">
       <div class="screen_l">
         <el-date-picker
+          @change="getReport"
           class="date"
           v-model="datePicker"
           type="daterange"
@@ -50,7 +51,7 @@
             </el-dropdown-item>
             <el-dropdown-item divided class="checkbox_dro">
               <el-checkbox-group v-model="checkedReportReason" @change="handleCheckedReportReasonChange">
-                <el-checkbox v-for="(item,index) in reportReasonOption" :label="item" :key="item">{{item}}</el-checkbox>
+                <el-checkbox v-for="(item,index) in reportReasonOption" :label="item.id" :key="item.id">{{item.content}}</el-checkbox>
               </el-checkbox-group>
             </el-dropdown-item>
             <el-dropdown-item divided class="menu_btn">
@@ -66,9 +67,9 @@
             </el-dropdown-item>
             <el-dropdown-item divided class="checkbox_dro">
               <el-checkbox-group v-model="checkedWho" @change="handleCheckedWhoChange">
-                <el-checkbox v-for="(item,index) in whoOption" :label="item" :key="item">
-                  Jim
-                  <div>(projectmanager@whitehatbox.com)</div>
+                <el-checkbox v-for="(item,index) in whoOption" :label="item.id" :key="item.id">
+                  {{item.name}}
+                  <div>({{item.eamil}})</div>
                 </el-checkbox>
               </el-checkbox-group>
             </el-dropdown-item>
@@ -126,6 +127,7 @@
         :data="tableData"
         :cell-style="attenceCellStyle"
         :header-cell-style="attenceHeaderStyle"
+        v-loading="loading"
         style="width: 100%">
         <el-table-column
           prop="online"
@@ -193,11 +195,11 @@
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :current-page="currentPage4"
-          :page-sizes="[100, 200, 300, 400]"
-          :page-size="100"
+          :current-page="page.pageIndex"
+          :page-sizes="[10, 20, 30, 40]"
+          :page-size="page.pageSize"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="400">
+          :total="page.pageTotal">
         </el-pagination>
       </div>
     </div>
@@ -213,8 +215,10 @@ export default {
   },
   data(){
     return{
+      loading:false,
+      allLoading:false,
       datePicker:[],
-      reportReasonOption:['Coarse language','Sensitive information','Violates rights','Tax fine'], //举报原因选项
+      reportReasonOption:[], //举报原因选项
       checkedReportReason:[], //选择的举报原因
       checkAllReportReason: false, //举报原因是否全选
       isReportReasonIndeterminate:true,
@@ -226,11 +230,15 @@ export default {
       checkedStatus:[], //选择的status
       checkAllStatus: false, //status是否全选
       isStatusIndeterminate:true,
-      whoOption:['Investigating report','Report closed - Review offine','Report closed - still online'], //status选项
-      checkedWho:[], //选择的status
-      checkAllWho: false, //status是否全选
+      whoOption:[], //举报人选项
+      checkedWho:[], //选择的举报人
+      checkAllWho: false, //举报人是否全选
       isWhoIndeterminate:true,
-      currentPage4:4,
+      page:{
+        pageSize:10, //每页数量
+        pageTotal:null, //总数量
+        pageIndex:1 //当前页
+      },
       tableData: [{
           online:true,
           status:'Report closed - Review still online',
@@ -288,7 +296,57 @@ export default {
         }]
     }
   },
+  mounted(){
+    this.getSelOption();
+  },
   methods:{
+    /**
+     * 获取举报列表
+     */
+    getReport(){
+      this.loading=true;
+      const data={
+        startTime:this.datePicker.length>0?this.datePicker[0].timeFormat('yyyy-MM-dd'):null,
+        endTime:this.datePicker.length>0?this.datePicker[1].timeFormat('yyyy-MM-dd'):null,
+        reportAndReviewStatus:this.checkedStatus,
+        star:this.checkedStar,
+        reportingReason:this.checkedReportReason,
+        offset:this.page.pageIndex,
+        limit:this.page.pageSize,
+      }
+      this.$apiHttp.siteReport({params:data}).then((resp)=>{
+        if(resp.res==200){
+
+        }
+      })
+    },
+    /**
+     * 获取举报原因及举报人选项数据
+     */
+    getSelOption(){
+      this.allLoading=true;
+      const data={
+        star:null,
+        reply:null,
+        report:null,
+        startTime:null,
+        endTime:null,
+        offset:this.page.pageIndex,
+        limit:this.page.pageSize,
+      }
+      Promise.all([
+        this.$apiHttp.siteUserWhoReported(),
+        this.$apiHttp.siteReportingReason(),
+        this.$apiHttp.siteReport({params:data})
+      ]).then((resp)=>{
+        if(resp[0].res==200){
+          this.whoOption=resp[0].data;
+        }
+        if(resp[1].res==200){
+          this.reportReasonOption=resp[1].data;
+        }
+      }).finally(()=> this.allLoading=false);
+    },
     /**
      * 查看原因
      */
@@ -305,13 +363,16 @@ export default {
      * 设置查询每页多少条
      */
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      this.page.pageIndex=1;
+      this.page.pageSize = val;
+      this.getReport();
     },
     /**
      * 设置当前页多少条
      */
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      this.page.pageIndex=val;
+      this.getReport();
     },
     /**
      * 筛选
@@ -328,6 +389,7 @@ export default {
       else if(type==4){
         this.$refs.whoreport.hide()
       }
+      this.getReport();
     },
     /**
      * 举报原因选项
