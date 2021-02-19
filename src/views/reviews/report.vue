@@ -1,5 +1,5 @@
 <template>
-  <div class="report" v-loading="allLoading">
+  <div class="report">
     <div class="screen">
       <div class="screen_l">
         <el-date-picker
@@ -35,7 +35,7 @@
             </el-dropdown-item>
             <el-dropdown-item divided class="checkbox_dro">
               <el-checkbox-group v-model="checkedStar" @change="handleCheckedStarChange">
-                <el-checkbox v-for="(item,index) in starOption" :label="item" :key="item">{{item}}</el-checkbox>
+                <el-checkbox v-for="(item,index) in starOption" :label="item.id" :key="item.id">{{item.content}}</el-checkbox>
               </el-checkbox-group>
             </el-dropdown-item>
             <el-dropdown-item divided class="menu_btn">
@@ -80,17 +80,17 @@
         </el-dropdown>      
       </div>
     </div>
-    <div class="card_group">
+    <div class="card_group" v-if="tableData">
       <el-row :gutter="16" class="card_row">
         <el-col :span="12">
           <div class="card">
-            <span>8</span> 
+            <span>{{tableData.numberOfReports}}</span> 
             <span>Number of reports</span>
           </div>
         </el-col>
         <el-col :span="12">
           <div class="card">
-            <span>0</span> 
+            <span>{{tableData.reportsUnderInvestigation}}</span> 
             <span>Reports under investigation</span>
           </div>
         </el-col>
@@ -99,16 +99,16 @@
         <el-col :span="12">
           <div class="tow_card">
             <div class="card">
-              <span>8</span> 
+              <span>{{tableData.reportsClosedButReviewOnline}}</span> 
               <span>Reports closed, review still online</span>
             </div>
             <div class="card_item">
               <p>
-                <span>4</span> 
+                <span>{{tableData.invalidReports}}</span> 
                 <span>Invalid reports (reviews not in breach)</span>
               </p>
               <p>
-                <span>0</span> 
+                <span>{{tableData.issue}}</span> 
                 <span>Issue addressed by the reviewer</span>
               </p>
             </div>
@@ -116,18 +116,18 @@
         </el-col>
         <el-col :span="12">
           <div class="card last_card">
-            <span>3</span> 
+            <span>{{tableData.reviewsTakenOffline}}</span> 
             <span>Reviews taken offline</span>
           </div>
         </el-col>
       </el-row>
     </div>
-    <div class="report_group">
+    <div class="report_group" v-loading="loading">
       <el-table
-        :data="tableData"
+        v-if="tableData && tableData.reportData.length"
+        :data="tableData.reportData"
         :cell-style="attenceCellStyle"
         :header-cell-style="attenceHeaderStyle"
-        v-loading="loading"
         style="width: 100%">
         <el-table-column
           prop="online"
@@ -135,62 +135,68 @@
           class="online_col"
          >
           <template slot-scope="scope">
-            <div v-if="scope.row.online" class="online"></div>
+            <div v-if="scope.row.status==0" class="online"></div>
             <div v-else class="unline"></div>
           </template>
         </el-table-column>
         <el-table-column
           prop="status"
           label="Report & Review status"
-          width="200"
          >
           <template slot-scope="scope">
-            <div>{{scope.row.status}}</div>
-            <div class="dialog_text"><span @click="handleSee">See the review</span></div>
-            <div class="dialog_text"><span @click="handleWhy">Why is it still online?</span></div>
+            <div v-if="scope.row.status==0">	Report closed - Review still online</div>
+            <div v-else>	Report closed - Review offline</div>
+            <div class="dialog_text"><span @click="handleSee(scope.row)">See the review</span></div>
+            <div class="dialog_text"><span @click="handleWhy(scope.row)">Why is it still online?</span></div>
           </template>
         </el-table-column>
         <el-table-column
-          prop="lastDate"
+          prop="lastStatusChangeTime"
           label="Last status change"
-          sortable
-          width="180">
+          sortable>
+          <template slot-scope="scope">
+            <span>{{scope.row.lastStatusChangeTime?scope.row.lastStatusChangeTime.timeFormat('yyyy-MM-dd'):'--'}}</span>
+          </template>
         </el-table-column>
         <el-table-column
-          prop="reportDate"
+          prop="dateOfTheReportTime"
           sortable
-          width="180"
           label="Date of the report">
+          <template slot-scope="scope">
+            <span>{{scope.row.dateOfTheReportTime?scope.row.dateOfTheReportTime.timeFormat('yyyy-MM-dd'):'--'}}</span>
+          </template>
         </el-table-column>
         <el-table-column
-          prop="star"
+          prop="rank"
           sortable
-          width="140"
           label="Star rating">
           <template slot-scope="scope">
             <rate
               class="c_rate"
-              :value="scope.row.star"
+              :value="scope.row.reviews.rank"
               :isDisabled="true"
             >
             </rate>
           </template>
         </el-table-column>
         <el-table-column
-          prop="reason"
-          width="300"
+          prop="content"
           label="Reporting reason">
+          <template slot-scope="scope">
+            <div class="reason">{{scope.row.reportingReason}}</div>
+            <div class="content">{{scope.row.content}}</div>
+          </template>
         </el-table-column>
         <el-table-column
-          width="210"
           prop="name"
           label="User who reported">
           <template slot-scope="scope">
-            <div>{{scope.row.name}}</div>
-            <div>({{scope.row.email}})</div>
+            <div>{{scope.row.reportUser.name}}</div>
+            <div>({{scope.row.reportUser.eamil}})</div>
           </template>
         </el-table-column>
       </el-table>
+      <empty v-else :tips="'No data available'"></empty>
       <div class="pagination">
         <el-pagination
           @size-change="handleSizeChange"
@@ -203,8 +209,8 @@
         </el-pagination>
       </div>
     </div>
-    <SeeDialog ref="seedialog"></SeeDialog>
-    <WhyDialog ref="whydialog"></WhyDialog>
+    <SeeDialog ref="seedialog" :seeReviews="seeReviews"></SeeDialog>
+    <WhyDialog ref="whydialog" :seeReviews="seeReviews"></WhyDialog>
   </div>
 </template>
 <script>
@@ -213,16 +219,39 @@ export default {
     SeeDialog:()=> import('./see-dialog'),
     WhyDialog:()=> import('./why-dialog'),
   },
+  props:{
+    whoOption:{
+      type:Array,
+      default:[]
+    },
+    reportReasonOption:{
+      type:Array,
+      default:[]
+    }
+  },
   data(){
     return{
-      loading:false,
-      allLoading:false,
+      loading:true,
       datePicker:[],
-      reportReasonOption:[], //举报原因选项
       checkedReportReason:[], //选择的举报原因
       checkAllReportReason: false, //举报原因是否全选
       isReportReasonIndeterminate:true,
-      starOption:['1 STARS','2 STARS','3 STARS','4 STARS','5 STARS'], //星级选项
+      starOption:[{
+        id: 1, content: "1 STARS"
+      },
+      {
+        id: 2, content: "2 STARS"
+      },
+      {
+        id: 3, content: "3 STARS"
+      },
+      {
+        id: 4, content: "4 STARS"
+      },
+      {
+        id: 5, content: "5 STARS"
+      },
+      ], //星级选项
       checkedStar:[], //选择的星级
       checkAllStar: false, //星级是否全选
       isStarIndeterminate:true,
@@ -230,7 +259,6 @@ export default {
       checkedStatus:[], //选择的status
       checkAllStatus: false, //status是否全选
       isStatusIndeterminate:true,
-      whoOption:[], //举报人选项
       checkedWho:[], //选择的举报人
       checkAllWho: false, //举报人是否全选
       isWhoIndeterminate:true,
@@ -239,65 +267,12 @@ export default {
         pageTotal:null, //总数量
         pageIndex:1 //当前页
       },
-      tableData: [{
-          online:true,
-          status:'Report closed - Review still online',
-          lastDate: '2016-05-02',
-          reportDate: '2016-05-02',
-          star: 4,
-          reason: 'The review is markting or spam.',
-          name:'Jim',
-          email:'projectmaneger@whi.com'
-        }, {
-          online:true,
-          status:'Report closed - Review still online',
-          lastDate: '2016-05-02',
-          reportDate: '2016-05-02',
-          star: 4,
-          reason: 'The review is markting or spam.',
-          name:'Jim',
-          email:'projectmaneger@whi.com'
-        }, {
-          online:false,
-          status:'Report closed - Review still online',
-          lastDate: '2016-05-02',
-          reportDate: '2016-05-02',
-          star: 4,
-          reason: 'The review is markting or spam.',
-          name:'Jim',
-          email:'projectmaneger@whi.com'
-        }, {
-          online:true,
-          status:'Report closed - Review still online',
-          lastDate: '2016-05-02',
-          reportDate: '2016-05-02',
-          star: 4,
-          reason: 'The review is markting or spam.',
-          name:'Jim',
-          email:'projectmaneger@whi.com'
-        }, {
-          online:true,
-          status:'Report closed - Review still online',
-          lastDate: '2016-05-02',
-          reportDate: '2016-05-02',
-          star: 4,
-          reason: 'The review is markting or spam.',
-          name:'Jim',
-          email:'projectmaneger@whi.com'
-        }, {
-          online:true,
-          status:'Report closed - Review still online',
-          lastDate: '2016-05-02',
-          reportDate: '2016-05-02',
-          star: 4,
-          reason: 'The review is markting or spam.',
-          name:'Jim',
-          email:'projectmaneger@whi.com'
-        }]
+      tableData: null,
+      seeReviews:null, //查看的评论
     }
   },
   mounted(){
-    this.getSelOption();
+    this.getReport();
   },
   methods:{
     /**
@@ -316,47 +291,23 @@ export default {
       }
       this.$apiHttp.siteReport({params:data}).then((resp)=>{
         if(resp.res==200){
-
+          this.tableData=resp.data;
+          this.page.pageTotal=resp.data.total;
         }
-      })
-    },
-    /**
-     * 获取举报原因及举报人选项数据
-     */
-    getSelOption(){
-      this.allLoading=true;
-      const data={
-        star:null,
-        reply:null,
-        report:null,
-        startTime:null,
-        endTime:null,
-        offset:this.page.pageIndex,
-        limit:this.page.pageSize,
-      }
-      Promise.all([
-        this.$apiHttp.siteUserWhoReported(),
-        this.$apiHttp.siteReportingReason(),
-        this.$apiHttp.siteReport({params:data})
-      ]).then((resp)=>{
-        if(resp[0].res==200){
-          this.whoOption=resp[0].data;
-        }
-        if(resp[1].res==200){
-          this.reportReasonOption=resp[1].data;
-        }
-      }).finally(()=> this.allLoading=false);
+      }).finally(()=> this.loading=false);
     },
     /**
      * 查看原因
      */
-    handleWhy(){
+    handleWhy(reviews){
+      this.seeReviews=reviews;
       this.$refs.whydialog.openDialog();
     },
     /**
      * 查看评论
      */
-    handleSee(){
+    handleSee(reviews){
+      this.seeReviews=reviews;
       this.$refs.seedialog.openDialog();
     },
     /**
@@ -597,6 +548,12 @@ export default {
         background: #00B67A;
         border-radius: 50%;
         margin: 0 auto;
+      }
+      .reason{
+        margin-bottom: 8px;
+      }
+      .content{
+        line-height: 20px;
       }
       .dialog_text{
         span{

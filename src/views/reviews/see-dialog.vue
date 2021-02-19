@@ -1,5 +1,5 @@
 <template>
-  <div class="see-dialog">
+  <div class="see-dialog" v-if="seeReviews">
     <el-dialog title="Review" :visible.sync="dialogSee" width="615px">
       <div class="see_main">
         <el-row>
@@ -7,22 +7,22 @@
             <div class="col_l">
               <rate
                 class="c_rate"
-                :value="4"
+                :value="seeReviews.reviews.rank"
                 :isDisabled="true"
               >
               </rate>
-              <p class="name">Marshall Greer</p>
+              <p class="name">{{seeReviews.reviews.name}}</p>
               <div class="review_date">
                 Reinstated on<br>
-                30/12/2020
+                {{seeReviews.reviews.time.timeFormat('yyyy-MM-dd')}}
               </div>
             </div>
           </el-col>
           <el-col :span="16">
             <div class="col_r">
-              <h5>Tried and regret.</h5>
-              <p>Other products on the market are better and more user friendly. Support is slow and not helpful.</p>
-              <p>UPDATE: WhiteHatBox attempted to have my review taken down or edited from the site. They claimed my review broke the terms of service for Trust Pilot because it “promoted” other products. This is a cheap and slimy move that casts them in an even shadier light. Don’t trust them!</p>
+              <h5>{{seeReviews.reviews.subject}}</h5>
+              <p>{{seeReviews.reviews.content}}</p>
+              <!-- <p>UPDATE: WhiteHatBox attempted to have my review taken down or edited from the site. They claimed my review broke the terms of service for Trust Pilot because it “promoted” other products. This is a cheap and slimy move that casts them in an even shadier light. Don’t trust them!</p> -->
               </p>
             </div>
           </el-col>
@@ -36,6 +36,12 @@
 </template>
 <script>
 export default {
+  props:{
+    seeReviews:{
+      type:Object,
+      default:null
+    }
+  },
   data(){
     return{
       dialogSee:false,
@@ -68,7 +74,7 @@ export default {
         }
       }
       .name{
-        margin: 10px 0 8px;
+        margin: 14px 0 8px;
         color: #454554;
       }
       .review_date{
@@ -93,6 +99,7 @@ export default {
   /deep/.el-dialog__body{
     border-top: 1px solid #E4E4EC;
     padding:22px;
+    min-height: 180px;
   }
   /deep/.el-dialog__footer{
     border-top: 1px solid #E4E4EC;
