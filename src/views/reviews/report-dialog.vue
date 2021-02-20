@@ -50,7 +50,11 @@ export default {
     comId:{
       type:Number,
       default:null,
-    }
+    },
+    selOption:{
+      type:Array,
+      default:[]
+    },
   },
   data(){
     return{
@@ -61,24 +65,12 @@ export default {
         twoSel:1, //步骤二举报原因单选
         reason:''
       },
-      selOption:null,
       oneChecked:false
     }
   },
   mounted(){
-    this.getOption();
   },
   methods:{
-    /**
-     * 获取举报原因选项
-     */
-    getOption(){
-      this.$apiHttp.siteReportingReason().then((resp)=>{
-        if(resp.res==200){
-          this.selOption=resp.data;
-        }
-      })
-    },
     /**
      * 打开弹窗回调
      */

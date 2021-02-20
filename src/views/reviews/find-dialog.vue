@@ -1,16 +1,16 @@
 <template>
   <div class="find-dialog">
-    <el-dialog title="Contact the reviewer" :visible.sync="dialogFind" width="615px" @closed="close">
+    <el-dialog title="Contact the reviewer" :visible.sync="dialogFind" width="615px" @closed="close" v-if="selReviews">
       <div class="find_main">
         <h5>How it works</h5>
-        <p>We’ll let the reviewer know you’d like more information to help you identify them and their experience with WhiteHatBox. It's up to them whether they choose to share their full name, email, order ID, phone number, or all of the above with you.</p>
+        <p>We’ll let the reviewer know you’d like more information to help you identify them and their experience with {{selReviews.companyName}}. It's up to them whether they choose to share their full name, email, order ID, phone number, or all of the above with you.</p>
         <p>They’ll have 3 days to reply.</p>
-        <h5><i class="el-icon-message icon"></i> Here’s the email we’ll send to Maroco:</h5>
-        <p>(We'll translate this message to match Maroco’s own language)</p>
+        <h5><i class="el-icon-message icon"></i> Here’s the email we’ll send to {{selReviews.name}}:</h5>
+        <p>(We'll translate this message to match {{selReviews.name}}’s own language)</p>
         <div class="email" v-if="!isSeeMore">
           <p>Sitespilot</p>
-          <h5>WhiteHatBox would like some information regarding your review</h5>
-          <div class="one_row">Hi Maroco, Thanks for your review on Sitespilot. Based on your review WhiteHatBox would like a little more information</div>
+          <h5>{{selReviews.companyName}} would like some information regarding your review</h5>
+          <div class="one_row">Hi {{selReviews.name}}, Thanks for your review on Sitespilot. Based on your review {{selReviews.companyName}} would like a little more information</div>
           <el-link type="primary" @click="isSeeMore=true">See more</el-link>
         </div>
         <div class="email_more" v-else>
@@ -19,36 +19,43 @@
               Sitespilot
             </el-form-item>
             <el-form-item label="To:">
-              quoc lecuong
+              {{selReviews.name}}
             </el-form-item>
             <el-form-item label="Subject:">
-              <div>WhiteHatBox would like some information regarding your review</div>
+              <div>{{selReviews.companyName}} would like some information regarding your review</div>
             </el-form-item>
           </el-form>
           <div class="email_con">
-            <p>Hi quoc lecuong,</p>
+            <p>Hi {{selReviews.name}},</p>
             <p>Thanks for your review on Sitespilot.</p>
-            <p>Based on your review, WhiteHatBox would like a little more information about your experience. This will help them write a more useful reply to you. It'll also help them verify that you’ve had a genuine experience with their business.</p>
+            <p>Based on your review, {{selReviews.companyName}} would like a little more information about your experience. This will help them write a more useful reply to you. It'll also help them verify that you’ve had a genuine experience with their business.</p>
             <p>Of course, it’s totally up to you what you share.</p>
-            <p class="more_info">Provide more information</p>
-            <p>Thanks for helping WhiteHatBox connect the dots!</p>
+            <!-- <p class="more_info">Provide more information</p> -->
+            <p>Thanks for helping {{selReviews.companyName}} connect the dots!</p>
             <p>The Sitespilot Team</p>
           </div>
         </div>
       </div>
       <div slot="footer" class="dialog-footer">
         <el-button plain @click="handleCancle">Cancel</el-button>
-        <el-button type="primary" @click="confirmBtn" icon="el-icon-position">Send Request</el-button>
+        <el-button type="primary" @click="confirmBtn" icon="el-icon-position" :loading="loading">Send Request</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 <script>
 export default {
+  props:{
+    selReviews:{
+      type:Object,
+      default:null
+    }
+  },
   data(){
     return{
       dialogFind:false,
-      isSeeMore:false //是否查看更多
+      isSeeMore:false, //是否查看更多
+      loading:false
     }
   },
   methods:{
@@ -74,7 +81,67 @@ export default {
      * 确认按钮
      */
     confirmBtn(){
-      this.dialogFind = false
+      this.loading=true;
+      const html=`
+      <style>
+      .email{
+        width: 100%;
+        padding: 22px;
+      }
+      .email_car{
+        width: 500px;
+        padding: 16px 34px;
+        text-align: left;
+        border: 1px solid #c5c5d6;
+        border-radius: 4px;
+        margin: 0 auto;
+      }
+      .email_car p{
+        word-break: break-all;
+        margin: 10px 0;
+      }
+      .email_car a{
+        width: calc(100% - 40px);
+        margin: 18px 0;
+        padding: 12px 20px;
+        color: #FFF;
+        background-color: #409EFF;
+        display: block;
+        text-align: center;
+        border-radius: 4px;
+        text-decoration: none !important;
+      }
+      </style>
+      <div class="email">
+      <div class="email_car">
+      <p>Hi ${this.selReviews.name},</p>
+      <p>Thanks for your review on Sitespilot.</p>
+      <p>Based on your review, ${this.selReviews.companyName} would like a little more information about your experience. This will help them write a more useful reply to you. It'll also help them verify that you’ve had a genuine experience with their business.</p>
+      <p>Of course, it’s totally up to you what you share.</p>
+      <a href="http://sitespilot.com/">Provide more information</a>
+      <p>Please note: This is a direct link to your Sitespilot account.</p>
+      <p>Please don't share it width other.</p>
+      <p style="margin-top:40px">Thank you for using our application!</p>
+      <p>Best Regards, <br> Sitespilot</p>
+      </div>
+      </div>`
+      const data={
+        toEmail:this.selReviews.email,
+        subject:`${this.selReviews.companyName} would like some information regarding your review`,
+        body:html,
+        isHtml:true
+      }
+      this.$apiHttp.siteSendEmail(data).then((resp)=>{
+        if(resp.res==200){
+          this.$message({
+            message: 'Your request for information has been sent',
+            type: 'success'
+          });
+          this.dialogFind = false;
+        }
+      }).finally(()=>{
+        this.loading=false;
+      })
     },
   }
 }

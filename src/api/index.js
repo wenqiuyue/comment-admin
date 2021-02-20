@@ -81,8 +81,8 @@ export function siteDelReply (data) {
 /**
  * 举报数据查询
  */
-export function siteReport (data) {
-  return fetchGet('/site/Report',data)
+export function siteReportSelect (data) {
+  return fetchPost('/site/ReportSelect',data)
 };
 /**
  * 评论举报
@@ -101,4 +101,16 @@ export function siteReportingReason () {
  */
 export function siteUserWhoReported () {
   return fetchGet('/site/UserWhoReported')
+};
+/**
+  获取报告和回复的状态
+ */
+ export function siteReportAndReviweStatus () {
+  return fetchGet('/site/ReportAndReviweStatus')
+};
+/**
+ * 发送邮件
+ */
+export function siteSendEmail (data) {
+  return fetchPost('/site/SendEmail',data)
 };

@@ -19,7 +19,7 @@
             </el-dropdown-item>
             <el-dropdown-item divided class="checkbox_dro">
               <el-checkbox-group v-model="checkedStatus" @change="handleCheckedStatusChange">
-                <el-checkbox v-for="(item,index) in statusOption" :label="item" :key="item">{{item}}</el-checkbox>
+                <el-checkbox v-for="(item,index) in statusOption" :label="item.id" :key="item.id">{{item.content}}</el-checkbox>
               </el-checkbox-group>
             </el-dropdown-item>
             <el-dropdown-item divided class="menu_btn">
@@ -124,7 +124,7 @@
     </div>
     <div class="report_group" v-loading="loading">
       <el-table
-        v-if="tableData && tableData.reportData.length"
+        v-if="tableData && tableData.reportData.length && !loading"
         :data="tableData.reportData"
         :cell-style="attenceCellStyle"
         :header-cell-style="attenceHeaderStyle"
@@ -197,7 +197,7 @@
         </el-table-column>
       </el-table>
       <empty v-else :tips="'No data available'"></empty>
-      <div class="pagination">
+      <div class="pagination" v-if="page.pageTotal/page.pageSize>1 && !loading">
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
@@ -225,6 +225,10 @@ export default {
       default:[]
     },
     reportReasonOption:{
+      type:Array,
+      default:[]
+    },
+    statusOption:{
       type:Array,
       default:[]
     }
@@ -255,7 +259,6 @@ export default {
       checkedStar:[], //选择的星级
       checkAllStar: false, //星级是否全选
       isStarIndeterminate:true,
-      statusOption:['Investigating report','Report closed - Review offine','Report closed - still online'], //status选项
       checkedStatus:[], //选择的status
       checkAllStatus: false, //status是否全选
       isStatusIndeterminate:true,
@@ -286,10 +289,11 @@ export default {
         reportAndReviewStatus:this.checkedStatus,
         star:this.checkedStar,
         reportingReason:this.checkedReportReason,
+        userWhoReported:this.checkedWho,
         offset:this.page.pageIndex,
         limit:this.page.pageSize,
       }
-      this.$apiHttp.siteReport({params:data}).then((resp)=>{
+      this.$apiHttp.siteReportSelect(data).then((resp)=>{
         if(resp.res==200){
           this.tableData=resp.data;
           this.page.pageTotal=resp.data.total;

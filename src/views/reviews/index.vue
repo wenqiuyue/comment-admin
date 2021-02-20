@@ -1,11 +1,11 @@
 <template>
-  <div class="reviews" v-loading="allLoading">
+  <div class="reviews">
     <el-tabs v-model="activeName">
       <el-tab-pane label="Inbox" name="1">
         <Inbox v-if="activeName=='1'" :reportReasonOption="reportReasonOption"></Inbox>
       </el-tab-pane>
       <el-tab-pane label="Reporting activity" name="2">
-        <Report v-if="activeName=='2'" :whoOption="whoOption" :reportReasonOption="reportReasonOption"></Report>
+        <Report v-if="activeName=='2'" :whoOption="whoOption" :reportReasonOption="reportReasonOption" :statusOption="reportAndReviweStatus"></Report>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -21,7 +21,7 @@ export default {
       activeName:'1',
       whoOption:[], //举报人选项
       reportReasonOption:[],
-      allLoading:false
+      reportAndReviweStatus:[],
     }
   },
   mounted(){
@@ -32,10 +32,10 @@ export default {
      * 获取举报原因及举报人选项数据
      */
     getSelOption(){
-      this.allLoading=true;
       Promise.all([
         this.$apiHttp.siteUserWhoReported(),
         this.$apiHttp.siteReportingReason(),
+        this.$apiHttp.siteReportAndReviweStatus(),
       ]).then((resp)=>{
         if(resp[0].res==200){
           this.whoOption=resp[0].data;
@@ -43,7 +43,10 @@ export default {
         if(resp[1].res==200){
           this.reportReasonOption=resp[1].data;
         }
-      }).finally(()=> this.allLoading=false);
+        if(resp[2].res==200){
+          this.reportAndReviweStatus=resp[2].data;
+        }
+      })
     },
   }
 }
