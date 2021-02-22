@@ -579,8 +579,11 @@ export default {
         color: #333333;
         border-color: #E3E3EC;
       }
-      .el-dropdown{
+      /deep/.el-dropdown{
         margin-right: 10px;
+        .el-button-group{
+          display: flex;
+        }
       }
       .date{
         margin-right: 10px;
@@ -790,6 +793,123 @@ export default {
   }
   .pagination{
     background: #ffffff;
+  }
+}
+@media all and (max-width: 1024px) {
+  .inbox{
+    .screen{
+      .screen_l{
+        flex-wrap: wrap;
+        /deep/.el-input{
+          margin-bottom: 8px;
+        }
+        .el-dropdown{
+          margin-bottom: 8px;
+        }
+        .date{
+          margin-bottom: 8px;
+        }
+      }
+    }
+    .review_list{
+      padding: 0 3px;
+      .review_card{
+        .card_main{
+          flex-direction: column;
+          padding: 18px 13px;
+          .card_main_l{
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            .c_rate{
+              /deep/.icon-pingfendengjiRating4{
+                font-size: 22px;
+              }
+            }
+          }
+          .card_main_r{
+            flex: 1;
+            p:nth-child(1){
+              display: flex;
+              flex-direction: column;
+              margin-top: 0;
+              span:nth-child(1){
+                width: 100%;
+                margin-bottom: 3px;
+              }
+            }
+          }
+        }
+        .card_btn_group{
+          position: relative;
+          .el-tabs{
+            /deep/.el-tabs__nav-wrap{
+              padding:0px 18px;
+              overflow-x: scroll;
+            }
+            /deep/.el-tabs__nav{
+              display: flex;
+              align-items: center;
+            }
+            /deep/.el-tabs__nav-scroll{
+              float: left;
+            }
+            .reply_tab{
+              flex-direction: column;
+              .reply_tab_l{
+                width: 100%;
+                margin-bottom: 5px;
+              }
+            }
+            .find_tab{
+              .find{
+                display: flex;
+                flex-direction: column;
+                .find_tab_l{
+                  width: 100%;
+                }
+              }
+            }
+            .report_tab{
+              padding: 18px 15px;
+              background: #F9F9FA;
+              .dif_issue{
+                color: #454554;
+              }
+              /deep/.el-timeline-item__node{
+                background-color: #409EFF;
+              }
+              /deep/.el-timeline-item__tail{
+                border-left: 2px solid #C5C5D6;
+              }
+              .show_btn{
+                padding-left: 30px;
+              }
+              .report_card_main{
+                display: flex;
+                flex-direction: row;
+                .r_c_m_l{
+                  flex-shrink: 0;
+                }
+                .r_c_m_r{
+                  margin-left: 8px;
+                  p{
+                    margin: 0 0 5px;
+                  }
+                  .p_one{
+                    margin-bottom: 10px !important;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    .pagination{
+      background: #ffffff;
+    }
   }
 }
 </style>

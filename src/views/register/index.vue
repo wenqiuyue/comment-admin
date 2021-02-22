@@ -320,6 +320,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .register{
+  height: 100%;
   display: table;
   flex-direction: row;
   .r_left{
@@ -449,6 +450,41 @@ export default {
     width: 40%;
     display:table-cell;
     background: #040620;
+  }
+}
+@media all and (max-width: 1024px) {
+  .register{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    .r_left{
+      width: calc(100% - 50px);
+      padding: 0 25px;
+    }
+    .register_main{
+      width: 100%;
+      padding-bottom: 22px;
+      .main_title{
+        font-size: 30px;
+        margin-top: 38px;
+      }
+      .verification{
+        font-size: 14px;
+        /deep/.el-radio{
+          margin-top: 14px;
+        }
+        .options{
+          margin-left: 24px;
+          width: calc(100% - 24px);
+        }
+      }
+      .register_btn{
+          margin-top: 36px;
+        }
+    }
+    .right_col{
+      width: 100%;
+    }
   }
 }
 </style>

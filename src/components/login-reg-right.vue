@@ -62,4 +62,12 @@ export default {
     font-weight: 600;
   }
 }
+@media all and (max-width: 1024px) {
+  .login-reg-right{
+    padding: 50px 45px 33px 45px;
+    .c_rate{
+      margin-top: 100px;
+    }
+  }
+}
 </style>

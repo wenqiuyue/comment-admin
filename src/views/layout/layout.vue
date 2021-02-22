@@ -1,6 +1,6 @@
 <template>
   <el-container class="container">
-    <el-aside class="aside" :style="`width:${isCollapse ? 54 : 200}px`">
+    <el-aside class="aside" :style="`width:${isCollapse ? 54 : 200}px`" v-if="!isMobile()">
       <div class="logo" :style="`width:${isCollapse ? 54 : 200}px`">
         <el-image
           :class="isCollapse ? 'collapse_img' : 'collapse_n_img'"
@@ -40,6 +40,51 @@
         </div>
       </el-menu>
     </el-aside>
+    <el-drawer
+      v-else
+      :with-header="false"
+      :visible.sync="isCollapse"
+      direction="ltr"
+      size="75%"
+    >
+      <div class="logo">
+        <el-image
+          class="collapse_n_img"
+          :src="require('../../assets/img/logo.png')"
+          fit="scale-down"
+        >
+        </el-image>
+      </div>
+      <el-menu
+        background-color="#304156"
+        text-color="#bfcbd9"
+        :default-active="path"
+        unique-opened
+        router
+      >
+        <el-menu-item index="/Verification" class="menu_item" v-if="path=='/Verification'">
+          <svg-icon value="icon-linkman-contacts_ico" :size="1.1"></svg-icon>
+          <span slot="title">Profile verification</span>
+        </el-menu-item>
+        <div v-else>
+          <el-menu-item index="/home" class="menu_item">
+            <svg-icon value="icon-shouye1" :size="1.1"></svg-icon>
+            <span slot="title">Home</span>
+          </el-menu-item>
+          <el-menu-item index="/analystics" class="menu_item">
+            <svg-icon value="icon-shuju1" :size="1.1"></svg-icon>
+            <span slot="title">Analystics</span>
+          </el-menu-item>
+          <el-menu-item index="/reviews" class="menu_item">
+            <svg-icon
+              value="icon-pinglun"
+              :size="1.2"
+            ></svg-icon>
+            <span slot="title">Reviews</span>
+          </el-menu-item>
+        </div>
+      </el-menu>
+    </el-drawer>
     <el-container class="right_container">
       <el-header class="header">
         <div class="header_left">
@@ -49,7 +94,7 @@
               :size="1.2"
             ></svg-icon>
           </span>
-          <div v-if="path=='/Verification' && user">{{user.webSite}}</div>
+          <div v-if="path=='/Verification' && user">{{user.webSite.split('/')[2]}}</div>
           <el-breadcrumb separator="/" v-else>
             <el-breadcrumb-item
               v-for="item in levelList"
@@ -89,6 +134,7 @@
 </template>
 <script>
 import type from "../../commons/type";
+import {isMobile} from "../../commons";
 export default {
   data() {
     return {
@@ -112,6 +158,7 @@ export default {
     this.user = JSON.parse(localStorage.getItem(type.USER));
   },
   methods: {
+    isMobile,
     /**
      * 头部下拉菜单
      */
@@ -183,6 +230,27 @@ export default {
       }
     }
   }
+  /deep/.el-drawer.ltr{
+    background: #304156;
+    .el-menu {
+      border: none;
+    }
+    .logo {
+      width: 100%;
+      height: 60px;
+      padding: 5px 0;
+      line-height: 50px;
+      background: #2b2f3a;
+      text-align: center;
+      .collapse_n_img {
+        height: 100%;
+        width: 100%;
+        /deep/img {
+          height: 100%;
+        }
+      }
+    }
+  }
   .right_container {
     .header {
       height: 50px !important;
@@ -222,4 +290,5 @@ export default {
     }
   }
 }
+
 </style>

@@ -12,7 +12,7 @@
     </div>
     <div class="home_main" v-if="comData">
       <el-row :gutter="8" class="row">
-        <el-col :span="12">
+        <el-col :span="12" :xs="24">
           <div class="card">
             <div class="card_title">
               <div class="card_title_left">
@@ -39,7 +39,7 @@
             </div>
           </div>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="12" :xs="24">
           <div class="card">
             <div class="card_title">
               <div class="card_title_left">
@@ -75,7 +75,7 @@
         </el-col>
       </el-row>
       <el-row class="row">
-        <el-col :span="24">
+        <el-col :span="24" >
           <div class="card">
             <div class="card_title">
               <div class="card_title_left">
@@ -389,5 +389,62 @@ export default {
   .row:last-child{
     margin-top: 8px;
   }
+}
+@media all and (max-width: 1024px) {
+  .home{
+  height: auto;
+  .row{
+    height: auto;
+    margin-top: 0px;
+    .el-col{
+      margin-top: 10px;
+      .card{
+        padding: 0 20px 14px 26px;
+        .reviews{
+          display: flex;
+          flex-direction: column;
+          // align-items: center;
+          .reviews_l{
+            width: 100%;
+          }
+          .reviews_l_card_list{
+            padding-right: 20px;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            .reviews_l_card{
+              width: 37%;
+              height: calc(50% - 35px);
+              padding: 15px;
+              margin-right: 5px;
+              margin-bottom: 30px;
+            }
+          }
+          .reviews_r{
+            width:100%;
+            .reviews_star_list{
+              width: 100%;
+              .star_item{
+                .el-progress{
+                  width: 59%;
+                }
+                span{
+                  font-size: 13px;
+                  flex-shrink: 0;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .row:last-child{
+    margin-top: 0px;
+    padding-bottom: 10px;
+  }
+}
 }
 </style>

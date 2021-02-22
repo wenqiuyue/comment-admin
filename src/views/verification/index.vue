@@ -160,4 +160,24 @@ export default {
     }  
   }
 }
+@media all and (max-width: 1024px) {
+  .verification{
+    padding: 0 18px;
+    width: calc(100% - 36px);  
+    .ver_main{
+      width: 100%;
+      padding-bottom: 22px;
+      .main_title{
+        word-break: break-all;
+        font-size: 23px;
+      }
+      .options{
+        width: calc(100% - 24px);
+      }
+      .register_btn{
+        margin-top: 24px;
+      }  
+    }
+  }
+}
 </style>

@@ -230,4 +230,19 @@ export default {
     }
   }
 }
+@media all and (max-width: 1024px) {
+  .analystics{
+    padding:8px;
+    .echar{
+      padding: 22px 12px;
+      .echar_title{
+        flex-wrap: wrap;
+        .echar_title_l{
+          margin-bottom: 5px;
+          font-size: 20px;
+        }
+      }
+    }
+  }
+}
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <el-row>
-      <el-col :span="15">
+      <el-col :span="15" :xs="24">
         <div class="login_main">
           <h1 class="main_head">
             <a href="http://sitespilot.com/">sitespilot.com</a>
@@ -17,7 +17,7 @@
               </el-input>
             </el-form-item>
              <el-form-item class="check_item">
-              <el-checkbox v-model="automaticChecked">Remember the password</el-checkbox>
+              <el-checkbox v-model="automaticChecked">Remember me</el-checkbox>
               <a :href="`${pageUrl}/forgot-password`" class="forget">Forgot Your Password?</a>
             </el-form-item>
             <el-button class="login_btn" type="primary" :loading="loading" @click="handleLogin">Login</el-button>
@@ -25,7 +25,7 @@
           </el-form>
         </div>
       </el-col>
-      <el-col :span="9" class="right_col">
+      <el-col :span="9" :xs="24" class="right_col">
         <login-reg-right></login-reg-right>
       </el-col>
     </el-row>
@@ -182,6 +182,22 @@ export default {
           text-decoration: none;
           color: #428AFF;
         }
+      }
+    }
+  }
+}
+@media all and (max-width: 1024px) {
+  .login{
+    .login_main{
+      width: calc(100% - 50px);
+      left: 0;
+      padding-right: 25px;
+      padding-left: 25px;
+      .main_head{
+        margin-top: 46px;
+      }
+      .main_title{
+        margin-top: 40px;
       }
     }
   }
