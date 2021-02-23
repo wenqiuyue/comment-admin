@@ -233,14 +233,14 @@
                         <div class="report_card_main">
                           <span class="r_c_m_l">{{report.state==0?'Invistigation in progress:':'Invistigation complete:'}}</span> 
                           <div class="r_c_m_r">
-                            <p v-if="report.state==1" class="p_one">
-                              The review doesn't breach our guidelines for:
+                            <p class="p_one" v-if="report.state==2 || report.state==1">
+                              The review {{report.state==2?"doesn't":""}} breach our guidelines for:
                             </p>
                             <p><strong>{{report.reportingReason}}</strong></p>
                             <p>{{report.content}}</p>
                           </div>
                         </div>
-                        <p v-if="report.state==1">
+                        <p v-if="report.state==2 || report.state==1">
                           <el-button plain icon="el-icon-reading" @click="handleRead(item,report)">Read our decision</el-button>
                           <el-button type="text" class="dif_issue" @click="handleDifferent(item.id)">There's a different issue</el-button>
                         </p>
@@ -253,14 +253,14 @@
                         <div class="report_card_main">
                           <span class="r_c_m_l">{{item.investigations[0].state==0?'Invistigation in progress:':'Invistigation complete:'}}</span> 
                           <div class="r_c_m_r">
-                            <p v-if="item.investigations[0].state==1" class="p_one">
-                              The review doesn't breach our guidelines for:
+                            <p v-if="item.investigations[0].state==1 || item.investigations[0].state==2" class="p_one">
+                              The review {{item.investigations[0].state==2?"doesn't":""}} breach our guidelines for:
                             </p>
                             <p><strong>{{item.investigations[0].reportingReason}}</strong></p>
                             <p>{{item.investigations[0].content}}</p>
                           </div>
                         </div>
-                        <p v-if="item.investigations[0].state==1">
+                        <p v-if="item.investigations[0].state==1 || item.investigations[0].state==2">
                           <el-button plain icon="el-icon-reading" @click="handleRead(item,item.investigations[0])">Read our decision</el-button>
                           <el-button type="text" class="dif_issue" @click="handleDifferent(item.id)">There's a different issue</el-button>
                         </p>
@@ -793,6 +793,7 @@ export default {
   }
   .pagination{
     background: #ffffff;
+    padding-bottom: 10px;
   }
 }
 @media all and (max-width: 1024px) {
@@ -874,26 +875,17 @@ export default {
             .report_tab{
               padding: 18px 15px;
               background: #F9F9FA;
-              .dif_issue{
-                color: #454554;
-              }
-              /deep/.el-timeline-item__node{
-                background-color: #409EFF;
-              }
-              /deep/.el-timeline-item__tail{
-                border-left: 2px solid #C5C5D6;
+              /deep/.el-timeline{
+                padding: 0;
               }
               .show_btn{
-                padding-left: 30px;
+                padding-left: 0px;
               }
               .report_card_main{
                 display: flex;
-                flex-direction: row;
-                .r_c_m_l{
-                  flex-shrink: 0;
-                }
+                flex-direction: column;
                 .r_c_m_r{
-                  margin-left: 8px;
+                  margin-left: 0px;
                   p{
                     margin: 0 0 5px;
                   }
@@ -908,7 +900,8 @@ export default {
       }
     }
     .pagination{
-      background: #ffffff;
+      padding-bottom: 24px;
+      overflow-x: scroll;
     }
   }
 }

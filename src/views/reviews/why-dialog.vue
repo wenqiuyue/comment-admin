@@ -46,6 +46,7 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+@import "../../assets/dialog.less";
 .why-dialog{
   .why_main{
     h5{

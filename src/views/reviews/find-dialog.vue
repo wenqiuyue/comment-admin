@@ -44,6 +44,7 @@
   </div>
 </template>
 <script>
+import {isMobile} from "../../commons";
 export default {
   props:{
     selReviews:{
@@ -59,6 +60,7 @@ export default {
     }
   },
   methods:{
+    isMobile,
     /**
      * 弹窗关闭回调
      */
@@ -147,6 +149,7 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+@import "../../assets/dialog.less"; 
 .find-dialog{
   .find_main{
     h5{

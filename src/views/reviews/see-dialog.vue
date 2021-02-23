@@ -3,7 +3,7 @@
     <el-dialog title="Review" :visible.sync="dialogSee" width="615px">
       <div class="see_main">
         <el-row>
-          <el-col :span="8">
+          <el-col :span="8" :xs="24">
             <div class="col_l">
               <rate
                 class="c_rate"
@@ -18,7 +18,7 @@
               </div>
             </div>
           </el-col>
-          <el-col :span="16">
+          <el-col :span="16" :xs="24">
             <div class="col_r">
               <h5>{{seeReviews.reviews.subject}}</h5>
               <p>{{seeReviews.reviews.content}}</p>
@@ -64,6 +64,7 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+@import "../../assets/dialog.less";
 .see-dialog{
   .see_main{
     .col_l{

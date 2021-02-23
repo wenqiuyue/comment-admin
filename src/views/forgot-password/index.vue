@@ -1,7 +1,7 @@
 <template>
   <div class="forgot-password">
     <el-row>
-      <el-col :span="15">
+      <el-col :span="15" :xs="24">
         <div class="forgot_main">
           <h1 class="main_head">
             <a href="http://sitespilot.com/">sitespilot.com</a>
@@ -18,7 +18,7 @@
           </el-form>
         </div>
       </el-col>
-      <el-col :span="9" class="right_col">
+      <el-col :span="9" :xs="24" class="right_col">
         <login-reg-right></login-reg-right>
       </el-col>
     </el-row>
@@ -127,6 +127,28 @@ export default {
       }
       .register_tips:last-child{
         margin-top: 10px;
+      }
+    }
+  }
+}
+@media all and (max-width: 1024px) {
+  .forgot-password{
+    .forgot_main{
+      width: calc(100% - 50px);
+      left: 0;
+      padding-right: 25px;
+      padding-left: 25px;
+      .main_head{
+        margin-top: 46px;
+      }
+      .main_title{
+        margin-top: 40px;
+        font-size: 38px;
+      }
+      .form{
+        .forgot_btn{
+          font-size: 18px;
+        }
       }
     }
   }

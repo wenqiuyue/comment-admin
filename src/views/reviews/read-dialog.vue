@@ -45,6 +45,7 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+@import "../../assets/dialog.less";
 .read-dialog{
   .read_main{
     p{

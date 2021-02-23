@@ -142,4 +142,32 @@ export default {
     }
   }
 }
+@media all and (max-width: 1024px) {
+  .password-reset{
+    display: flex;
+    flex-direction: column;
+    .right_col{
+      width: 100%;
+    }
+    .left_col{
+      padding: 0 25px;
+      width: calc(100% - 50px);
+      .reset_main{
+        width: 100%;
+        .main_head{
+          margin-top: 38px;
+        }
+        .main_title{
+          font-size: 38px;
+          margin-top: 61px;
+        }
+        .form{
+          .reset_btn{
+            font-size: 18px;
+          }
+        }
+      }
+    }
+  }
+}
 </style>

@@ -82,13 +82,13 @@
     </div>
     <div class="card_group" v-if="tableData">
       <el-row :gutter="16" class="card_row">
-        <el-col :span="12">
+        <el-col :span="12" :xs="24">
           <div class="card">
             <span>{{tableData.numberOfReports}}</span> 
             <span>Number of reports</span>
           </div>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="12" :xs="24">
           <div class="card">
             <span>{{tableData.reportsUnderInvestigation}}</span> 
             <span>Reports under investigation</span>
@@ -96,7 +96,7 @@
         </el-col>
       </el-row>
       <el-row :gutter="16" class="card_row">
-        <el-col :span="12">
+        <el-col :span="12" :xs="24">
           <div class="tow_card">
             <div class="card">
               <span>{{tableData.reportsClosedButReviewOnline}}</span> 
@@ -114,7 +114,7 @@
             </div>
           </div>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="12" :xs="24">
           <div class="card last_card">
             <span>{{tableData.reviewsTakenOffline}}</span> 
             <span>Reviews taken offline</span>
@@ -131,7 +131,7 @@
         style="width: 100%">
         <el-table-column
           prop="online"
-          width="70"
+          width="50"
           class="online_col"
          >
           <template slot-scope="scope">
@@ -142,6 +142,7 @@
         <el-table-column
           prop="status"
           label="Report & Review status"
+          width="180"
          >
           <template slot-scope="scope">
             <div v-if="scope.row.status==0">	Report closed - Review still online</div>
@@ -153,6 +154,7 @@
         <el-table-column
           prop="lastStatusChangeTime"
           label="Last status change"
+          width="170"
           sortable>
           <template slot-scope="scope">
             <span>{{scope.row.lastStatusChangeTime?scope.row.lastStatusChangeTime.timeFormat('yyyy-MM-dd'):'--'}}</span>
@@ -161,6 +163,7 @@
         <el-table-column
           prop="dateOfTheReportTime"
           sortable
+          width="170"
           label="Date of the report">
           <template slot-scope="scope">
             <span>{{scope.row.dateOfTheReportTime?scope.row.dateOfTheReportTime.timeFormat('yyyy-MM-dd'):'--'}}</span>
@@ -169,6 +172,7 @@
         <el-table-column
           prop="rank"
           sortable
+          width="150"
           label="Star rating">
           <template slot-scope="scope">
             <rate
@@ -181,6 +185,7 @@
         </el-table-column>
         <el-table-column
           prop="content"
+          width="230"
           label="Reporting reason">
           <template slot-scope="scope">
             <div class="reason">{{scope.row.reportingReason}}</div>
@@ -189,12 +194,14 @@
         </el-table-column>
         <el-table-column
           prop="name"
+          width="180"
           label="User who reported">
           <template slot-scope="scope">
             <div>{{scope.row.reportUser.name}}</div>
             <div>({{scope.row.reportUser.eamil}})</div>
           </template>
         </el-table-column>
+        <el-table-column></el-table-column>
       </el-table>
       <empty v-else :tips="'No data available'"></empty>
       <div class="pagination" v-if="page.pageTotal/page.pageSize>1 && !loading">
@@ -563,6 +570,82 @@ export default {
         span{
           cursor: pointer;
           color: #409EFF;
+        }
+      }
+    }
+  }
+}
+@media all and (max-width: 1024px){
+  .report{
+    .screen{
+      .screen_l{
+        flex-wrap: wrap;
+        /deep/.el-input{
+          margin-bottom: 8px;
+        }
+        .el-dropdown{
+          margin-bottom: 8px;
+          .el-button-group{
+            display: flex;
+          }
+        }
+        .date{
+          margin-bottom: 8px;
+        }
+      }
+    }
+    .card_group{
+      padding: 12px 8px;
+      .card_row{
+        margin-top: 0px;
+        .el-col-xs-24{
+          margin-top: 10px;
+        }
+        .card{
+          padding: 10px 12px;
+          span:first-child{
+            font-size: 32px;
+          }
+        }
+        .last_card{
+          padding: 10px 12px;
+        }
+        .tow_card{
+          .card_item{
+            padding: 10px 12px;
+          }
+        }
+      }
+    }
+    .report_group{
+      padding: 10px 8px;
+      .el-table{
+        border: 1px solid #DCDCE6;
+        .online{
+          width: 12px;
+          height: 12px;
+          background: #EB1700;
+          border-radius: 50%;
+          margin: 0 auto;
+        }
+        .unline{
+          width: 12px;
+          height: 12px;
+          background: #00B67A;
+          border-radius: 50%;
+          margin: 0 auto;
+        }
+        .reason{
+          margin-bottom: 8px;
+        }
+        .content{
+          line-height: 20px;
+        }
+        .dialog_text{
+          span{
+            cursor: pointer;
+            color: #409EFF;
+          }
         }
       }
     }

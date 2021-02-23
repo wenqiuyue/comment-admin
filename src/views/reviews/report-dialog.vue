@@ -121,6 +121,7 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+@import "../../assets/dialog.less";
 .report-dialog{
   .page_one{
     .one_step{

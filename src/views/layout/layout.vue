@@ -106,6 +106,20 @@
           </el-breadcrumb>
         </div>
         <div class="header_right">
+          <el-popover
+            placement="bottom"
+            width="250"
+            trigger="click">
+            <div class="new_msg">
+              <p>Notifications</p>
+              <div v-if="false">You do not have any new activity</div>
+              <div class="have_new" v-else>
+                <i class="el-icon-s-opportunity"></i>
+                <span>You have 1 new review</span>
+              </div>
+            </div>
+            <i slot="reference" class="el-icon-message-solid"></i>
+          </el-popover>
           <el-dropdown trigger="click" @command="handleCommand">
             <span class="el-dropdown-link">
               <el-avatar
@@ -278,6 +292,13 @@ export default {
         }
       }
       .header_right {
+        display:flex;
+        align-items: center;
+        .el-icon-message-solid{
+          font-size:24px;
+          margin-right:16px;
+          cursor:pointer;
+        }
         .el-dropdown-link {
           &:hover {
             cursor: pointer;
@@ -290,5 +311,23 @@ export default {
     }
   }
 }
-
+.el-popover {
+  .new_msg{
+    p{
+      font-weight: 600;
+      color:#333333;
+    }
+    .have_new{
+      display:flex;
+      align-items: center;
+      cursor: pointer;
+      &:hover{
+        color:#1989fa;
+      }
+      span{
+        margin-left:3px;
+      }
+    }
+  }
+}
 </style>
