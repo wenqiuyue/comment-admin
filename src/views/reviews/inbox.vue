@@ -126,7 +126,7 @@
                   {{item.name}}<i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item class="review_name_dropdown">{{item.name}}<i class="el-icon-document"></i></el-dropdown-item>
+                  <el-dropdown-item class="review_name_dropdown"><a class="user_a" :href="`http://192.168.0.103:9000/profile?id=${123}`">{{item.name}}<i class="el-icon-document"></i></a></el-dropdown-item>
                   <el-dropdown-item class="review_name_dropdown" disabled><i class="el-icon-edit"></i> {{item.totalReviews}}</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
@@ -180,33 +180,29 @@
                   </div>
                 </div>
               </el-tab-pane>
-              <el-tab-pane label="Share" :name="JSON.stringify({name:'share',item:item})">
+              <!-- <el-tab-pane label="Share" :name="JSON.stringify({name:'share',item:item})">
                 <div slot="label" class="tab_label"><svg-icon value="icon-fenxiang1" :size="1.1"></svg-icon> <span>Share</span></div>
                 12
-              </el-tab-pane>
+              </el-tab-pane> -->
               <el-tab-pane label="Find Reviewer" :name="JSON.stringify({name:'find',item:item})">
                 <div slot="label" class="tab_label"><svg-icon value="icon-chazhao" :size="1.4"></svg-icon> <span>Find Reviewer</span> <el-tag size="mini" v-if="item.findReviewers.length">{{item.findReviewers.length}}</el-tag></div>
                 <template v-if="!item.findReviewers.length">
-                  <div class="find_tab" v-for="(fitem,index) in item.findReviewers" :key="index">
+                  <div class="find_tab" v-for="(fitem,index) in 4" :key="index">
                     <div class="find">
                       <div class="find_tab_l">
                         29 Dec 2020, 14:36
                       </div>
                       <div class="find_tab_r">
-                          <div class="find_content">
+                          <div class="find_content" v-if="index==0">
                             <p>You asked William Clark for more information.</p>
                           </div>
-                          <div class="find_border" v-if="index!=2">
+                          <div class="find_border" v-else-if="index==1">
+                            <p>Unfortunately, BROKEPRODUCTIONS did not respond to your Find Reviewer request within the 3 day response period.</p>  
+                          </div>
+                          <div class="find_border" v-else-if="index==2">
                             <p>They have until Wednesday, 10 February at 13:00 to respond. We’ll email you with the outcome no matter what.</p>
                           </div>
-                      </div>
-                    </div>
-                    <div class="find" v-if="index==2">
-                      <div class="find_tab_l">
-                        29 Dec 2020, 14:36
-                      </div>
-                      <div class="find_tab_r">
-                          <div class="find_border">
+                          <div class="find_border" v-else>
                             <p class="first_p">William Clark responded to your request:</p>
                             <div>
                               <p>Reference number:ts #120107</p>
@@ -521,6 +517,10 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+.user_a{
+  text-decoration: none;
+  color: #606266;
+}
 .el-dropdown-menu{
   /deep/.review_name_dropdown{
     padding: 0 15px !important;

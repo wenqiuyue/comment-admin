@@ -25,6 +25,7 @@
   </div>
 </template>
 <script>
+import type from '../../commons/type';
 export default {
   data(){
     return{
@@ -36,6 +37,7 @@ export default {
       rules: {
         email: [
           { required: true, message: 'Please input email', trigger: 'blur' },
+          { type: 'email', message: 'Please enter the correct email address', trigger: ['blur', 'change'] }
         ],
       }
     }
@@ -47,11 +49,78 @@ export default {
   },
   methods:{
     /**
-     * 发送邮件
+     * 确认
      */
     handleSend(){
-      this.$router.push({
-        path:'/password-reset'
+      this.loading=true;
+      this.$apiHttp.siteForgotPassword({params:this.forgotForm}).then((resp)=>{
+        if(resp.res==200){
+          this.sendEmail();
+          localStorage.setItem(type.TOKEN,resp.data);
+        }else{
+          this.loading=false;
+        }
+      })
+    },
+    /**
+     * 发送邮件
+     */
+    sendEmail(){
+      const html=`
+      <style>
+      .email{
+        width: 100%;
+        padding: 22px;
+      }
+      .email_car{
+        width: 500px;
+        padding: 16px 34px;
+        text-align: left;
+        border: 1px solid #c5c5d6;
+        border-radius: 4px;
+        margin: 0 auto;
+      }
+      .email_car p{
+        word-break: break-all;
+        margin: 10px 0;
+      }
+      .email_car a{
+        width: calc(100% - 40px);
+        margin: 18px 0;
+        padding: 12px 20px;
+        color: #FFF;
+        background-color: #409EFF;
+        display: block;
+        text-align: center;
+        border-radius: 4px;
+        text-decoration: none !important;
+      }
+      </style>
+      <div class="email">
+      <div class="email_car">
+      <p>Hello!</p>
+      <p>You are receiving this email because we received a password reset request for your account.</p>
+      <a href="http://192.168.1.15:8081/password-reset?email=${this.forgotForm.email}">Reset Button</a>
+      <p>This password reset link will expire in 60 minutes.</p>
+      <p>If you did not request a password reset, no further action is required.</p>
+      <p style="margin-top:40px">Thank you for using our application!</p>
+      <p>Best Regards, <br> Sitespilot</p>
+      </div>
+      </div>`
+      const data={
+        toEmail:this.forgotForm.email,
+        subject:`Reset Password Notification`,
+        body:html,
+        isHtml:true
+      }
+      this.$apiHttp.siteSendEmail(data).then((resp)=>{
+        if(resp.res==200){
+          this.$router.push({
+            path:'/'
+          })
+        }
+      }).finally(()=>{
+        this.loading=false;
       })
     }
   }

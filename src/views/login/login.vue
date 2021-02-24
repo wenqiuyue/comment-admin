@@ -95,7 +95,7 @@ export default {
      * 后台验证Token
      */
     handleCheckToken() {
-      if (localStorage.getItem(type.TOKEN)) {
+      if (localStorage.getItem(type.TOKEN) && localStorage.getItem(type.USER)) {
         this.$router.push({
           path: "/home"
         })

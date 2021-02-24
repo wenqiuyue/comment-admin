@@ -19,7 +19,7 @@
               <el-input v-model="resetForm.confirmPass" placeholder="Confirm Password">
               </el-input>
             </el-form-item>
-            <el-button class="reset_btn" type="primary" :loading="loading" @click="handleSend">Send Password Reset Link</el-button>
+            <el-button class="reset_btn" type="primary" :loading="loading" @click="handleSend">Reset password</el-button>
             <div class="register_tips">Already have an account? <a :href="pageUrl">Sign In</a></div>
             <div class="register_tips">Need an account? <a :href="`${pageUrl}/register`">Sign up</a></div>
           </el-form>
@@ -33,6 +33,13 @@
 <script>
 export default {
   data(){
+    var checkPass = (rule, value, callback) => {
+      if(value != this.resetForm.pass){
+        callback(new Error('Please enter the correct password'));
+      }else{
+        callback();
+      }
+    };
     return{
       loading:false, //加载
       resetForm:{
@@ -50,6 +57,7 @@ export default {
         ],
         confirmPass: [
           { required: true, message: 'Please input confirm password', trigger: 'blur' },
+          { validator: checkPass, trigger: 'blur' }
         ],
       }
     }
@@ -59,13 +67,32 @@ export default {
       return process.env.VUE_APP_PAGE_URL
     }
   },
+  mounted(){
+    this.resetForm.email=this.$route.query.email;
+  },
   methods:{
     /**
-     * 发送邮件
+     * 修改密码
      */
     handleSend(){
-      this.$router.push({
-        path:'/'
+      this.$refs.resetForm.validate((valid)=>{
+        if(valid){
+          this.loading=true;
+          const data={
+            email:this.resetForm.email,
+            password:this.resetForm.pass
+          }
+          this.$apiHttp.siteResetPassword(data).then((resp)=>{
+            if(resp.res==200){
+              this.$store.dispatch("logout");
+              this.$router.push({
+                path:'/'
+              })
+            }
+          }).finally(()=> this.loading=false);
+        }else{
+          return;
+        }
       })
     }
   }

@@ -183,14 +183,10 @@ export default {
           path: "/",
         });
       }else if(com == 2){
-        this.$refs.passwordset.openDialog();
-      } else if (com == 3) {
-        this.$refs.aliapiset.openDialog();
-      } else if(com == 4){
-        this.$router.push('/home');
-      }else if(com == 1){
-        this.$refs.setup.openDialog();
-      }
+        this.$router.replace({
+          path: "/password-reset",
+        });
+      } 
     },
     /**
      * 面包屑

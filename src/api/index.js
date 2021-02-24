@@ -114,3 +114,15 @@ export function siteUserWhoReported () {
 export function siteSendEmail (data) {
   return fetchPost('/site/SendEmail',data)
 };
+/**
+ * 获取修改密码token
+ */
+export function siteForgotPassword (data) {
+  return fetchGet('/site/ForgotPassword',data)
+};
+/**
+ * 修改密码
+ */
+export function siteResetPassword (data) {
+  return fetchPost('/site/ResetPassword',data)
+};
