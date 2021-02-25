@@ -4,7 +4,8 @@
       <div class="echar_title" v-if="reviewNumData">
         <div class="echar_title_l">
           Reviews-{{reviewNumData.total}}
-          <el-tooltip class="item" effect="dark" content="Top Center 提示文字" placement="top">
+          <el-tooltip class="item" effect="dark" placement="top">
+            <div slot="content" style="width:210px;word-break:break-all">Monitor the number of reviews your business receives and your average rating over times</div>
             <i class="el-icon-info"></i>
           </el-tooltip>
         </div>
@@ -23,9 +24,6 @@
       <div class="echar_title">
         <div class="echar_title_l">
           Total reviews by rating
-          <el-tooltip class="item" effect="dark" content="Top Center 提示文字" placement="top">
-            <i class="el-icon-info"></i>
-          </el-tooltip>
         </div>
         <el-date-picker
           @change="datePickerChange(2)"

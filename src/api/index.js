@@ -126,3 +126,9 @@ export function siteForgotPassword (data) {
 export function siteResetPassword (data) {
   return fetchPost('/site/ResetPassword',data)
 };
+/**
+ * 保存商家FindReviewer发送的信息
+ */
+export function siteFindReviewers (data) {
+  return fetchGet('/site/FindReviewers',data)
+};

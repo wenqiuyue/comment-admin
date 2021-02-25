@@ -118,7 +118,9 @@
                 <span>You have 1 new review</span>
               </div>
             </div>
-            <i slot="reference" class="el-icon-message-solid"></i>
+            <el-badge is-dot class="item" slot="reference">
+              <i class="el-icon-message-solid"></i>
+            </el-badge>
           </el-popover>
           <el-dropdown trigger="click" @command="handleCommand">
             <span class="el-dropdown-link">
@@ -292,8 +294,10 @@ export default {
         align-items: center;
         .el-icon-message-solid{
           font-size:24px;
-          margin-right:16px;
           cursor:pointer;
+        }
+        .el-dropdown{
+          margin-left: 26px;
         }
         .el-dropdown-link {
           &:hover {

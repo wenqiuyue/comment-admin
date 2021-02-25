@@ -4,7 +4,7 @@
       <div class="read_main">
         <p>Hi {{selReport.companyName}},</p>
         <p>Thanks for your inquiry about the review by {{selReport.name}}, which you flagged as {{selReport.reportingReason}}.</p>
-        <p>We’ve assessed the review and concluded it doesn’t contain {{selReport.reportingReason}},{{selReport.content}}. Therefore, we won’t be taking any further action, and you won’t be able to flag the review again for any of these reasons. You can read more about the types of content we consider to be harmful or illegal here.</p>
+        <p>We've assessed the review and concluded it doesn't contain {{selReport.reportingReason}},{{selReport.content}}. Therefore, we won't be taking any further action, and you won't be able to flag the review again for any of these reasons. You can read more about the types of content we consider to be harmful or illegal here.</p>
         <p>The review has now been reinstated.</p>
         <p>If you have any questions, you can reply to this email in the next 7 days, or you can always contact us via our Support Center.</p>
         <p>Thanks</p>

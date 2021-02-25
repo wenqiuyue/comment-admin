@@ -4,7 +4,7 @@ import { Message } from "element-ui";
 
 const instance = axios.create({
   // baseURL: '/',
-  timeout: 20000,
+  // timeout: 20000,
 })
 // 请求拦截器
 instance.interceptors.request.use(

@@ -22,7 +22,7 @@
             <div class="col_r">
               <h5>{{seeReviews.reviews.subject}}</h5>
               <p>{{seeReviews.reviews.content}}</p>
-              <!-- <p>UPDATE: WhiteHatBox attempted to have my review taken down or edited from the site. They claimed my review broke the terms of service for Trust Pilot because it “promoted” other products. This is a cheap and slimy move that casts them in an even shadier light. Don’t trust them!</p> -->
+              <!-- <p>UPDATE: WhiteHatBox attempted to have my review taken down or edited from the site. They claimed my review broke the terms of service for Trust Pilot because it “promoted” other products. This is a cheap and slimy move that casts them in an even shadier light. Don't trust them!</p> -->
               </p>
             </div>
           </el-col>

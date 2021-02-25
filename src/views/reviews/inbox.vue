@@ -126,7 +126,7 @@
                   {{item.name}}<i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item class="review_name_dropdown"><a class="user_a" :href="`http://192.168.0.103:9000/profile?id=${123}`">{{item.name}}<i class="el-icon-document"></i></a></el-dropdown-item>
+                  <el-dropdown-item class="review_name_dropdown"><a class="user_a" :href="`http://192.168.0.103:8080/profile?id=${item.userId}`" target="_blank">{{item.name}} <i class="el-icon-document"></i></a></el-dropdown-item>
                   <el-dropdown-item class="review_name_dropdown" disabled><i class="el-icon-edit"></i> {{item.totalReviews}}</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
@@ -186,30 +186,45 @@
               </el-tab-pane> -->
               <el-tab-pane label="Find Reviewer" :name="JSON.stringify({name:'find',item:item})">
                 <div slot="label" class="tab_label"><svg-icon value="icon-chazhao" :size="1.4"></svg-icon> <span>Find Reviewer</span> <el-tag size="mini" v-if="item.findReviewers.length">{{item.findReviewers.length}}</el-tag></div>
-                <template v-if="!item.findReviewers.length">
-                  <div class="find_tab" v-for="(fitem,index) in 4" :key="index">
-                    <div class="find">
+                <template v-if="item.findReviewers.length">
+                  <div class="find_tab" v-for="(fitem,index) in item.findReviewers" :key="index">
+                    <div class="find" v-if="fitem.status==1">
                       <div class="find_tab_l">
-                        29 Dec 2020, 14:36
+                        {{fitem.created.timeFormat('yyyy-MM-dd HH:mm')}}
                       </div>
                       <div class="find_tab_r">
-                          <div class="find_content" v-if="index==0">
-                            <p>You asked William Clark for more information.</p>
-                          </div>
-                          <div class="find_border" v-else-if="index==1">
-                            <p>Unfortunately, BROKEPRODUCTIONS did not respond to your Find Reviewer request within the 3 day response period.</p>  
-                          </div>
-                          <div class="find_border" v-else-if="index==2">
-                            <p>They have until Wednesday, 10 February at 13:00 to respond. We’ll email you with the outcome no matter what.</p>
-                          </div>
-                          <div class="find_border" v-else>
-                            <p class="first_p">William Clark responded to your request:</p>
+                        <div class="find_content">
+                          <p>You asked William Clark for more information.</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="find" v-if="fitem.status==1 && fitem.consumer">
+                      <div class="find_tab_l">
+                        {{fitem.consumer.submittedAt.timeFormat('yyyy-MM-dd HH:mm')}}
+                      </div>
+                      <div class="find_tab_r">
+                        <div class="find_border">
+                            <p class="first_p">{{item.name}} responded to your request:</p>
                             <div>
-                              <p>Reference number:ts #120107</p>
-                              <p>Email:wrclark1961@gmail.com</p>
-                              <p>Name:William Clark</p>
+                              <p>Reference number:{{fitem.consumer.referenceNumber}}</p>
+                              <p>Email:{{fitem.consumer.email}}</p>
+                              <p>Name:{{fitem.consumer.fullName}}</p>
+                              <p>Phone:{{fitem.consumer.phoneNumber}}</p>
                             </div>
                           </div>
+                      </div>
+                    </div>
+                    <div class="find" v-if="fitem.status==0 || fitem.status==2">
+                      <div class="find_tab_l">
+                        {{fitem.created.timeFormat('yyyy-MM-dd HH:mm')}}
+                      </div>
+                      <div class="find_tab_r">
+                        <div class="find_border" v-if="fitem.status==2">
+                          <p>Unfortunately, {{item.name}} did not respond to your Find Reviewer request within the 3 day response period.</p>  
+                        </div>
+                        <div class="find_border" v-if="fitem.status==0">
+                          <p>They have until {{getThreeDayTime(fitem.created)}} to respond. We'll email you with the outcome no matter what.</p>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -291,7 +306,7 @@
       </el-pagination>
     </div>
     <ReportDialog ref="reportdialog" :comId="selCommonId" @success="getReviews" :selOption="reportReasonOption"></ReportDialog>
-    <FindDialog ref="finddialog" :selReviews="selReviews"></FindDialog>
+    <FindDialog ref="finddialog" :selReviews="selReviews" @success="getReviews"></FindDialog>
     <ReadDialog ref="readdialog" :selReport="selReviews"></ReadDialog>
   </div>
 </template>
@@ -338,6 +353,14 @@ export default {
   },
   methods:{
     dateEnglish,
+    /**
+     * 获取3天后的时间
+     */
+    getThreeDayTime(time){
+      let date = new Date(time);
+      date.setDate(date.getDate()+3);
+      return `${this.dateEnglish(date)} at ${date.timeFormat('HH:mm')}`;
+    },
     /**
      * 阅读举报
      */

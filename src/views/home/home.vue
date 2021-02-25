@@ -49,7 +49,7 @@
                   <i class="el-icon-info"></i>
                 </el-tooltip>
               </div>
-              <div class="card_title_right">
+              <div class="card_title_right" @click="$router.push('/reviews')">
                 Service Reviews
               </div>
             </div>
@@ -99,11 +99,11 @@
                     <span class="el-dropdown-link">
                       <i class="el-icon-caret-bottom"></i> <span class="dropdown_txt">{{comData.yourReviews.totalReviews.compare}}</span>
                     </span>
-                    <el-dropdown-menu slot="dropdown">
+                    <!-- <el-dropdown-menu slot="dropdown">
                       <el-dropdown-item>黄金糕</el-dropdown-item>
                       <el-dropdown-item>狮子头</el-dropdown-item>
                       <el-dropdown-item>螺蛳粉</el-dropdown-item>
-                    </el-dropdown-menu>
+                    </el-dropdown-menu> -->
                   </el-dropdown>
                 </div>
                 <div class="reviews_l_card">
@@ -195,6 +195,7 @@ export default {
   padding:10px;
   background: #F9F9F9;
   height: calc(100% - 20px);
+  overflow-y: scroll;
   .date{
     text-align: right;
   }
@@ -202,10 +203,10 @@ export default {
     height: 100%;
   }
   .row{
-    height: 48%;
+    display: -webkit-box;
     margin-top: 10px;
     .el-col{
-      height: 100%;
+      // height: 100%;
       .card{
         background: #ffffff;
         border: 1px solid #e4ebf3;
@@ -230,6 +231,10 @@ export default {
           .card_title_right{
             color: #C5C5D6;
             font-size: 14px;
+            cursor: pointer;
+            &:hover{
+              color: #409eff;
+            }
           }
         }
         .card_score{
@@ -275,7 +280,11 @@ export default {
           .reviews_item{
             display: flex;
             flex-direction: row;
-            margin-bottom: 11px;
+            padding: 8px 0;
+            // cursor: pointer;
+            // &:hover{
+            //   background: #F2F2F5;
+            // }
             .reviews_item_l{
               flex-shrink: 0;
               font-size: 33px;
@@ -311,10 +320,14 @@ export default {
               }
             }
           }
+          .reviews_item:last-child{
+            margin-bottom: 8px;
+          }
         }
         .reviews{
           display: flex;
           flex-direction: row;
+          padding-bottom: 10px;
           // align-items: center;
           .reviews_l{
             width: 50%;
@@ -387,14 +400,15 @@ export default {
     }
   }
   .row:last-child{
-    margin-top: 8px;
+    margin-top: 10px;
   }
 }
 @media all and (max-width: 1024px) {
   .home{
-  height: auto;
+  height: 100%;
   .row{
-    height: auto;
+    display: flex;
+    flex-direction: column;
     margin-top: 0px;
     .el-col{
       margin-top: 10px;

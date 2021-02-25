@@ -10,7 +10,7 @@
     >
     </rate>
     <p class="text_about">AI powered platform aimed to cater to all businesses that have an online presence.</p>
-    <p class="text_about_company">Trusted by the world’s smartest companies</p>
+    <p class="text_about_company">Trusted by the world's smartest companies</p>
     <p class="text_about_footer">By signing up you agree to receive email communication about our products and services.</p>
   </div>
 </template>

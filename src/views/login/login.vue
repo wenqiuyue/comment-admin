@@ -17,7 +17,7 @@
               </el-input>
             </el-form-item>
              <el-form-item class="check_item">
-              <el-checkbox v-model="automaticChecked">Remember me</el-checkbox>
+              <!-- <el-checkbox v-model="automaticChecked">Remember me</el-checkbox> -->
               <a :href="`${pageUrl}/forgot-password`" class="forget">Forgot Your Password?</a>
             </el-form-item>
             <el-button class="login_btn" type="primary" :loading="loading" @click="handleLogin">Login</el-button>
@@ -39,7 +39,8 @@ export default {
       loading:false, //加载
       loginForm:{
         account:null,
-        password:null
+        password:null,
+        SiteId:null
       },
       automaticChecked:true, //自动登录
       rules: {
@@ -69,6 +70,9 @@ export default {
       this.$refs.loginForm.validate((valid)=>{
         if(valid){
           this.loading=true;
+          if(this.$route.query.SiteId){
+            this.loginForm.SiteId=this.$route.query.SiteId;
+          }
           this.$apiHttp.login(this.loginForm).then((resp)=>{
             if(resp.res==200){
               if(resp.data.status){

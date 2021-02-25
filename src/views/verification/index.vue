@@ -7,7 +7,7 @@
         <p class="option_dec">The skin is the largest organ in the body. It defends against</p>
         <ul>
           <li>
-            <p><strong>Copy meta tag below</strong> and paste it into your site’s home page.</p>
+            <p><strong>Copy meta tag below</strong> and paste it into your site's home page.</p>
             <el-input
               type="textarea"
               :autosize="{ minRows: 2, maxRows: 4}"
@@ -17,7 +17,7 @@
           </li>
           <li>
             <p><strong>Click Finish button</strong></p>
-            <p class="normal_p">To stay verified, don’t remove the meta tag, even after verification succeeds.</p>
+            <p class="normal_p">To stay verified, don't remove the meta tag, even after verification succeeds.</p>
           </li>
         </ul>
       </div>

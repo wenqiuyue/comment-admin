@@ -3,10 +3,10 @@
     <el-dialog title="Contact the reviewer" :visible.sync="dialogFind" width="615px" @closed="close" v-if="selReviews">
       <div class="find_main">
         <h5>How it works</h5>
-        <p>We’ll let the reviewer know you’d like more information to help you identify them and their experience with {{selReviews.companyName}}. It's up to them whether they choose to share their full name, email, order ID, phone number, or all of the above with you.</p>
-        <p>They’ll have 3 days to reply.</p>
-        <h5><i class="el-icon-message icon"></i> Here’s the email we’ll send to {{selReviews.name}}:</h5>
-        <p>(We'll translate this message to match {{selReviews.name}}’s own language)</p>
+        <p>We'll let the reviewer know you'd like more information to help you identify them and their experience with {{selReviews.companyName}}. It's up to them whether they choose to share their full name, email, order ID, phone number, or all of the above with you.</p>
+        <p>They'll have 3 days to reply.</p>
+        <h5><i class="el-icon-message icon"></i> Here's the email we'll send to {{selReviews.name}}:</h5>
+        <p>(We'll translate this message to match {{selReviews.name}}'s own language)</p>
         <div class="email" v-if="!isSeeMore">
           <p>Sitespilot</p>
           <h5>{{selReviews.companyName}} would like some information regarding your review</h5>
@@ -28,8 +28,8 @@
           <div class="email_con">
             <p>Hi {{selReviews.name}},</p>
             <p>Thanks for your review on Sitespilot.</p>
-            <p>Based on your review, {{selReviews.companyName}} would like a little more information about your experience. This will help them write a more useful reply to you. It'll also help them verify that you’ve had a genuine experience with their business.</p>
-            <p>Of course, it’s totally up to you what you share.</p>
+            <p>Based on your review, {{selReviews.companyName}} would like a little more information about your experience. This will help them write a more useful reply to you. It'll also help them verify that you've had a genuine experience with their business.</p>
+            <p>Of course, it's totally up to you what you share.</p>
             <!-- <p class="more_info">Provide more information</p> -->
             <p>Thanks for helping {{selReviews.companyName}} connect the dots!</p>
             <p>The Sitespilot Team</p>
@@ -38,7 +38,7 @@
       </div>
       <div slot="footer" class="dialog-footer">
         <el-button plain @click="handleCancle">Cancel</el-button>
-        <el-button type="primary" @click="confirmBtn" icon="el-icon-position" :loading="loading">Send Request</el-button>
+        <el-button type="primary" @click="saveFindReviewer" icon="el-icon-position" :loading="loading">Send Request</el-button>
       </div>
     </el-dialog>
   </div>
@@ -82,8 +82,8 @@ export default {
     /**
      * 确认按钮
      */
-    confirmBtn(){
-      this.loading=true;
+    confirmBtn(fid){  
+      console.log(fid)  
       const html=`
       <style>
       .email{
@@ -118,9 +118,9 @@ export default {
       <div class="email_car">
       <p>Hi ${this.selReviews.name},</p>
       <p>Thanks for your review on Sitespilot.</p>
-      <p>Based on your review, ${this.selReviews.companyName} would like a little more information about your experience. This will help them write a more useful reply to you. It'll also help them verify that you’ve had a genuine experience with their business.</p>
-      <p>Of course, it’s totally up to you what you share.</p>
-      <a href="http://sitespilot.com/">Provide more information</a>
+      <p>Based on your review, ${this.selReviews.companyName} would like a little more information about your experience. This will help them write a more useful reply to you. It'll also help them verify that you've had a genuine experience with their business.</p>
+      <p>Of course, it's totally up to you what you share.</p>
+      <a href="http://sitespilot.com/?id=${this.selReviews.id}&findReviewerID=${fid}">Provide more information</a>
       <p>Please note: This is a direct link to your Sitespilot account.</p>
       <p>Please don't share it width other.</p>
       <p style="margin-top:40px">Thank you for using our application!</p>
@@ -140,11 +140,23 @@ export default {
             type: 'success'
           });
           this.dialogFind = false;
+          this.$emit('success');
         }
-      }).finally(()=>{
-        this.loading=false;
-      })
+      }).finally(()=> this.loading=false);
     },
+    /**
+     * 保存FindReviewer发送的信息
+     */
+    saveFindReviewer(){
+      this.loading=true;
+      this.$apiHttp.siteFindReviewers({params:{commentId:this.selReviews.id}}).then((resp)=>{
+        if(resp.res==200){
+          this.confirmBtn(resp.data);
+        }else{
+          this.loading=false;
+        }
+      })
+    }
   }
 }
 </script>
