@@ -15,4 +15,14 @@ VueRouter.prototype.push = function push (location) {
   return originalPush.call(this, location).catch(err => err)
 }
 
+/**
+ * 全局前置守卫
+ */
+router.beforeEach((to, from, next) => {
+  if (to.query.SiteId) {
+    localStorage.setItem(type.SITEID, to.query.SiteId);
+  }
+  next();
+});
+
 export default router

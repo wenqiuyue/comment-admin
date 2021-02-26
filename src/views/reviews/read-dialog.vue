@@ -1,6 +1,6 @@
 <template>
-  <div class="read-dialog">
-    <el-dialog title="Message from Sitespilot Content Integrity" :visible.sync="dialogRead" width="550px" v-if="selReport">
+  <div class="read-dialog" v-if="site">
+    <el-dialog :title="`Message from ${site.SiteName} Content Integrity`" :visible.sync="dialogRead" width="550px" v-if="selReport">
       <div class="read_main">
         <p>Hi {{selReport.companyName}},</p>
         <p>Thanks for your inquiry about the review by {{selReport.name}}, which you flagged as {{selReport.reportingReason}}.</p>
@@ -26,6 +26,11 @@ export default {
   data(){
     return{
       dialogRead:false,
+    }
+  },
+  computed:{
+    site(){
+      return this.$store.state.siteInfo;
     }
   },
   methods:{

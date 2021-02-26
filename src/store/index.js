@@ -7,6 +7,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     token: null,
+    siteInfo:null
   },
   mutations: {
     //后台登录
@@ -17,6 +18,9 @@ export default new Vuex.Store({
     logout(state) {
       state.token = null;
     },
+    getSite(state, payload) {
+      state.siteInfo = payload;
+    }
   },
   actions: {
     
@@ -28,6 +32,10 @@ export default new Vuex.Store({
       localStorage.removeItem(type.TOKEN);
       localStorage.removeItem(type.USER);
       commit("logout");
+    },
+
+    getSite({ commit }, siteInfo) {
+      if (siteInfo && siteInfo !== "null") commit("getSite", siteInfo);
     },
   },
   modules: {}

@@ -187,7 +187,8 @@ export default {
         City: [
           { required: true, message: 'City is required.', trigger: 'blur' },
         ],
-      }
+      },
+      siteId:null, //站点id
     }
   },
   computed:{
@@ -214,6 +215,7 @@ export default {
   },
   mounted(){
     this.getCountry();
+    this.siteId=this.$route.query.SiteId?this.$route.query.SiteId:localStorage.getItem(type.SITEID);
   },
   methods:{
     /**
@@ -223,13 +225,13 @@ export default {
       const data={
         account:this.registerForm.WorkEmail,
         password:this.registerForm.Pwd,
-        SiteId:this.$route.query.SiteId
+        SiteId:this.siteId
       }
       this.$apiHttp.login(data).then((resp)=>{
         if(resp.res==200){
           if(resp.data.status){
             localStorage.setItem(type.USER, JSON.stringify(resp.data));
-            this.$store.dispatch("login", resp.data);
+            this.$store.dispatch("login", resp.data.token);
             this.$router.push({
               path: "/home"
             });
@@ -238,7 +240,7 @@ export default {
             this.$router.push({
               path:'/Verification',
               query:{
-                SiteId:this.$route.query.SiteId
+                SiteId:this.siteId
               }
             })
           }
@@ -297,7 +299,7 @@ export default {
      */
     saveBusiness(){
       this.loading=true;
-      this.registerForm.SiteId=this.$route.query.SiteId;
+      this.registerForm.SiteId=this.siteId;
       this.$apiHttp.businessSaveBusiness(this.registerForm).then((resp)=>{
         if(resp.res==200){
           this.businessId=resp.data;

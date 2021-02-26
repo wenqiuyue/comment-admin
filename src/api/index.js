@@ -132,3 +132,9 @@ export function siteResetPassword (data) {
 export function siteFindReviewers (data) {
   return fetchGet('/site/FindReviewers',data)
 };
+/**
+ * 获取siteid
+ */
+export function getWebSiteInfo (data) {
+  return fetchGet('api/UserInfo/GetWebSiteInfo',data)
+};

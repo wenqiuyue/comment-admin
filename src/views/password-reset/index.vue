@@ -3,7 +3,7 @@
       <div class="left_col">
         <div class="reset_main">
           <h1 class="main_head">
-            <a href="http://sitespilot.com/">sitespilot.com</a>
+             <a v-if="site" :href="site.Url" target="_blank">{{site.SiteName}}</a>
           </h1>
           <h1 class="main_title">Reset Password</h1>
           <el-form :model="resetForm" :rules="rules" ref="resetForm" class="form" label-position="top" :hide-required-asterisk="true">
@@ -65,6 +65,9 @@ export default {
   computed:{
     pageUrl(){
       return process.env.VUE_APP_PAGE_URL
+    },
+    site(){
+      return this.$store.state.siteInfo;
     }
   },
   mounted(){

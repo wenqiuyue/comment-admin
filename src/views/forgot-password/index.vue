@@ -4,7 +4,7 @@
       <el-col :span="15" :xs="24">
         <div class="forgot_main">
           <h1 class="main_head">
-            <a href="http://sitespilot.com/">sitespilot.com</a>
+            <a v-if="site" :href="site.Url" target="_blank">{{site.SiteName}}</a>
           </h1>
           <h1 class="main_title">Reset Password</h1>
           <el-form :model="forgotForm" :rules="rules" ref="forgotForm" class="form" label-position="top" :hide-required-asterisk="true">
@@ -45,6 +45,9 @@ export default {
   computed:{
     pageUrl(){
       return process.env.VUE_APP_PAGE_URL
+    },
+    site(){
+      return this.$store.state.siteInfo;
     }
   },
   methods:{
@@ -100,11 +103,11 @@ export default {
       <div class="email_car">
       <p>Hello!</p>
       <p>You are receiving this email because we received a password reset request for your account.</p>
-      <a href="http://192.168.1.15:8081/password-reset?email=${this.forgotForm.email}">Reset Button</a>
+      <a href="http://192.168.0.183:8081/password-reset?email=${this.forgotForm.email}">Reset Button</a>
       <p>This password reset link will expire in 60 minutes.</p>
       <p>If you did not request a password reset, no further action is required.</p>
       <p style="margin-top:40px">Thank you for using our application!</p>
-      <p>Best Regards, <br> Sitespilot</p>
+      <p>Best Regards, <br> ${this.site.SiteName}</p>
       </div>
       </div>`
       const data={

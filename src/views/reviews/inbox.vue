@@ -126,7 +126,7 @@
                   {{item.name}}<i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item class="review_name_dropdown"><a class="user_a" :href="`http://192.168.0.103:8080/profile?id=${item.userId}`" target="_blank">{{item.name}} <i class="el-icon-document"></i></a></el-dropdown-item>
+                  <el-dropdown-item class="review_name_dropdown"><a class="user_a" :href="`http://sitesjabber.com/profile?id=${item.userId}`" target="_blank">{{item.name}} <i class="el-icon-document"></i></a></el-dropdown-item>
                   <el-dropdown-item class="review_name_dropdown" disabled><i class="el-icon-edit"></i> {{item.totalReviews}}</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>

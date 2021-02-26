@@ -135,7 +135,7 @@
           class="online_col"
          >
           <template slot-scope="scope">
-            <div v-if="scope.row.status==0" class="online"></div>
+            <div v-if="scope.row.status==3" class="online"></div>
             <div v-else class="unline"></div>
           </template>
         </el-table-column>
@@ -145,10 +145,11 @@
           width="180"
          >
           <template slot-scope="scope">
-            <div v-if="scope.row.status==0">	Report closed - Review still online</div>
-            <div v-else>	Report closed - Review offline</div>
-            <div class="dialog_text"><span @click="handleSee(scope.row)">See the review</span></div>
-            <div class="dialog_text"><span @click="handleWhy(scope.row)">Why is it still online?</span></div>
+            <div v-if="scope.row.status==1">Investigating report</div>
+            <div v-else-if="scope.row.status==2">Report closed - Review offine</div>
+            <div v-else-if="scope.row.status==3">Report closed - still online</div>
+            <div class="dialog_text" v-if="!scope.row.status==3"><span @click="handleSee(scope.row)">See the review</span></div>
+            <div class="dialog_text" v-if="!scope.row.status==3"><span @click="handleWhy(scope.row)">Why is it still online?</span></div>
           </template>
         </el-table-column>
         <el-table-column

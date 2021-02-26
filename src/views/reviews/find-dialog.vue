@@ -1,6 +1,6 @@
 <template>
   <div class="find-dialog">
-    <el-dialog title="Contact the reviewer" :visible.sync="dialogFind" width="615px" @closed="close" v-if="selReviews">
+    <el-dialog title="Contact the reviewer" :visible.sync="dialogFind" width="615px" @closed="close" v-if="selReviews && site">
       <div class="find_main">
         <h5>How it works</h5>
         <p>We'll let the reviewer know you'd like more information to help you identify them and their experience with {{selReviews.companyName}}. It's up to them whether they choose to share their full name, email, order ID, phone number, or all of the above with you.</p>
@@ -8,15 +8,15 @@
         <h5><i class="el-icon-message icon"></i> Here's the email we'll send to {{selReviews.name}}:</h5>
         <p>(We'll translate this message to match {{selReviews.name}}'s own language)</p>
         <div class="email" v-if="!isSeeMore">
-          <p>Sitespilot</p>
+          <p>{{site.SiteName}}</p>
           <h5>{{selReviews.companyName}} would like some information regarding your review</h5>
-          <div class="one_row">Hi {{selReviews.name}}, Thanks for your review on Sitespilot. Based on your review {{selReviews.companyName}} would like a little more information</div>
+          <div class="one_row">Hi {{selReviews.name}}, Thanks for your review on {{site.SiteName}}. Based on your review {{selReviews.companyName}} would like a little more information</div>
           <el-link type="primary" @click="isSeeMore=true">See more</el-link>
         </div>
         <div class="email_more" v-else>
           <el-form ref="form" label-width="80px">
             <el-form-item label="From:">
-              Sitespilot
+              {{site.SiteName}}
             </el-form-item>
             <el-form-item label="To:">
               {{selReviews.name}}
@@ -27,12 +27,12 @@
           </el-form>
           <div class="email_con">
             <p>Hi {{selReviews.name}},</p>
-            <p>Thanks for your review on Sitespilot.</p>
+            <p>Thanks for your review on {{site.SiteName}}.</p>
             <p>Based on your review, {{selReviews.companyName}} would like a little more information about your experience. This will help them write a more useful reply to you. It'll also help them verify that you've had a genuine experience with their business.</p>
             <p>Of course, it's totally up to you what you share.</p>
             <!-- <p class="more_info">Provide more information</p> -->
             <p>Thanks for helping {{selReviews.companyName}} connect the dots!</p>
-            <p>The Sitespilot Team</p>
+            <p>The {{site.SiteName}} Team</p>
           </div>
         </div>
       </div>
@@ -57,6 +57,11 @@ export default {
       dialogFind:false,
       isSeeMore:false, //是否查看更多
       loading:false
+    }
+  },
+  computed:{
+    site(){
+      return this.$store.state.siteInfo;
     }
   },
   methods:{
@@ -117,14 +122,14 @@ export default {
       <div class="email">
       <div class="email_car">
       <p>Hi ${this.selReviews.name},</p>
-      <p>Thanks for your review on Sitespilot.</p>
+      <p>Thanks for your review on ${this.site.SiteName}.</p>
       <p>Based on your review, ${this.selReviews.companyName} would like a little more information about your experience. This will help them write a more useful reply to you. It'll also help them verify that you've had a genuine experience with their business.</p>
       <p>Of course, it's totally up to you what you share.</p>
-      <a href="http://sitespilot.com/?id=${this.selReviews.id}&findReviewerID=${fid}">Provide more information</a>
-      <p>Please note: This is a direct link to your Sitespilot account.</p>
+      <a href="http://sitesjabber.com/activate?id=${this.selReviews.id}&findReviewerID=${fid}">Provide more information</a>
+      <p>Please note: This is a direct link to your ${this.site.SiteName} account.</p>
       <p>Please don't share it width other.</p>
       <p style="margin-top:40px">Thank you for using our application!</p>
-      <p>Best Regards, <br> Sitespilot</p>
+      <p>Best Regards, <br> ${this.site.SiteName}</p>
       </div>
       </div>`
       const data={

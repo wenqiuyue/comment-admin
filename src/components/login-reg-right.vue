@@ -1,7 +1,7 @@
 <template>
   <div class="login-reg-right">
     <div class="about">
-      <a href="http://sitespilot.com/">sitespilot.com</a>
+      <a v-if="site" :href="site.Url" target="_blank">{{site.SiteName}}</a>
     </div>
     <rate
       class="c_rate"
@@ -16,7 +16,12 @@
 </template>
 <script>
 export default {
-  name:'login-reg-right'
+  name:'login-reg-right',
+  computed:{
+    site(){
+      return this.$store.state.siteInfo;
+    }
+  }
 }
 </script>
 <style lang="less" scoped>

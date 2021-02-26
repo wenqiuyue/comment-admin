@@ -4,7 +4,7 @@
       <el-col :span="15" :xs="24">
         <div class="login_main">
           <h1 class="main_head">
-            <a href="http://sitespilot.com/">sitespilot.com</a>
+            <a v-if="site" :href="site.Url" target="_blank">{{site.SiteName}}</a>
           </h1>
           <h1 class="main_title">Login</h1>
           <el-form :model="loginForm" :rules="rules" ref="loginForm" class="form" label-position="top" :hide-required-asterisk="true">
@@ -57,6 +57,9 @@ export default {
   computed:{
     pageUrl(){
       return process.env.VUE_APP_PAGE_URL
+    },
+    site(){
+      return this.$store.state.siteInfo;
     }
   },
   created(){
@@ -72,6 +75,8 @@ export default {
           this.loading=true;
           if(this.$route.query.SiteId){
             this.loginForm.SiteId=this.$route.query.SiteId;
+          }else{
+            this.loginForm.SiteId=localStorage.getItem(type.SITEID);
           }
           this.$apiHttp.login(this.loginForm).then((resp)=>{
             if(resp.res==200){
