@@ -57,6 +57,13 @@ export default [
         meta:{title:'Verification'},
         component: () => import('../../views/verification'),
       },
+      //验证
+      {
+        path: '/setting',
+        name: 'setting',
+        meta:{title:'Setting'},
+        component: () => import('../../views/setting'),
+      },
     ]
   }
 ]

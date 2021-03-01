@@ -102,6 +102,13 @@
       "font_class": "wushuju",
       "unicode": "e642",
       "unicode_decimal": 58946
+    },
+    {
+      "icon_id": "73249156",
+      "name": "设置",
+      "font_class": "shezhi",
+      "unicode": "e601",
+      "unicode_decimal": 58881
     }
   ]
 }

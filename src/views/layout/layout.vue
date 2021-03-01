@@ -37,6 +37,13 @@
             ></svg-icon>
             <span slot="title">Reviews</span>
           </el-menu-item>
+          <el-menu-item index="/setting" class="menu_item">
+            <svg-icon
+              value="icon-shezhi"
+              :size="1.2"
+            ></svg-icon>
+            <span slot="title">Settings</span>
+          </el-menu-item>
         </div>
       </el-menu>
     </el-aside>
@@ -81,6 +88,10 @@
               :size="1.2"
             ></svg-icon>
             <span slot="title">Reviews</span>
+          </el-menu-item>
+          <el-menu-item index="/reviews" class="menu_item">
+            <i class="el-icon-delete"></i>
+            <span slot="title">Settings</span>
           </el-menu-item>
         </div>
       </el-menu>

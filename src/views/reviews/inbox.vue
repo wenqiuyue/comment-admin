@@ -111,7 +111,7 @@
       </div>
     </div>
     <div class="review_list" v-loading="loading">
-      <template v-if="reviewsList.length>0 && !loading">
+      <template v-if="reviewsList.length>0">
         <div class="review_card" v-for="(item,index) in reviewsList" :key="item.id">
           <div class="card_main">
             <div class="card_main_l">
@@ -483,6 +483,11 @@ export default {
      */
     handleCardNameClick(tab, event){
       const tabData = JSON.parse(tab.name);
+      // if(tabData.name=='find'){
+      //   this.selReviews=null;
+      //   this.selReviews=tabData.item;
+      //   this.$refs.finddialog.openDialog();
+      // }
       if(tabData.name=='report' && tabData.item.investigations.length==0){
         this.selCommonId=tabData.item.id;
         this.$refs.reportdialog.openDialog();  
@@ -811,6 +816,12 @@ export default {
             }
           }
         }
+      }
+    }
+    /deep/.el-loading-mask{
+      .el-loading-spinner{
+        position: fixed;
+        max-width: 980px;
       }
     }
   }

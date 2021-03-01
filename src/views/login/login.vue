@@ -73,11 +73,12 @@ export default {
       this.$refs.loginForm.validate((valid)=>{
         if(valid){
           this.loading=true;
-          if(this.$route.query.SiteId){
-            this.loginForm.SiteId=this.$route.query.SiteId;
-          }else{
-            this.loginForm.SiteId=localStorage.getItem(type.SITEID);
-          }
+          // if(this.$route.query.SiteId){
+          //   this.loginForm.SiteId=this.$route.query.SiteId;
+          // }else{
+          //   this.loginForm.SiteId=localStorage.getItem(type.SITEID);
+          // }
+          this.loginForm.SiteId=7;
           this.$apiHttp.login(this.loginForm).then((resp)=>{
             if(resp.res==200){
               if(resp.data.status){

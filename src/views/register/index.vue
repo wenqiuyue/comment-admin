@@ -14,14 +14,14 @@
             </el-form-item>
             <div class="inline">
               <el-form-item prop="Pwd" label="Password">
-                <el-input v-model="registerForm.Pwd" placeholder="Enter password">
+                <el-input v-model="registerForm.Pwd" placeholder="Enter password" show-password>
                 </el-input>
               </el-form-item>
               <el-form-item 
                 prop="repeatPass" 
                 label="Repeat password"
               >
-                <el-input v-model="registerForm.repeatPass" placeholder="Repeat password">
+                <el-input v-model="registerForm.repeatPass" placeholder="Repeat password" show-password>
                 </el-input>
               </el-form-item>
             </div>

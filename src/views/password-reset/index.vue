@@ -12,11 +12,11 @@
               </el-input>
             </el-form-item>
             <el-form-item prop="pass" label="Password">
-              <el-input v-model="resetForm.pass" placeholder="Enter Password">
+              <el-input v-model="resetForm.pass" placeholder="Enter Password" show-password>
               </el-input>
             </el-form-item>
             <el-form-item prop="confirmPass" label="Confirm Password">
-              <el-input v-model="resetForm.confirmPass" placeholder="Confirm Password">
+              <el-input v-model="resetForm.confirmPass" placeholder="Confirm Password" show-password>
               </el-input>
             </el-form-item>
             <el-button class="reset_btn" type="primary" :loading="loading" @click="handleSend">Reset password</el-button>
@@ -31,6 +31,7 @@
   </div>
 </template>
 <script>
+import type from '../../commons/type';
 export default {
   data(){
     var checkPass = (rule, value, callback) => {
@@ -71,6 +72,10 @@ export default {
     }
   },
   mounted(){
+    const token=this.$route.query.token;
+    if(token){
+      localStorage.setItem(type.TOKEN,token);
+    }
     this.resetForm.email=this.$route.query.email;
   },
   methods:{
