@@ -1,152 +1,42 @@
 <template>
-  <div class="inbox">
-    <div class="all_link" v-if="Object.keys(this.query).length">
-      <span @click="$router.push('/reviews')">< All reviews</span>
-    </div>
-    <div class="screen" v-else>
-      <div class="screen_l">
-        <el-input
-          @blur="getReviews"
-          placeholder="Search"
-          prefix-icon="el-icon-search"
-          v-model="searchVal">
-        </el-input>
-        <el-dropdown split-button size="small" type="primary" trigger="click" :hide-on-click="false" ref="starRate" @command="handleCommand($event,3)">
-          Star rating
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="1">
-              <div class="star_rate">
-                <i v-if="starCom==1" class="el-icon-check"></i>
-                <span>Bad</span>
-                <rate
-                  class="c_rate"
-                  :value="1"
-                  :isDisabled="true"
-                >
-                </rate>
-              </div>
-            </el-dropdown-item>
-            <el-dropdown-item command="2">
-              <div class="star_rate">
-                <i v-if="starCom==2" class="el-icon-check"></i>
-                <span>Poor</span>
-                <rate
-                  class="c_rate"
-                  :value="2"
-                  :isDisabled="true"
-                >
-                </rate>
-              </div>
-            </el-dropdown-item>
-            <el-dropdown-item command="3">
-              <div class="star_rate">
-                <i v-if="starCom==3" class="el-icon-check"></i>
-                <span>Average</span>
-                <rate
-                  class="c_rate"
-                  :value="3"
-                  :isDisabled="true"
-                >
-                </rate>
-              </div>
-            </el-dropdown-item>
-            <el-dropdown-item command="4">
-              <div class="star_rate">
-                <i v-if="starCom==4" class="el-icon-check"></i>
-                <span>Great</span>
-                <rate
-                  class="c_rate"
-                  :value="4"
-                  :isDisabled="true"
-                >
-                </rate>
-              </div>
-            </el-dropdown-item>
-            <el-dropdown-item command="5">
-              <div class="star_rate">
-                <i v-if="starCom==5" class="el-icon-check"></i>
-                <span>Excellent</span>
-                <rate
-                  class="c_rate"
-                  :value="5"
-                  :isDisabled="true"
-                >
-                </rate>
-              </div>
-            </el-dropdown-item>
-            <el-dropdown-item divided class="menu_btn">
-              <el-button plain size="mini" @click="handleApply(3)">Apply</el-button>
-              <el-button plain size="mini" @click="handleClear(3)">Clear</el-button>
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-        <el-dropdown split-button size="small" type="primary" trigger="click" :hide-on-click="false" ref="reply" @command="handleCommand($event,1)">
-          Reply
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item :icon="replyCom==1?'el-icon-check':''" command="1">Reviews <strong>width a reply</strong></el-dropdown-item>
-            <el-dropdown-item :icon="replyCom==2?'el-icon-check':''" command="2">Reviews <strong>without a reply</strong></el-dropdown-item>
-            <el-dropdown-item divided class="menu_btn">
-              <el-button plain size="mini" @click="handleApply(1)">Apply</el-button>
-              <el-button plain size="mini" @click="handleClear(1)">Clear</el-button>
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-        <el-dropdown split-button size="small" type="primary" trigger="click" :hide-on-click="false" ref="report" @command="handleCommand($event,2)">
-          Report
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item :icon="reportCom==1?'el-icon-check':''" command="1">Reviews <strong>reported</strong></el-dropdown-item>
-            <el-dropdown-item :icon="reportCom==2?'el-icon-check':''" command="2">Reviews <strong>nor reported</strong></el-dropdown-item>
-            <el-dropdown-item divided class="menu_btn">
-              <el-button plain size="mini" @click="handleApply(2)">Apply</el-button>
-              <el-button plain size="mini" @click="handleClear(2)">Clear</el-button>
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-        <el-date-picker
-          class="date"
-          @change="getReviews"
-          v-model="datePicker"
-          type="daterange"
-          range-separator="-"
-          start-placeholder="Start date"
-          end-placeholder="End date">
-        </el-date-picker>
-      </div>
+  <div class="review-alone">
+    <div class="all_link">
+      <span>< All reviews</span>
     </div>
     <div class="review_list" v-loading="loading">
-      <template v-if="reviewsList.length>0">
-        <div class="review_card" v-for="(item,index) in reviewsList" :key="item.id">
+      <template v-if="true">
+        <div class="review_card" v-for="(item,index) in 1" :key="item">
           <div class="card_main">
             <div class="card_main_l">
               <rate
                 class="c_rate"
-                :value="item.rank"
+                :value="4"
                 :isDisabled="true"
               >
               </rate>
               <el-dropdown trigger="click">
                 <span class="el-dropdown-link">
-                  {{item.name}}<i class="el-icon-arrow-down el-icon--right"></i>
+                  BROKEPRODUCTIONS<i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item class="review_name_dropdown"><a class="user_a" :href="`http://sitesjabber.com/profile?id=${item.userId}`" target="_blank">{{item.name}} <i class="el-icon-document"></i></a></el-dropdown-item>
-                  <el-dropdown-item class="review_name_dropdown" disabled><i class="el-icon-edit"></i> {{item.totalReviews}}</el-dropdown-item>
+                  <el-dropdown-item class="review_name_dropdown"><a class="user_a" :href="`http://sitesjabber.com/profile?id=${3}`" target="_blank">BROKEPRODUCTIONS <i class="el-icon-document"></i></a></el-dropdown-item>
+                  <el-dropdown-item class="review_name_dropdown" disabled><i class="el-icon-edit"></i> 32</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </div>
             <div class="card_main_r">
               <p>
-                <span>{{item.subject}}</span>
-                <span>{{dateEnglish(item.time)}}</span>
+                <span>I bought AIO stream</span>
+                <span>27 Jan 2021</span>
               </p>
-              <p>{{item.content}}</p>
+              <p>I bought AIO stream. it will blow your mind when you fully understand what this programm can do and what not. support always answered my questions and solved my problems.</p>
               <p>Source: Organic</p>
             </div>
           </div>
           <div class="card_btn_group">
             <el-tabs v-model="activeCardName" @tab-click="handleCardNameClick">
               <el-tab-pane label="Reply" :name="JSON.stringify({name:'reply',item:item})">
-                <div slot="label" class="tab_label" v-if="item.replys.length>0"><i class="el-icon-success"></i> <span>Replied</span></div>
+                <div slot="label" class="tab_label" v-if="item>0"><i class="el-icon-success"></i> <span>Replied</span></div>
                 <div slot="label" class="tab_label" v-else><svg-icon value="icon-huifu" :size="1.5"></svg-icon> <span>Reply</span></div>
                 <div class="reply_tab">
                   <div class="reply_tab_l">
@@ -287,237 +177,22 @@
                 </div>
               </el-tab-pane>
             </el-tabs>
-            <!-- <div class="report">
-              <svg-icon value="icon-biaoji" :size="1.3" :color="'#9A9AAD'" @click="handleReport"></svg-icon>
-              <span v-if="index==2">Invistigation in progress</span>
-              <span v-else-if="index==1">Invistigation complete</span>
-            </div> -->
           </div>
         </div>
       </template>
       <empty v-else :tips="'No data available'"></empty>
     </div>
-    <div class="pagination" v-if="page.pageTotal/page.pageSize>1 && !loading">
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="page.pageIndex"
-        :page-sizes="[10, 20, 30, 40]"
-        :page-size="page.pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="page.pageTotal">
-      </el-pagination>
-    </div>
-    <ReportDialog ref="reportdialog" :comId="selCommonId" @success="getReviews" :selOption="reportReasonOption"></ReportDialog>
-    <FindDialog ref="finddialog" :selReviews="selReviews" @success="getReviews"></FindDialog>
-    <ReadDialog ref="readdialog" :selReport="selReviews"></ReadDialog>
   </div>
 </template>
 <script>
-import { dateEnglish } from '../../commons';
 export default {
-  components:{
-    ReportDialog:()=> import("./report-dialog"),
-    FindDialog:()=> import("./find-dialog"),
-    ReadDialog:()=> import("./read-dialog")
-  },
-  props:{
-    reportReasonOption:{
-      type:Array,
-      default:[]
-    },
-  },
   data(){
     return{
-      searchVal:null, //搜索
-      datePicker:[], //评论时间筛选
-      activeCardName:null, //评论卡片操作选项卡
-      replyTextarea:'', //商家回复
-      isDown:true, //向下
       loading:false,
-      starCom:null, //星星筛选条件
-      replyCom:null, //回复筛选条件
-      reportCom:null, //举报筛选条件
-      reviewsList:[], //评论列表
-      confrimBtnLoading:false,
-      page:{
-        pageSize:10, //每页数量
-        pageTotal:null, //总数量
-        pageIndex:1 //当前页
-      },
-      user: null, //商家信息
-      replyEditId:null, //回复的id
-      selCommonId:null, //选择的评论id
-      selReviews:null, //选择的评论
-      reviewId:null //评论id
+      activeCardName:null, //评论卡片操作选项卡
     }
-  },
-  computed:{
-    query(){
-      return this.$route.query;
-    }
-  },
-  watch:{
-    query(){
-      if(Object.keys(this.query).length){
-      //查询单条评论
-        if(this.query.review_id){
-          this.reviewId=this.query.review_id;
-        }else{
-          this.reviewId=null;
-        }
-      }else{
-        this.reviewId=null;
-      }
-      this.page.pageIndex=1;
-      this.reviewsList=[];
-      this.getReviews();   
-    }
-  },
-  mounted(){
-    if(Object.keys(this.query).length){
-      //查询单条评论
-      if(this.query.review_id){
-        this.reviewId=this.query.review_id;
-      }
-    }
-    this.getReviews();
   },
   methods:{
-    dateEnglish,
-    /**
-     * 获取3天后的时间
-     */
-    getThreeDayTime(time){
-      let date = new Date(time);
-      date.setDate(date.getDate()+3);
-      return `${this.dateEnglish(date)} at ${date.timeFormat('HH:mm')}`;
-    },
-    /**
-     * 阅读举报
-     */
-    handleRead(item,report){
-      this.selReviews=null;
-      this.selReviews=report;
-      this.selReviews.companyName=item.companyName;
-      this.selReviews.name=item.name;
-      this.$refs.readdialog.openDialog();
-    },
-    /**
-     * 删除评论
-     */
-    handleDel(id){
-      this.$apiHttp.siteDelReply({params:{id:id}}).then((resp)=>{
-        if(resp.res==200){
-          this.$message({
-            message: 'Successfully deleted',
-            type: 'success'
-          });
-          this.getReviews();
-        }
-      })
-    },
-    /**
-     * 评论cancle
-     */
-    handleCancle(){
-      this.replyTextarea=null;
-      this.activeCardName=null;
-      this.replyEditId=null;
-    },
-    /**
-     * 点击修改按钮
-     */
-    handleEditReply(reply){
-      this.replyEditId = reply.id;
-      this.replyTextarea = reply.content;
-    },
-    /**
-     * 商家回复/修改
-     */
-    handleReply(comId){
-      this.confrimBtnLoading=true;
-      const data={
-        content:this.replyTextarea,
-        commentId:comId,
-        id:this.replyEditId,
-      }
-      this.$apiHttp.siteReply(data).then((resp)=>{
-        if(resp.res==200){
-          this.replyTextarea=null;
-          this.replyEditId=null;
-          this.$message({
-            message: this.replyEditId?'Modification reply succeeded':'Reply succeeded',
-            type: 'success'
-          });
-          this.getReviews();
-        }
-      }).finally(()=> this.confrimBtnLoading=false);
-    },
-    /**
-     * 筛选条件选择切换
-     */
-    handleCommand(com,type){
-      if(!com){
-        return;
-      }
-      if(type==3){
-        this.starCom = com;
-      }else if(type==1){
-        this.replyCom = com;
-      }else if(type==2){
-        this.reportCom = com;
-      }
-    },
-    /**
-     * 获取评论数据
-     */
-    getReviews(){
-      this.loading=true;
-      const data={
-        id:this.reviewId,
-        search: this.searchVal,
-        star:this.starCom,
-        reply:this.replyCom,
-        report:this.reportCom,
-        startTime:this.datePicker.length>0?this.datePicker[0].timeFormat('yyyy-MM-dd'):null,
-        endTime:this.datePicker.length>0?this.datePicker[1].timeFormat('yyyy-MM-dd'):null,
-        offset:this.page.pageIndex,
-        limit:this.page.pageSize,
-      }
-      this.$apiHttp.siteReviews({params:data}).then((resp)=>{
-        if(resp.res==200){
-          this.reviewsList=resp.data.reviews;
-          this.reviewsList.forEach((m)=>{
-            m.reportSta=null;
-            if(m.investigations.length>0){
-              m.investigations.forEach((i)=>{
-                if(i.state==0){
-                  m.reportSta=0;
-                }else if(i.state==1){
-                  m.reportSta=1;
-                }
-              })
-            }
-          })
-          //当查询单条评论，根据type，默认展开第一条评论选项卡
-          if(Object.keys(this.query).length){
-            //查询单条评论
-            if(this.query.type=='reply'){
-              this.activeCardName=JSON.stringify({name:'reply',item:this.reviewsList[0]})
-            }
-          }
-          this.page.pageTotal=resp.data.total;
-        }
-      }).finally(()=> this.loading=false);
-    },
-    /**
-     * 举报不同的问题
-     */
-    handleDifferent(id){
-      this.selCommonId=id;
-      this.$refs.reportdialog.openDialog();  
-    },
     /**
      * 评论状态切换
      */
@@ -537,91 +212,12 @@ export default {
         this.$refs.finddialog.openDialog();
       }
     },
-    /**
-     * 举报
-     */
-    handleReport(){
-      this.$refs.reportdialog.openDialog();
-    },
-    /**
-     * 筛选
-     */
-    handleApply(type){
-      if(type==1){
-        this.$refs.reply.hide();
-      }else if(type==2){
-        this.$refs.report.hide();
-      }else if(type==3){
-        this.$refs.starRate.hide()
-      }
-      this.getReviews();
-    },
-    /**
-     * 清除筛选
-     */
-    handleClear(type){
-      if(type==1){
-        this.replyCom = null;
-        this.$refs.reply.hide();
-      }else if(type==2){
-        this.reportCom = null;
-        this.$refs.report.hide();
-      }else if(type==3){
-        this.starCom = null;
-        this.$refs.starRate.hide()
-      }
-      this.getReviews();
-    },
-    handleSizeChange(val) {
-      this.page.pageIndex=1;
-      this.page.pageSize = val;
-      this.getReviews();
-    },
-    handleCurrentChange(val) {
-      this.page.pageIndex=val;
-      this.getReviews();
-    }
   }
 }
 </script>
 <style lang="less" scoped>
-.user_a{
-  text-decoration: none;
-  color: #606266;
-}
-.el-dropdown-menu{
-  /deep/.review_name_dropdown{
-    padding: 0 15px !important;
-  }
-  /deep/.review_name_dropdown:first-child{
-    font-weight: bold;
-    font-size: 16px;
-  }
-  /deep/.el-dropdown-menu__item{
-    padding: 3px 15px;
-    // background: #ffffff;
-  }
-  /deep/.menu_btn{
-    background: #ffffff;
-  }
-  .star_rate{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    span{
-      margin-right: 22px;
-    }
-    .el-rate{
-      height: auto;
-      /deep/.el-rate__icon{
-        font-size: 20px;
-        margin-right: 3px;
-      }
-    }
-  }
-}
-.inbox{
+.review-alone{
+  background: #F9F9F9;
   .all_link{
     background: #f5f9fc;
     border-bottom: 1px solid #eaedf3;
@@ -630,48 +226,6 @@ export default {
       color: #454554;
       cursor: pointer;
       font-size: 15px;
-    }
-  }
-  .screen{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 10px;
-    box-shadow: 0 2px 2px 0 rgba(0,0,50,0.1);
-    .screen_l{
-      display: flex;
-      flex-direction: row;
-      /deep/.el-input{
-        width: auto;
-        margin-right: 10px;
-      }
-      /deep/.el-input__inner{
-        height: 32px;
-        line-height: 32px;
-      }
-      /deep/.el-input__icon{
-        line-height: 32px;
-      }
-      /deep/.el-button{
-        background: #ffffff;
-        color: #333333;
-        border-color: #E3E3EC;
-      }
-      /deep/.el-dropdown{
-        margin-right: 10px;
-        .el-button-group{
-          display: flex;
-        }
-      }
-      .date{
-        margin-right: 10px;
-        /deep/.el-input__icon{
-          line-height: 25px;
-        }
-        /deep/.el-range-separator{
-          line-height: 25px;
-        }
-      }
     }
   }
   .review_list{
@@ -875,27 +429,9 @@ export default {
       }
     }
   }
-  .pagination{
-    background: #ffffff;
-    padding-bottom: 10px;
-  }
 }
 @media all and (max-width: 1024px) {
-  .inbox{
-    .screen{
-      .screen_l{
-        flex-wrap: wrap;
-        /deep/.el-input{
-          margin-bottom: 8px;
-        }
-        .el-dropdown{
-          margin-bottom: 8px;
-        }
-        .date{
-          margin-bottom: 8px;
-        }
-      }
-    }
+  .review-alone{
     .review_list{
       padding: 0 3px;
       .review_card{
@@ -982,10 +518,6 @@ export default {
           }
         }
       }
-    }
-    .pagination{
-      padding-bottom: 24px;
-      overflow-x: scroll;
     }
   }
 }

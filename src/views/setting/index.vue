@@ -1,35 +1,36 @@
 <template>
-  <div class="setting">
+  <div class="setting" v-loading="loading">
     <div class="form_card">
       <div class="form_title">Basic info</div>
       <el-divider></el-divider>
       <el-form label-position="top" label-width="80px" :model="form" class="form" :rules="rules">
-        <el-form-item label="First Name" prop="FirstName">
-          <el-input v-model="form.FirstName" placeholder="Enter first name"></el-input>
+        <el-form-item label="First Name" prop="firstName">
+          <el-input v-model="form.firstName" placeholder="Enter first name"></el-input>
         </el-form-item>
-        <el-form-item label="Surname" prop="Surname">
-          <el-input v-model="form.Surname" placeholder="Enter surname"></el-input>
+        <el-form-item label="Surname" prop="surname">
+          <el-input v-model="form.surname" placeholder="Enter surname"></el-input>
         </el-form-item>
-        <el-form-item prop="Country" label="Country">
-          <el-select v-model="form.Country" placeholder="Please select">
+        <el-form-item prop="country" label="Country">
+          <el-select v-model="form.country" placeholder="Please select">
             <el-option
               v-for="item in countryOptions"
-              :key="item.Id"
-              :label="item.Name"
-              :value="item.Id">
+              :key="item.id"
+              :label="item.name"
+              :value="item.id">
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item prop="City" label="City">
-          <el-input v-model="form.City" placeholder="Enter city">
+        <el-form-item prop="city" label="City">
+          <el-input v-model="form.city" placeholder="Enter city">
           </el-input>
         </el-form-item>
-        <el-form-item prop="Phone" label="Phone number">
-          <el-input v-model="form.Phone" placeholder="Enter phone number">
+        <el-form-item prop="phone" label="Phone number">
+          <el-input v-model="form.phone" placeholder="Enter phone number">
+            <template slot="prepend">{{countryOptions && form.country?countryOptions.find((val)=> val.id==form.country).areaCode:''}}</template>
           </el-input>
         </el-form-item>
         <el-form-item style="margin-top:18px">
-          <el-button>Save changes</el-button>
+          <el-button @click="handleSave" :loading="bLoading">Save changes</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -40,13 +41,13 @@
         <p class="d_f_lable">Email</p>
         <div class="d_f_input">
           <el-input v-model="eamil" placeholder="Enter Email"></el-input>
-          <el-button>Change email</el-button>
+          <el-button @click="handleChangeEmail" :loading="eLoading">Change email</el-button>
         </div>
         <p class="d_f_tips">We won't change this email until we've received your confirmation.</p>
       </div>
       <div class="password">
         <div class="p_lable">Password</div>
-        <el-button>Change password</el-button>
+        <el-button @click="handleChangePass">Change password</el-button>
       </div>
     </div>
   </div>
@@ -55,33 +56,90 @@
 export default {
   data(){
     return{
+      loading:false, //页面加载
+      bLoading:false, //Basic info保存按钮加载
+      eLoading:false, //修改email按钮加载
       countryOptions:null, //国家选项
       eamil:null, //修改的邮箱
       form:{
-        FirstName:null,
-        Surname:null,
-        Phone:null,
-        Country:null,
-        City:null
+        firstName:null,
+        surname:null,
+        phone:null,
+        country:null,
+        city:null
       },
       rules:{
-        
+         firstName: [
+          { required: true, message: 'First name is required.', trigger: 'blur' },
+        ],
+        surname: [
+          { required: true, message: 'The Surname is required.', trigger: 'blur' },
+        ],
+        phone: [
+          { required: true, message: 'Phone number is required.', trigger: 'blur' },
+        ],
+        city: [
+          { required: true, message: 'City is required.', trigger: 'blur' },
+        ],
       }
     }
   },
   mounted(){
-    this.getCountry();
+    this.getBusinessInfo();
   },
   methods:{
-     /**
-     * 获取国家选项
+    /**
+     * 获取商家基本信息
      */
-    getCountry(){
-      this.$apiHttp.businessGetCountry().then((resp)=>{
-        if(resp.res==200){
-          this.countryOptions=resp.data;
+    getBusinessInfo(){
+      this.loading=true;
+      Promise.all([
+        this.$apiHttp.siteProfileBasic(),
+        this.$apiHttp.siteCountry()
+      ]).then((resp)=>{
+        if(resp[0].res==200){
+          Object.keys(resp[0].data).forEach((k)=>{
+            if(k=='email'){
+              this.eamil=resp[0].data[k];
+            }
+            Object.keys(this.form).forEach((j)=>{
+              if(k==j){
+                this.form[j]=resp[0].data[k];
+              }
+            })
+          })
         }
-      })
+        if(resp[1].res==200){
+          this.countryOptions=resp[1].data;
+        }
+      }).finally(()=> this.loading=false);
+    },
+    /**
+     * 修改邮件
+     */
+    handleChangeEmail(){
+      if(!this.eamil){
+        this.$message({
+          message: 'Please input email',
+          type: 'warning'
+        });
+        return;
+      }
+      this.eLoading=true;
+    },
+    /**
+     * 修改密码
+     */
+    handleChangePass(){
+      this.$router.replace({
+        path: "/password-reset",
+      });
+    },
+    /**
+     * 保存基本信息
+     */
+    handleSave(){
+      this.bLoading=true;
     },
   }
 }

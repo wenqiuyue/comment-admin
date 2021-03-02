@@ -37,6 +37,12 @@ export function businessDownLoadFile (data) {
   return fetchGet('http://120.25.67.116:5251/api/Business/DownLoadFile',data)
 };
 /**
+ * 获取siteid
+ */
+export function getWebSiteInfo (data) {
+  return fetchGet('http://120.25.67.116:5251/api/UserInfo/GetWebSiteInfo',data)
+};
+/**
  * 登录
  */
 export function login (data) {
@@ -133,8 +139,14 @@ export function siteFindReviewers (data) {
   return fetchGet('/site/FindReviewers',data)
 };
 /**
- * 获取siteid
+ * 获取国家或地区的名称和区号
  */
-export function getWebSiteInfo (data) {
-  return fetchGet('http://120.25.67.116:5251/api/UserInfo/GetWebSiteInfo',data)
+export function siteCountry (data) {
+  return fetchGet('/site/Country',data)
+};
+/**
+ * 获取商家基本信息
+ */
+export function siteProfileBasic (data) {
+  return fetchGet('/site/ProfileBasic',data)
 };

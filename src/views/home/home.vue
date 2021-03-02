@@ -55,7 +55,7 @@
             </div>
             <p class="eng_reviews">Your {{comData.engage.length}} latest reviews</p>
             <div class="reviews_list">
-              <div class="reviews_item" v-for="(item,index) in comData.engage" :key="index">
+              <div class="reviews_item" v-for="(item,index) in comData.engage" :key="index" @click="handleSeeReview(item.id)">
                 <span class="reviews_item_l">"</span>
                 <div class="reviews_item_r">
                   <div>{{item.content}}</div>
@@ -95,16 +95,17 @@
                 <div class="reviews_l_card">
                   <div class="r_l_c_title">TOTAL REVIEWS</div>
                   <h5>{{comData.yourReviews.totalReviews.total}}</h5>
-                  <el-dropdown trigger="click">
+                  <i class="el-icon-caret-bottom"></i> <span class="dropdown_txt">{{comData.yourReviews.totalReviews.compare}}</span>
+                  <!-- <el-dropdown trigger="click">
                     <span class="el-dropdown-link">
                       <i class="el-icon-caret-bottom"></i> <span class="dropdown_txt">{{comData.yourReviews.totalReviews.compare}}</span>
                     </span>
-                    <!-- <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-menu slot="dropdown">
                       <el-dropdown-item>黄金糕</el-dropdown-item>
                       <el-dropdown-item>狮子头</el-dropdown-item>
                       <el-dropdown-item>螺蛳粉</el-dropdown-item>
-                    </el-dropdown-menu> -->
-                  </el-dropdown>
+                    </el-dropdown-menu>
+                  </el-dropdown> -->
                 </div>
                 <div class="reviews_l_card">
                   <div class="r_l_c_title">YOUR REPLY RATE</div>
@@ -168,6 +169,18 @@ export default {
   },
   methods:{
     formatDate,
+    /**
+     * 查看某条评论
+     */
+    handleSeeReview(rid){
+      this.$router.push({
+        path:"/reviews",
+        query:{
+          review_id:rid,
+          type:'reply'
+        }
+      })
+    },
     /**
      * 时间选择触发
      */
@@ -281,10 +294,10 @@ export default {
             display: flex;
             flex-direction: row;
             padding: 8px 0;
-            // cursor: pointer;
-            // &:hover{
-            //   background: #F2F2F5;
-            // }
+            cursor: pointer;
+            &:hover{
+              background: #F2F2F5;
+            }
             .reviews_item_l{
               flex-shrink: 0;
               font-size: 33px;

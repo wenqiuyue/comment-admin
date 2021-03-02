@@ -41,18 +41,14 @@
                 </el-input>
               </el-form-item>
             </div>
-            <el-form-item prop="Phone" label="Phone number">
-              <el-input v-model="registerForm.Phone" placeholder="Enter phone number">
-              </el-input>
-            </el-form-item>
             <div class="inline">
               <el-form-item prop="Country" label="Country">
                 <el-select v-model="registerForm.Country">
                   <el-option
                     v-for="item in countryOptions"
-                    :key="item.Id"
-                    :label="item.Name"
-                    :value="item.Id">
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id">
                   </el-option>
                 </el-select>
               </el-form-item>
@@ -61,6 +57,11 @@
                 </el-input>
               </el-form-item>
             </div>
+            <el-form-item prop="Phone" label="Phone number">
+              <el-input v-model="registerForm.Phone" placeholder="Enter phone number">
+                <template slot="prepend">{{countryOptions?countryOptions.find((val)=> val.id==form.country).areaCode:''}}</template>
+              </el-input>
+            </el-form-item>
           </el-form>
           <div class="verification" v-if="step==3">
                 <el-radio v-model="verification" :label="1">Verification option 1</el-radio>
@@ -260,7 +261,7 @@ export default {
      * 获取国家选项
      */
     getCountry(){
-      this.$apiHttp.businessGetCountry().then((resp)=>{
+      this.$apiHttp.siteCountry().then((resp)=>{
         if(resp.res==200){
           this.countryOptions=resp.data;
         }
@@ -351,6 +352,9 @@ export default {
       /deep/.el-form-item__label{
         color: #05091D;
         line-height: 24px;
+      }
+      /deep/.el-input-group__prepend{
+        box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1);
       }
       /deep/.el-input__inner{
         height: 52px;
