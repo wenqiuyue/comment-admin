@@ -59,7 +59,7 @@
             </div>
             <el-form-item prop="Phone" label="Phone number">
               <el-input v-model="registerForm.Phone" placeholder="Enter phone number">
-                <template slot="prepend">{{countryOptions?countryOptions.find((val)=> val.id==form.country).areaCode:''}}</template>
+                <template slot="prepend">{{countryOptions?countryOptions.find((val)=> val.id==registerForm.Country).areaCode:''}}</template>
               </el-input>
             </el-form-item>
           </el-form>

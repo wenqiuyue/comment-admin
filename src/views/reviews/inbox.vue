@@ -475,7 +475,7 @@ export default {
     getReviews(){
       this.loading=true;
       const data={
-        id:this.reviewId,
+        ids:this.reviewId,
         search: this.searchVal,
         star:this.starCom,
         reply:this.replyCom,

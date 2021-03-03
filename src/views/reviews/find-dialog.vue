@@ -87,8 +87,7 @@ export default {
     /**
      * 确认按钮
      */
-    confirmBtn(fid){  
-      console.log(fid)  
+    confirmBtn(fdata){  
       const html=`
       <div class="email" style="width: 100%;padding: 22px;">
       <div class="email_car" style="width: 500px;padding: 16px 34px;text-align: left;border: 1px solid #c5c5d6;border-radius: 4px;margin: 0 auto;">
@@ -96,7 +95,7 @@ export default {
       <p style="word-break: break-all;margin: 10px 0;">Thanks for your review on ${this.site.SiteName}.</p>
       <p style="word-break: break-all;margin: 10px 0;">Based on your review, ${this.selReviews.companyName} would like a little more information about your experience. This will help them write a more useful reply to you. It'll also help them verify that you've had a genuine experience with their business.</p>
       <p style="word-break: break-all;margin: 10px 0;">Of course, it's totally up to you what you share.</p>
-      <a style="width: calc(100% - 40px);margin: 18px 0;padding: 12px 20px;color: #FFF;background-color: #409EFF;display: block;text-align: center;border-radius: 4px;text-decoration: none !important;" href="http://sitesjabber.com/activate?id=${this.selReviews.id}&findReviewerID=${fid}">Provide more information</a>
+      <a style="width: calc(100% - 40px);margin: 18px 0;padding: 12px 20px;color: #FFF;background-color: #409EFF;display: block;text-align: center;border-radius: 4px;text-decoration: none !important;" href="http://sitesjabber.com/activate?${fdata}">Provide more information</a>
       <p style="word-break: break-all;margin: 10px 0;">Please note: This is a direct link to your ${this.site.SiteName} account.</p>
       <p style="word-break: break-all;margin: 10px 0;">Please don't share it width other.</p>
       <p style="margin-top:40px;word-break: break-all;margin: 10px 0;">Thank you for using our application!</p>

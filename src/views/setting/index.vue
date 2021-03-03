@@ -3,7 +3,7 @@
     <div class="form_card">
       <div class="form_title">Basic info</div>
       <el-divider></el-divider>
-      <el-form label-position="top" label-width="80px" :model="form" class="form" :rules="rules">
+      <el-form label-position="top" ref="form" label-width="80px" :model="form" class="form" :rules="rules">
         <el-form-item label="First Name" prop="firstName">
           <el-input v-model="form.firstName" placeholder="Enter first name"></el-input>
         </el-form-item>
@@ -24,8 +24,8 @@
           <el-input v-model="form.city" placeholder="Enter city">
           </el-input>
         </el-form-item>
-        <el-form-item prop="phone" label="Phone number">
-          <el-input v-model="form.phone" placeholder="Enter phone number">
+        <el-form-item prop="phoneNumber" label="Phone number">
+          <el-input v-model="form.phoneNumber" placeholder="Enter phone number">
             <template slot="prepend">{{countryOptions && form.country?countryOptions.find((val)=> val.id==form.country).areaCode:''}}</template>
           </el-input>
         </el-form-item>
@@ -64,7 +64,7 @@ export default {
       form:{
         firstName:null,
         surname:null,
-        phone:null,
+        phoneNumber:null,
         country:null,
         city:null
       },
@@ -75,7 +75,7 @@ export default {
         surname: [
           { required: true, message: 'The Surname is required.', trigger: 'blur' },
         ],
-        phone: [
+        phoneNumber: [
           { required: true, message: 'Phone number is required.', trigger: 'blur' },
         ],
         city: [
@@ -99,8 +99,8 @@ export default {
       ]).then((resp)=>{
         if(resp[0].res==200){
           Object.keys(resp[0].data).forEach((k)=>{
-            if(k=='email'){
-              this.eamil=resp[0].data[k];
+            if(k=='workEmail'){
+              this.eamil=resp[0].data.workEmail;
             }
             Object.keys(this.form).forEach((j)=>{
               if(k==j){
@@ -126,6 +126,14 @@ export default {
         return;
       }
       this.eLoading=true;
+      this.$apiHttp.siteProfileWorkEmail({workEmail:this.eamil}).then((resp)=>{
+        if(resp.res==200){
+          this.$message({
+            message: 'Email sent successfully',
+            type: 'success'
+          });
+        }
+      }).finally(()=> this.eLoading=false);
     },
     /**
      * 修改密码
@@ -139,7 +147,21 @@ export default {
      * 保存基本信息
      */
     handleSave(){
-      this.bLoading=true;
+      this.$refs.form.validate((vali)=>{
+        if(vali){
+          this.bLoading=true;
+          this.$apiHttp.siteEditProfileBasic(this.form).then((resp)=>{
+            if(resp.res==200){
+              this.$message({
+                message: 'Modified successfully',
+                type: 'success'
+              });
+            }
+          }).finally(()=> this.bLoading=false);
+        }else{
+          return;
+        }
+      })
     },
   }
 }
@@ -163,7 +185,7 @@ export default {
     }
     .form{
       /deep/.el-form-item{
-        margin-bottom: 12px;
+        margin-bottom: 18px;
         .el-form-item__label{
           line-height: 20px;
           padding: 0 0 3px;
@@ -206,6 +228,13 @@ export default {
         line-height: 20px;
         margin-bottom: 8px;
       }
+    }
+  }
+}
+@media all and (max-width: 1024px) {
+  .setting{
+    .form_card{
+      width: calc(100% - 48px);
     }
   }
 }

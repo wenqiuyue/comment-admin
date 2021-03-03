@@ -118,18 +118,19 @@
         </div>
         <div class="header_right">
           <el-popover
+          v-if="newMsg"
             placement="bottom"
             width="250"
             trigger="click">
             <div class="new_msg">
               <p>Notifications</p>
-              <div v-if="false">You do not have any new activity</div>
-              <div class="have_new" v-else>
+              <div v-if="newMsg.total==0">You do not have any new activity</div>
+              <div class="have_new" v-else @click="handleNewMsg">
                 <i class="el-icon-s-opportunity"></i>
-                <span>You have 1 new review</span>
+                <span>You have {{newMsg.total}} new review</span>
               </div>
             </div>
-            <el-badge is-dot class="item" slot="reference">
+            <el-badge :is-dot="newMsg.total==0?false:true" class="item" slot="reference">
               <i class="el-icon-message-solid"></i>
             </el-badge>
           </el-popover>
@@ -146,7 +147,7 @@
                 <div>{{user.firstName}}</div>
                 <div>{{user.workEmail}}</div>
               </el-dropdown-item>
-              <el-dropdown-item divided command="1">Set Up</el-dropdown-item>
+              <!-- <el-dropdown-item divided command="1">Set Up</el-dropdown-item> -->
               <el-dropdown-item command="2">Change Password</el-dropdown-item>
               <el-dropdown-item divided command="6">Log out</el-dropdown-item>
             </el-dropdown-menu>
@@ -169,6 +170,7 @@ export default {
       levelList: null, //面包屑
       user: null, //用户信息
       path:null, //当前路由
+      newMsg:null //新消息
     };
   },
   watch: {
@@ -178,6 +180,7 @@ export default {
     },
   },
   mounted() {
+    this.getNewMsgData();
     this.getBreadcrumb();
   },
   created() {
@@ -186,6 +189,28 @@ export default {
   },
   methods: {
     isMobile,
+    /**
+     * 查看新消息
+     */
+    handleNewMsg(){
+      this.$router.push({
+        path:"/reviews",
+        query:{
+          review_id:this.newMsg.data,
+          type:'reply'
+        }
+      })
+    },
+    /**
+     * 获取新消息数量
+     */
+    getNewMsgData(){
+      this.$apiHttp.siteNewReviews().then((resp)=>{
+        if(resp.res==200){
+          this.newMsg=resp.data;
+        }
+      })
+    },
     /**
      * 头部下拉菜单
      */

@@ -150,3 +150,21 @@ export function siteCountry (data) {
 export function siteProfileBasic (data) {
   return fetchGet('/site/ProfileBasic',data)
 };
+/**
+ * 修改商家基本信息
+ */
+export function siteEditProfileBasic (data) {
+  return fetchPost('/site/ProfileBasic',data)
+};
+/**
+ * 获取新消息数量
+ */
+export function siteNewReviews (data) {
+  return fetchGet('/site/NewReviews',data)
+};
+/**
+ * 修改邮箱
+ */
+export function siteProfileWorkEmail (data) {
+  return fetchPost('/site/ProfileWorkEmail',data)
+};
