@@ -1,7 +1,7 @@
 <template>
   <div class="login-reg-right">
     <div class="about">
-      <a v-if="site" :href="site.Url" target="_blank">{{site.SiteName}}</a>
+      <a :href="site.url" target="_blank">{{site.siteName}}</a>
     </div>
     <rate
       class="c_rate"

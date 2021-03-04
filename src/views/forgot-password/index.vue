@@ -4,7 +4,7 @@
       <el-col :span="15" :xs="24">
         <div class="forgot_main">
           <h1 class="main_head">
-            <a v-if="site" :href="site.Url" target="_blank">{{site.SiteName}}</a>
+            <a v-if="site" :href="site.url" target="_blank">{{site.siteName}}</a>
           </h1>
           <h1 class="main_title">Reset Password</h1>
           <el-form :model="forgotForm" :rules="rules" ref="forgotForm" class="form" label-position="top" :hide-required-asterisk="true">
@@ -76,11 +76,11 @@ export default {
       <div class="email_car" style="width: 500px;padding: 16px 34px;text-align: left;border: 1px solid #c5c5d6;border-radius: 4px;margin: 0 auto;">
       <p style="word-break: break-all;margin: 10px 0;">Hello!</p>
       <p style="word-break: break-all;margin: 10px 0;">You are receiving this email because we received a password reset request for your account.</p>
-      <a style="width: calc(100% - 40px);margin: 18px 0;padding: 12px 20px;color: #FFF;background-color: #409EFF;display: block;text-align: center;border-radius: 4px;text-decoration: none !important;" href="${this.pageUrl}/password-reset?email=${this.forgotForm.email}&SiteId=${localStorage.getItem(type.SITEID)}&token=${this.token}">Reset Button</a>
+      <a style="width: calc(100% - 40px);margin: 18px 0;padding: 12px 20px;color: #FFF;background-color: #409EFF;display: block;text-align: center;border-radius: 4px;text-decoration: none !important;" href="${this.pageUrl}/password-reset?email=${this.forgotForm.email}&token=${this.token}">Reset Button</a>
       <p style="word-break: break-all;margin: 10px 0;">This password reset link will expire in 60 minutes.</p>
       <p style="word-break: break-all;margin: 10px 0;">If you did not request a password reset, no further action is required.</p>
       <p style="margin-top:40px;word-break: break-all;margin: 10px 0;">Thank you for using our application!</p>
-      <p style="word-break: break-all;margin: 10px 0;">Best Regards, <br> ${this.site.SiteName}</p>
+      <p style="word-break: break-all;margin: 10px 0;">Best Regards, <br> ${this.site.siteName}</p>
       </div>
       </div>`
       const data={

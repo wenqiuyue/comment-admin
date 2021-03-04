@@ -199,6 +199,9 @@ export default {
     pageUrl(){
       return process.env.VUE_APP_PAGE_URL
     },
+    site(){
+      return this.$store.state.siteInfo;
+    }
   },
   directives: {
     /**
@@ -216,7 +219,7 @@ export default {
   },
   mounted(){
     this.getCountry();
-    this.siteId=this.$route.query.SiteId?this.$route.query.SiteId:localStorage.getItem(type.SITEID);
+    this.siteId=this.site.id;
   },
   methods:{
     /**
@@ -240,9 +243,6 @@ export default {
             localStorage.setItem(type.USER, JSON.stringify(resp.data));
             this.$router.push({
               path:'/Verification',
-              query:{
-                SiteId:this.siteId
-              }
             })
           }
         }

@@ -8,15 +8,15 @@
         <h5><i class="el-icon-message icon"></i> Here's the email we'll send to {{selReviews.name}}:</h5>
         <p>(We'll translate this message to match {{selReviews.name}}'s own language)</p>
         <div class="email" v-if="!isSeeMore">
-          <p>{{site.SiteName}}</p>
+          <p>{{site.siteName}}</p>
           <h5>{{selReviews.companyName}} would like some information regarding your review</h5>
-          <div class="one_row">Hi {{selReviews.name}}, Thanks for your review on {{site.SiteName}}. Based on your review {{selReviews.companyName}} would like a little more information</div>
+          <div class="one_row">Hi {{selReviews.name}}, Thanks for your review on {{site.siteName}}. Based on your review {{selReviews.companyName}} would like a little more information</div>
           <el-link type="primary" @click="isSeeMore=true">See more</el-link>
         </div>
         <div class="email_more" v-else>
           <el-form ref="form" label-width="80px">
             <el-form-item label="From:">
-              {{site.SiteName}}
+              {{site.siteName}}
             </el-form-item>
             <el-form-item label="To:">
               {{selReviews.name}}
@@ -27,12 +27,12 @@
           </el-form>
           <div class="email_con">
             <p>Hi {{selReviews.name}},</p>
-            <p>Thanks for your review on {{site.SiteName}}.</p>
+            <p>Thanks for your review on {{site.siteName}}.</p>
             <p>Based on your review, {{selReviews.companyName}} would like a little more information about your experience. This will help them write a more useful reply to you. It'll also help them verify that you've had a genuine experience with their business.</p>
             <p>Of course, it's totally up to you what you share.</p>
             <!-- <p class="more_info">Provide more information</p> -->
             <p>Thanks for helping {{selReviews.companyName}} connect the dots!</p>
-            <p>The {{site.SiteName}} Team</p>
+            <p>The {{site.siteName}} Team</p>
           </div>
         </div>
       </div>
@@ -92,14 +92,14 @@ export default {
       <div class="email" style="width: 100%;padding: 22px;">
       <div class="email_car" style="width: 500px;padding: 16px 34px;text-align: left;border: 1px solid #c5c5d6;border-radius: 4px;margin: 0 auto;">
       <p style="word-break: break-all;margin: 10px 0;">Hi ${this.selReviews.name},</p>
-      <p style="word-break: break-all;margin: 10px 0;">Thanks for your review on ${this.site.SiteName}.</p>
+      <p style="word-break: break-all;margin: 10px 0;">Thanks for your review on ${this.site.siteName}.</p>
       <p style="word-break: break-all;margin: 10px 0;">Based on your review, ${this.selReviews.companyName} would like a little more information about your experience. This will help them write a more useful reply to you. It'll also help them verify that you've had a genuine experience with their business.</p>
       <p style="word-break: break-all;margin: 10px 0;">Of course, it's totally up to you what you share.</p>
       <a style="width: calc(100% - 40px);margin: 18px 0;padding: 12px 20px;color: #FFF;background-color: #409EFF;display: block;text-align: center;border-radius: 4px;text-decoration: none !important;" href="http://sitesjabber.com/activate?${fdata}">Provide more information</a>
-      <p style="word-break: break-all;margin: 10px 0;">Please note: This is a direct link to your ${this.site.SiteName} account.</p>
+      <p style="word-break: break-all;margin: 10px 0;">Please note: This is a direct link to your ${this.site.siteName} account.</p>
       <p style="word-break: break-all;margin: 10px 0;">Please don't share it width other.</p>
       <p style="margin-top:40px;word-break: break-all;margin: 10px 0;">Thank you for using our application!</p>
-      <p>Best Regards, <br> ${this.site.SiteName}</p>
+      <p>Best Regards, <br> ${this.site.siteName}</p>
       </div>
       </div>`
       const data={

@@ -4,7 +4,7 @@
       <el-col :span="15" :xs="24">
         <div class="login_main">
           <h1 class="main_head">
-            <a v-if="site" :href="site.Url" target="_blank">{{site.SiteName}}</a>
+            <a v-if="site" :href="site.url" target="_blank">{{site.siteName}}</a>
           </h1>
           <h1 class="main_title">Login</h1>
           <el-form :model="loginForm" :rules="rules" ref="loginForm" class="form" label-position="top" :hide-required-asterisk="true">
@@ -63,7 +63,7 @@ export default {
     }
   },
   created(){
-    this.handleCheckToken();
+    // this.handleCheckToken();
   },
   methods:{
     /**
@@ -73,12 +73,7 @@ export default {
       this.$refs.loginForm.validate((valid)=>{
         if(valid){
           this.loading=true;
-          // if(this.$route.query.SiteId){
-          //   this.loginForm.SiteId=this.$route.query.SiteId;
-          // }else{
-          //   this.loginForm.SiteId=localStorage.getItem(type.SITEID);
-          // }
-          this.loginForm.SiteId=7;
+          this.loginForm.SiteId=this.site.id;
           this.$apiHttp.login(this.loginForm).then((resp)=>{
             if(resp.res==200){
               if(resp.data.status){

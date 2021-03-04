@@ -1,6 +1,6 @@
 <template>
   <div class="read-dialog" v-if="site">
-    <el-dialog :title="`Message from ${site.SiteName} Content Integrity`" :visible.sync="dialogRead" width="550px" v-if="selReport">
+    <el-dialog :title="`Message from ${site.siteName} Content Integrity`" :visible.sync="dialogRead" width="550px" v-if="selReport">
       <div class="read_main">
         <p>Hi {{selReport.companyName}},</p>
         <p>Thanks for your inquiry about the review by {{selReport.name}}, which you flagged as {{selReport.reportingReason}}.</p>

@@ -174,3 +174,9 @@ export function siteProfileWorkEmail (data) {
 export function siteProfileWorkEmailConfirm (data) {
   return fetchGet('/site/ProfileWorkEmailConfirm',data)
 };
+/**
+ * 获取网站信息
+ */
+export function siteWebSiteInfo (data) {
+  return fetchGet('/site/WebSiteInfo',data)
+};

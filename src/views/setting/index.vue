@@ -153,6 +153,10 @@ export default {
     handleChangePass(){
       this.$router.replace({
         path: "/password-reset",
+        query:{
+          email:this.oldEmail
+        }
+
       });
     },
     /**

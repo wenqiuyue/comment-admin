@@ -1,11 +1,16 @@
 <template>
-  <div id="app">
-    <router-view />
+  <div id="app" v-loading="loading">
+    <router-view v-if="!loading" />
   </div>
 </template>
 <script>
 import type from './commons/type';
 export default {
+  data(){
+    return{
+      loading:false,
+    }
+  },
   mounted(){
     this.getSite();
   },
@@ -14,17 +19,12 @@ export default {
      * 获取site信息
      */
     getSite(){
-      let site = null;
-      if (this.$route.query.SiteId) {
-        site = this.$route.query.SiteId;
-      } else {
-        site = localStorage.getItem(type.SITEID);
-      }
-      this.$apiHttp.getWebSiteInfo({params:{id:site}}).then((resp)=>{
+      this.loading=true;
+      this.$apiHttp.siteWebSiteInfo({params:{domain:document.domain}}).then((resp)=>{
         if(resp.res==200){
           this.$store.dispatch("getSite", resp.data);
         }
-      })
+      }).finally(()=> this.loading=false);
     }
   }
 }

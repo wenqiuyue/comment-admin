@@ -180,11 +180,13 @@ export default {
     },
   },
   mounted() {
-    this.getNewMsgData();
+    if(this.path!="/Verification"){
+      this.getNewMsgData();
+    }
     this.getBreadcrumb();
   },
   created() {
-    this.path = this.$route.fullPath;
+    this.path = this.$route.path;
     this.user = JSON.parse(localStorage.getItem(type.USER));
   },
   methods: {
@@ -224,6 +226,9 @@ export default {
       }else if(com == 2){
         this.$router.replace({
           path: "/password-reset",
+          query:{
+            email:this.user.workEmail
+          }
         });
       } 
     },

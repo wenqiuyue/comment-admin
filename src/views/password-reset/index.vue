@@ -3,12 +3,12 @@
       <div class="left_col">
         <div class="reset_main">
           <h1 class="main_head">
-             <a v-if="site" :href="site.Url" target="_blank">{{site.SiteName}}</a>
+             <a v-if="site" :href="site.url" target="_blank">{{site.siteName}}</a>
           </h1>
           <h1 class="main_title">Reset Password</h1>
           <el-form :model="resetForm" :rules="rules" ref="resetForm" class="form" label-position="top" :hide-required-asterisk="true">
             <el-form-item prop="email" label="E-mail">
-              <el-input v-model="resetForm.email" placeholder="example@example.com">
+              <el-input v-model="resetForm.email" placeholder="example@example.com" disabled>
               </el-input>
             </el-form-item>
             <el-form-item prop="pass" label="Password">
