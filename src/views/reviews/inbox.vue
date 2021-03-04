@@ -197,7 +197,7 @@
                       </div>
                       <div class="find_tab_r">
                         <div class="find_content">
-                          <p>You asked William Clark for more information.</p>
+                          <p>You asked {{item.name}} for more information.</p>
                         </div>
                       </div>
                     </div>
@@ -501,10 +501,14 @@ export default {
             }
           })
           //当查询单条评论，根据type，默认展开第一条评论选项卡
-          if(Object.keys(this.query).length){
+          if(Object.keys(this.query).length && this.reviewsList.length){
             //查询单条评论
             if(this.query.type=='reply'){
               this.activeCardName=JSON.stringify({name:'reply',item:this.reviewsList[0]})
+            }else if(this.query.type=='find'){
+              this.activeCardName=JSON.stringify({name:'find',item:this.reviewsList[0]})
+            }else if(this.query.type=='report'){
+              this.activeCardName=JSON.stringify({name:'report',item:this.reviewsList[0]})
             }
           }
           this.page.pageTotal=resp.data.total;

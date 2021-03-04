@@ -121,7 +121,7 @@
           v-if="newMsg"
             placement="bottom"
             width="250"
-            trigger="click">
+            trigger="hover">
             <div class="new_msg">
               <p>Notifications</p>
               <div v-if="newMsg.total==0">You do not have any new activity</div>
@@ -200,6 +200,7 @@ export default {
           type:'reply'
         }
       })
+      this.getNewMsgData();
     },
     /**
      * 获取新消息数量

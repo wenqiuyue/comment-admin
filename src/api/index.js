@@ -168,3 +168,9 @@ export function siteNewReviews (data) {
 export function siteProfileWorkEmail (data) {
   return fetchPost('/site/ProfileWorkEmail',data)
 };
+/**
+ * 修改邮箱确认
+ */
+export function siteProfileWorkEmailConfirm (data) {
+  return fetchGet('/site/ProfileWorkEmailConfirm',data)
+};

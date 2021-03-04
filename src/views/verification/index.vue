@@ -61,7 +61,7 @@ export default {
       inserted(el, binding) {
         el.addEventListener('click', () => {
           let url = binding.value;
-          const dic_url = process.env.VUE_APP_BASE_URL + "/api/Business/DownLoadFile?file=" + url;
+          const dic_url = "http://120.25.67.116:5251/api/Business/DownLoadFile?file=" + url;
           window.location.href=dic_url;
         })
       }

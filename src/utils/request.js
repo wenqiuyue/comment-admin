@@ -3,7 +3,7 @@ import type from '../commons/type'
 import { Message } from "element-ui";
 
 const instance = axios.create({
-  baseURL: process.env.VUE_APP_BASE_URL,
+  // baseURL: process.env.VUE_APP_BASE_URL,
   // timeout: 20000,
 })
 // 请求拦截器

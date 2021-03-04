@@ -23,6 +23,12 @@ export default [
 		name: 'password-reset',
     component: () => import('../../views/password-reset'),
   },
+  //修改密码加载页
+  {
+    path: '/email-loading',
+		name: 'email-loading',
+    component: () => import('../../views/setting/email-loading.vue'),
+  },
 	//首页
   {
     path: '/',

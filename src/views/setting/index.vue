@@ -41,7 +41,7 @@
         <p class="d_f_lable">Email</p>
         <div class="d_f_input">
           <el-input v-model="eamil" placeholder="Enter Email"></el-input>
-          <el-button @click="handleChangeEmail" :loading="eLoading">Change email</el-button>
+          <el-button @click="handleChangeEmail" :loading="eLoading" :disabled="changeEmailDis">Change email</el-button>
         </div>
         <p class="d_f_tips">We won't change this email until we've received your confirmation.</p>
       </div>
@@ -61,6 +61,8 @@ export default {
       eLoading:false, //修改email按钮加载
       countryOptions:null, //国家选项
       eamil:null, //修改的邮箱
+      oldEmail:null, //原密码
+      changeEmailDis:false,
       form:{
         firstName:null,
         surname:null,
@@ -81,6 +83,15 @@ export default {
         city: [
           { required: true, message: 'City is required.', trigger: 'blur' },
         ],
+      },
+    }
+  },
+  watch:{
+    eamil(){
+      if(!this.eamil || this.eamil == this.oldEmail){
+        this.changeEmailDis=true;
+      }else{
+        this.changeEmailDis=false;
       }
     }
   },
@@ -101,6 +112,7 @@ export default {
           Object.keys(resp[0].data).forEach((k)=>{
             if(k=='workEmail'){
               this.eamil=resp[0].data.workEmail;
+              this.oldEmail=resp[0].data.workEmail;
             }
             Object.keys(this.form).forEach((j)=>{
               if(k==j){
