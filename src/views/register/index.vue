@@ -5,7 +5,7 @@
           <h1 class="main_title">Create a free account</h1>
           <el-form :model="registerForm" :rules="rules" ref="form-1" class="form" label-position="top" :hide-required-asterisk="true" v-if="step==1">
             <el-form-item prop="WebSite" label="Web site">
-              <el-input v-model="registerForm.WebSite" placeholder="Enter web site">
+              <el-input v-model="registerForm.WebSite" placeholder="Enter web site" @blur="getSiteCompany(registerForm.WebSite)">
               </el-input>
             </el-form-item>
             <el-form-item prop="WorkEmail" label="Work email">
@@ -211,7 +211,7 @@ export default {
       inserted(el, binding) {
         el.addEventListener('click', () => {
           let url = binding.value;
-          const dic_url = "http://120.25.67.116:5251/api/Business/DownLoadFile?file=" + url;
+          const dic_url = `${process.env.VUE_APP_API_URL}/api/Business/DownLoadFile?file=${url}`;
           window.location.href=dic_url;
         })
       }
@@ -220,8 +220,27 @@ export default {
   mounted(){
     this.getCountry();
     this.siteId=this.site.id;
+    //默认绑定网站地址及公司名字
+    if(this.$route.query.url){
+      this.registerForm.WebSite=this.$route.query.url;
+    }
+    if(this.$route.query.company){
+      this.registerForm.CompanyName=this.$route.query.company;
+    }
   },
   methods:{
+    /**
+    根据网址查询数据库中的公司信息
+     */
+     getSiteCompany(urlData){
+       if(urlData){
+        this.$apiHttp.apiGetSiteCompany({params:{url:urlData}}).then((resp)=>{
+          if(resp.res==200 && resp.data){
+            this.registerForm.CompanyName=resp.data.Name;
+          }
+        })
+       }
+     },
     /**
      * 商家验证失败获取验证数据
      */

@@ -118,19 +118,23 @@
         </div>
         <div class="header_right">
           <el-popover
-          v-if="newMsg"
+            v-if="newMsg"
             placement="bottom"
             width="250"
             trigger="hover">
             <div class="new_msg">
               <p>Notifications</p>
-              <div v-if="newMsg.total==0">You do not have any new activity</div>
-              <div class="have_new" v-else @click="handleNewMsg">
+              <div v-if="newMsg.editTotal==0 && newMsg.newTotal==0">You do not have any new activity</div>
+              <div class="have_new" v-if="newMsg.newTotal>0" @click="handleNewMsg(newMsg.newData)">
                 <i class="el-icon-s-opportunity"></i>
-                <span>You have {{newMsg.total}} new review</span>
+                <span>You have {{newMsg.newTotal}} new review</span>
+              </div>
+              <div class="have_new" v-if="newMsg.editTotal>0" @click="handleNewMsg(newMsg.editData)">
+                <i class="el-icon-s-opportunity"></i>
+                <span>You have {{newMsg.editTotal}} updated review</span>
               </div>
             </div>
-            <el-badge :is-dot="newMsg.total==0?false:true" class="item" slot="reference">
+            <el-badge :is-dot="newMsg.editTotal==0 && newMsg.newTotal==0?false:true" class="item" slot="reference">
               <i class="el-icon-message-solid"></i>
             </el-badge>
           </el-popover>
@@ -184,6 +188,9 @@ export default {
       this.getNewMsgData();
     }
     this.getBreadcrumb();
+    this.$bus.$on('newMsg',(val)=>{
+      this.getNewMsgData();
+    })
   },
   created() {
     this.path = this.$route.path;
@@ -194,21 +201,21 @@ export default {
     /**
      * 查看新消息
      */
-    handleNewMsg(){
+    handleNewMsg(idData){
       this.$router.push({
         path:"/reviews",
         query:{
-          review_id:this.newMsg.data,
+          review_id:idData,
           type:'reply'
         }
       })
-      this.getNewMsgData();
+      // this.getNewMsgData();
     },
     /**
      * 获取新消息数量
      */
     getNewMsgData(){
-      this.$apiHttp.siteNewReviews().then((resp)=>{
+      this.$apiHttp.siteNewAndEditReviews().then((resp)=>{
         if(resp.res==200){
           this.newMsg=resp.data;
         }
@@ -363,6 +370,7 @@ export default {
       display:flex;
       align-items: center;
       cursor: pointer;
+      margin-top: 5px;
       &:hover{
         color:#1989fa;
       }

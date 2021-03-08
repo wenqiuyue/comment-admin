@@ -207,12 +207,13 @@
       <empty v-else :tips="'No data available'"></empty>
       <div class="pagination" v-if="page.pageTotal/page.pageSize>1 && !loading">
         <el-pagination
+          background
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="page.pageIndex"
           :page-sizes="[10, 20, 30, 40]"
           :page-size="page.pageSize"
-          layout="total, sizes, prev, pager, next, jumper"
+          layout="prev, pager, next"
           :total="page.pageTotal">
         </el-pagination>
       </div>
@@ -574,6 +575,9 @@ export default {
         }
       }
     }
+  }
+  .pagination{
+    margin-top: 5px;
   }
 }
 @media all and (max-width: 1024px){

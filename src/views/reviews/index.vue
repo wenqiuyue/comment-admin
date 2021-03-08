@@ -15,7 +15,6 @@ export default {
   components:{
     Inbox:()=> import("./inbox"),
     Report:()=> import("./report"),
-    // ReviewAlone:()=> import("./review-alone")
   },
   data(){
     return{

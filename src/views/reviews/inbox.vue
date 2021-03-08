@@ -129,7 +129,7 @@
                   {{item.name}}<i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item class="review_name_dropdown"><a class="user_a" :href="`http://sitesjabber.com/profile?id=${item.userId}`" target="_blank">{{item.name}} <i class="el-icon-document"></i></a></el-dropdown-item>
+                  <el-dropdown-item class="review_name_dropdown"><a class="user_a" :href="`${site.url}/profile?id=${item.userId}`" target="_blank">{{item.name}} <i class="el-icon-document"></i></a></el-dropdown-item>
                   <el-dropdown-item class="review_name_dropdown" disabled><i class="el-icon-edit"></i> {{item.totalReviews}}</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
@@ -137,7 +137,7 @@
             <div class="card_main_r">
               <p>
                 <span>{{item.subject}}</span>
-                <span>{{dateEnglish(item.time)}}</span>
+                <span>{{item.isEdit?'Updated:':''}} {{dateEnglish(item.time)}}</span>
               </p>
               <p>{{item.content}}</p>
               <p>Source: Organic</p>
@@ -166,7 +166,7 @@
                     <template v-else>
                       <div class="reply_content" v-for="(repitem,index) in item.replys" :key="repitem.id">
                         <p>{{repitem.content}}</p>
-                        <div class="date">{{dateEnglish(repitem.time)}}</div>
+                        <div class="date">{{repitem.isEdit?'Updated:':''}} {{dateEnglish(repitem.time)}}</div>
                         <el-button type="primary" size="small" plain @click="handleEditReply(repitem)"><i class="el-icon-edit el-icon--right"></i> Edit reply</el-button>
                         <el-popconfirm
                           confirm-button-text='confirm'
@@ -299,12 +299,13 @@
     </div>
     <div class="pagination" v-if="page.pageTotal/page.pageSize>1 && !loading">
       <el-pagination
+        background
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="page.pageIndex"
         :page-sizes="[10, 20, 30, 40]"
         :page-size="page.pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
+        layout="prev, pager, next"
         :total="page.pageTotal">
       </el-pagination>
     </div>
@@ -355,6 +356,9 @@ export default {
   computed:{
     query(){
       return this.$route.query;
+    },
+    site(){
+      return this.$store.state.siteInfo;
     }
   },
   watch:{
@@ -502,6 +506,7 @@ export default {
           })
           //当查询单条评论，根据type，默认展开第一条评论选项卡
           if(Object.keys(this.query).length && this.reviewsList.length){
+            this.$bus.$emit("newMsg");
             //查询单条评论
             if(this.query.type=='reply'){
               this.activeCardName=JSON.stringify({name:'reply',item:this.reviewsList[0]})
@@ -787,8 +792,8 @@ export default {
                   color: #454554;
                 }
                 .date{
-                  text-align: right;
-                  font-size: 14px;
+                  // text-align: right;
+                  font-size: 13px;
                   color: #6F6F87;
                 }
                 .el-button{
@@ -882,6 +887,8 @@ export default {
   .pagination{
     background: #ffffff;
     padding-bottom: 10px;
+    max-width: 980px;
+    margin: 5px auto;
   }
 }
 @media all and (max-width: 1024px) {

@@ -4,43 +4,49 @@ import { fetchGet,fetchPost,fetchDelete } from '../utils/request.js'
  * 注册获取国家
  */
 export function businessGetCountry () {
-  return fetchGet('http://120.25.67.116:5251/api/Business/GetCountry')
+  return fetchGet(`${process.env.VUE_APP_API_URL}/api/Business/GetCountry`)
 };
 /**
  * 验证该网址和公司是否存在我们的爬虫数据中
  */
 export function businessVerificationCompany (data) {
-  return fetchPost('http://120.25.67.116:5251/api/Business/VerificationCompany',data)
+  return fetchPost(`${process.env.VUE_APP_API_URL}/api/Business/VerificationCompany`,data)
 };
 /**
  * 保存商家注册信息
  */
 export function businessSaveBusiness (data) {
-  return fetchPost('http://120.25.67.116:5251/api/Business/SaveBusiness',data)
+  return fetchPost(`${process.env.VUE_APP_API_URL}/api/Business/SaveBusiness`,data)
 };
 /**
  * 获取两种验证方式的加密串和文件
  */
 export function businessGenerateCode (data) {
-  return fetchGet('http://120.25.67.116:5251/api/Business/GenerateCode',data)
+  return fetchGet(`${process.env.VUE_APP_API_URL}/api/Business/GenerateCode`,data)
 };
 /**
  * 商家注册验证
  */
 export function businessVerificationCode (data) {
-  return fetchPost('http://120.25.67.116:5251/api/Business/VerificationCode',data)
+  return fetchPost(`${process.env.VUE_APP_API_URL}/api/Business/VerificationCode`,data)
 };
 /**
  * 文件下载
  */
 export function businessDownLoadFile (data) {
-  return fetchGet('http://120.25.67.116:5251/api/Business/DownLoadFile',data)
+  return fetchGet(`${process.env.VUE_APP_API_URL}/api/Business/DownLoadFile`,data)
 };
 /**
  * 获取siteid
  */
 export function getWebSiteInfo (data) {
-  return fetchGet('http://120.25.67.116:5251/api/UserInfo/GetWebSiteInfo',data)
+  return fetchGet(`${process.env.VUE_APP_API_URL}/api/UserInfo/GetWebSiteInfo`,data)
+};
+/**
+ * 根据网址查询数据库中的公司信息
+ */
+export function apiGetSiteCompany (data) {
+  return fetchGet(`${process.env.VUE_APP_API_URL}/api/Business/GetSiteCompany`,data)
 };
 /**
  * 登录
@@ -159,8 +165,8 @@ export function siteEditProfileBasic (data) {
 /**
  * 获取新消息数量
  */
-export function siteNewReviews (data) {
-  return fetchGet('/site/NewReviews',data)
+export function siteNewAndEditReviews () {
+  return fetchGet('/site/NewAndEditReviews')
 };
 /**
  * 修改邮箱

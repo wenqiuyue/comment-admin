@@ -19,15 +19,16 @@ VueRouter.prototype.push = function push (location) {
  * 全局前置守卫
  */
 router.beforeEach((to, from, next) => {
+  console.log(to.name);
   if (localStorage.getItem(type.TOKEN) && localStorage.getItem(type.USER)) {
     if (to.name == '/') {
       next({ path: '/home' });
     } else {
       next();
     }
-  } else if (to.name != '/') {
+  } else if (to.name != '/' && to.name != 'register' && to.name != 'verification') {
     Message({
-      message: 'Identity information is lost, please login again',
+      message: 'Your identity is invalid, please login again',
       type: 'warning',
       duration:6000
     })

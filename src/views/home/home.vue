@@ -4,10 +4,10 @@
        <el-date-picker
         @change="datePickerChange"
         v-model="datePicker"
-        type="daterange"
+        type="monthrange"
         range-separator="-"
-        start-placeholder="Start date"
-        end-placeholder="End date">
+        start-placeholder="Start month"
+        end-placeholder="End month">
       </el-date-picker>
     </div>
     <div class="home_main" v-if="comData">
@@ -193,8 +193,8 @@ export default {
     getData(){
       this.loading=true;
       const data={
-        startTime:this.datePicker[0]?this.datePicker[0].timeFormat('yyyy-MM-dd'):null,
-        endTime:this.datePicker[1]?this.datePicker[1].timeFormat('yyyy-MM-dd'):null
+        startTime:this.datePicker[0]?this.datePicker[0].timeFormat('yyyy-MM'):null,
+        endTime:this.datePicker[1]?this.datePicker[1].timeFormat('yyyy-MM'):null
       }
       this.$apiHttp.siteComment({params:data}).then((resp)=>{
         this.comData = resp.data;

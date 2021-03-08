@@ -82,8 +82,8 @@ export default {
      */
     getAnalysticBrokenLine(){
       const data={
-        startTime: this.reviewNumDate.length>0?this.reviewNumDate[0].timeFormat('yyyy-MM-dd'):null,
-        endTime: this.reviewNumDate.length>0?this.reviewNumDate[1].timeFormat('yyyy-MM-dd'):null
+        startTime: this.reviewNumDate.length>0?this.reviewNumDate[0].timeFormat('yyyy-MM'):null,
+        endTime: this.reviewNumDate.length>0?this.reviewNumDate[1].timeFormat('yyyy-MM'):null
       }
       this.reviewNumLoading=true;
       this.$apiHttp.siteAnalysticBrokenLine({params:data}).then((resp)=>{
@@ -98,8 +98,8 @@ export default {
      */
     getAnalysticPieChart(){
       const data={
-        startTime: this.totalRatingDate.length>0?this.totalRatingDate[0].timeFormat('yyyy-MM-dd'):null,
-        endTime: this.totalRatingDate.length>0?this.totalRatingDate[1].timeFormat('yyyy-MM-dd'):null
+        startTime: this.totalRatingDate.length>0?this.totalRatingDate[0].timeFormat('yyyy-MM'):null,
+        endTime: this.totalRatingDate.length>0?this.totalRatingDate[1].timeFormat('yyyy-MM'):null
       }
        this.totalRatingLoading=true;
       this.$apiHttp.siteAnalysticPieChart({params:data}).then((resp)=>{
