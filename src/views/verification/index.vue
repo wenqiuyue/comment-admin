@@ -1,6 +1,6 @@
 <template>
-  <div class="verification" v-if="verificationData">
-    <div class="ver_main">
+  <div class="verification" v-loading="pLoading">
+    <div class="ver_main" v-if="verificationData">
       <h1 class="main_title">{{verificationData.webSite}} verification</h1>
       <el-radio v-model="verForm.verification" :label="1">Verification option 1</el-radio>
       <div class="options">
@@ -49,8 +49,8 @@ export default {
       verForm:{
         verification:1
       },
-      verificationData:null //验证需要的信息
-
+      verificationData:null, //验证需要的信息
+      pLoading:false
     }
   },
   directives: {
@@ -68,12 +68,31 @@ export default {
     }
   },
   mounted(){
-    this.verificationData = JSON.parse(localStorage.getItem(type.USER));
-    if(this.verificationData && this.verificationData.fileUrl){
-      this.verificationData.fileUrl = this.verificationData.fileUrl.split('/file/')[1];
+    const id=this.$route.query.id;
+    if(id){
+      this.getGenerateCode(id);
+    }else{
+      this.verificationData = JSON.parse(localStorage.getItem(type.USER));
+      if(this.verificationData && this.verificationData.fileUrl){
+        this.verificationData.fileUrl = this.verificationData.fileUrl.split('/file/')[1];
+      }
     }
   },
   methods:{
+    /**
+     * 获取两种验证方式的加密串和文件
+     */
+    getGenerateCode(id){
+      this.pLoading=true;
+      this.$apiHttp.businessGenerateCode({params:{id:id}}).then((resp)=>{
+        if(resp.res==200){
+          this.verificationData=resp.data;
+          if(this.verificationData && this.verificationData.fileUrl){
+            this.verificationData.fileUrl = this.verificationData.fileUrl.split('/file/')[1];
+          }
+        }
+      }).finally(()=> this.pLoading=false);
+    },
     /**
      * 验证
      */
