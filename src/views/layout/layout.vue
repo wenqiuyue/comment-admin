@@ -17,7 +17,7 @@
         unique-opened
         router
       >
-        <el-menu-item index="/Verification" class="menu_item" v-if="path=='/Verification'">
+        <el-menu-item index="/Verification" class="menu_item" v-if="path=='/verification' || path=='/Verification'">
           <svg-icon value="icon-linkman-contacts_ico" :size="1.1"></svg-icon>
           <span slot="title">Profile verification</span>
         </el-menu-item>
@@ -69,7 +69,7 @@
         unique-opened
         router
       >
-        <el-menu-item index="/Verification" class="menu_item" v-if="path=='/Verification'">
+        <el-menu-item index="/Verification" class="menu_item" v-if="path=='/verification' || path=='/Verification'">
           <svg-icon value="icon-linkman-contacts_ico" :size="1.1"></svg-icon>
           <span slot="title">Profile verification</span>
         </el-menu-item>
@@ -147,7 +147,7 @@
               <i class="el-icon-caret-bottom el-icon--right"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item disabled>
+              <el-dropdown-item disabled v-if="user">
                 <div>{{user.firstName}}</div>
                 <div>{{user.workEmail}}</div>
               </el-dropdown-item>

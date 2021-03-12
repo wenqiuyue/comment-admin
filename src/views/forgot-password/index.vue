@@ -71,18 +71,22 @@ export default {
      * 发送邮件
      */
     sendEmail(){
-      const html=`
-      <div class="email" style="width: 100%;padding: 22px;">
-      <div class="email_car" style="width: 500px;padding: 16px 34px;text-align: left;border: 1px solid #c5c5d6;border-radius: 4px;margin: 0 auto;">
-      <p style="word-break: break-all;margin: 10px 0;">Hello!</p>
-      <p style="word-break: break-all;margin: 10px 0;">You are receiving this email because we received a password reset request for your account.</p>
-      <a style="width: calc(100% - 40px);margin: 18px 0;padding: 12px 20px;color: #FFF;background-color: #409EFF;display: block;text-align: center;border-radius: 4px;text-decoration: none !important;" href="${this.pageUrl}/password-reset?email=${this.forgotForm.email}&token=${this.token}">Reset Button</a>
-      <p style="word-break: break-all;margin: 10px 0;">This password reset link will expire in 60 minutes.</p>
-      <p style="word-break: break-all;margin: 10px 0;">If you did not request a password reset, no further action is required.</p>
-      <p style="margin-top:40px;word-break: break-all;margin: 10px 0;">Thank you for using our application!</p>
-      <p style="word-break: break-all;margin: 10px 0;">Best Regards, <br> ${this.site.siteName}</p>
-      </div>
-      </div>`
+      const html=`<div style="min-height: 100vh;background: #000;display: flex;align-items: center;">
+			<div style="margin:10px auto">
+			<div style="margin:0 10px;max-width: 600px;background: #fff;padding: 50px;border-radius: 8px;">
+			<p style="font-size: 20px; font-weight: 700; margin-bottom: 25px; text-align: center;">Hello!</p>
+				<p style="word-break: break-all;margin: 10px 0;">You are receiving this email because we received a password reset
+						request for your account.</p>
+					<a style=" box-shadow: 0 3px 20px -3px rgba(0, 0, 0, 0.25);border-radius: 5px;font-size: 14px;width: 230px;height: 35px;background: #0e62fb;color: #fff;line-height: 35px;text-align: center;display: block;margin: 0 auto; margin-top: 20px;text-decoration: none;"
+					 href="${this.pageUrl}/password-reset?email=${this.forgotForm.email}&token=${this.token}">Reset Button</a>
+					<p style="word-break: break-all;margin: 10px 0;">This password reset link will expire in 60 minutes.</p>
+					<p style="word-break: break-all;margin: 10px 0;">If you did not request a password reset, no further action is
+						required.</p>
+					<p style="margin-top:40px;word-break: break-all;margin: 10px 0;">Thank you for using our application!</p>
+					<p style="word-break: break-all;margin: 10px 0;">Best Regards, <br> ${this.site.siteName}</p>			
+				</div>
+			</div>
+		</div>`
       const data={
         toEmail:this.forgotForm.email,
         subject:`Reset Password Notification`,

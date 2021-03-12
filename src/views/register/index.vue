@@ -336,8 +336,7 @@ export default {
       this.$apiHttp.businessGenerateCode({params:{id:id}}).then((resp)=>{
         if(resp.res==200){
           this.meta=resp.data.meta;
-          this.codeFile=resp.data.file;
-          console.log(this.codeFile);
+          this.codeFile=resp.data.fileUrl;
           this.step++;
         }
       }).finally(()=> this.loading=false);

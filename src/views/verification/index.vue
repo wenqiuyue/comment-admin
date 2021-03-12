@@ -86,9 +86,10 @@ export default {
       this.pLoading=true;
       this.$apiHttp.businessGenerateCode({params:{id:id}}).then((resp)=>{
         if(resp.res==200){
+          localStorage.setItem(type.USER, JSON.stringify(resp.data));
           this.verificationData=resp.data;
           if(this.verificationData && this.verificationData.fileUrl){
-            this.verificationData.fileUrl = this.verificationData.fileUrl.split('/file/')[1];
+            // this.verificationData.fileUrl = this.verificationData.fileUrl.split('/file/')[1];
           }
         }
       }).finally(()=> this.pLoading=false);

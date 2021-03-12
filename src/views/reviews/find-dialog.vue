@@ -89,18 +89,26 @@ export default {
      */
     confirmBtn(fdata){  
       const html=`
-      <div class="email" style="width: 100%;padding: 22px;">
-      <div class="email_car" style="width: 500px;padding: 16px 34px;text-align: left;border: 1px solid #c5c5d6;border-radius: 4px;margin: 0 auto;">
-      <p style="word-break: break-all;margin: 10px 0;">Hi ${this.selReviews.name},</p>
-      <p style="word-break: break-all;margin: 10px 0;">Thanks for your review on ${this.site.siteName}.</p>
-      <p style="word-break: break-all;margin: 10px 0;">Based on your review, ${this.selReviews.companyName} would like a little more information about your experience. This will help them write a more useful reply to you. It'll also help them verify that you've had a genuine experience with their business.</p>
-      <p style="word-break: break-all;margin: 10px 0;">Of course, it's totally up to you what you share.</p>
-      <a style="width: calc(100% - 40px);margin: 18px 0;padding: 12px 20px;color: #FFF;background-color: #409EFF;display: block;text-align: center;border-radius: 4px;text-decoration: none !important;" href="${this.site.url}/activate?${fdata}">Provide more information</a>
-      <p style="word-break: break-all;margin: 10px 0;">Please note: This is a direct link to your ${this.site.siteName} account.</p>
-      <p style="word-break: break-all;margin: 10px 0;">Please don't share it width other.</p>
-      <p style="margin-top:40px;word-break: break-all;margin: 10px 0;">Thank you for using our application!</p>
-      <p>Best Regards, <br> ${this.site.siteName}</p>
-      </div>
+      <div style="min-height: 100vh;background: #000;display: flex;align-items: center;">
+        <div style="margin:10px auto">
+        <div style="margin:0 20px;max-width: 600px;background: #fff;padding: 50px;border-radius: 8px;color: #333;">
+          <p style="font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 25px;
+        text-align: center;">Hi ${this.selReviews.name},</p>
+          <p style="word-break: break-all;margin: 10px 0;">Thanks for your review on ${this.site.siteName}.</p>
+          <p style="word-break: break-all;margin: 10px 0;">Based on your review, ${this.selReviews.companyName} would like a
+            little more information about your experience. This will help them write a more useful reply to you. It'll also
+            help them verify that you've had a genuine experience with their business.</p>
+          <p style="word-break: break-all;margin: 10px 0;">Of course, it's totally up to you what you share.</p>
+          <a href="${this.site.url}/activate?${fdata}" style=" box-shadow: 0 3px 20px -3px rgba(0, 0, 0, 0.25);border-radius: 5px;font-size: 14px;width: 230px;height: 35px;background: #0e62fb;color: #fff;line-height: 35px;text-align: center;display: block;margin: 0 auto; margin-top: 20px;text-decoration: none;">Provide more information</a>
+          <p style="word-break: break-all;margin: 10px 0;">Please note: This is a direct link to your ${this.site.siteName}
+            account.</p>
+          <p style="word-break: break-all;margin: 10px 0;">Please don't share it width other.</p>
+          <p style="margin-top:40px;word-break: break-all;margin: 10px 0;">Thank you for using our application!</p>
+          <p>Best Regards, <br> ${this.site.siteName}</p>
+        </div>
+        </div>
       </div>`
       const data={
         toEmail:this.selReviews.email,
